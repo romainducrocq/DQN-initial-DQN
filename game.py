@@ -11,4 +11,5 @@ def init(track, car):
 def event_loop(track, car, action):
     car.move(action)
     car.collision(track.border_vertices())
+    car.sonar(track.border_vertices())
     return track, car

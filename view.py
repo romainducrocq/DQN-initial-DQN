@@ -68,6 +68,7 @@ class View(pyglet.window.Window):
         draw_polygons(self.track.polygons, self.track.polygons_color)
         draw_vertices(self.track.out_border_vertices, self.track.vertex_color)
         draw_vertices(self.track.in_border_vertices, self.track.vertex_color)
+        draw_vertices(self.car.sonars, self.car.color)
         # draw_polygons([self.car.points()], self.car.color)
 
         self.car_sprites[int(self.car.is_collision)]["sprite"].update(

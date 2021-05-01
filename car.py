@@ -13,7 +13,7 @@ class Car:
         self.d_theta = 2
         self.d_a = 0.03
         self.d_a_friction = 0.01
-        self.min_speed = 0.5
+        self.min_speed = 0.3
 
         self.is_collision = False
 

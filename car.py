@@ -15,7 +15,10 @@ class Car:
         self.d_a_friction = 0.01
         self.min_speed = 0.5
 
-        self.color = color
+        self.is_collision = False
+
+        # self.color = color
+        self.sprites = ["./img/car_blue.png", "./img/car_red.png"]
 
     def top_left_point(self):
         return rotate_point(-self.width / 2, -self.height / 2, self.x_pos, self.y_pos, self.theta)
@@ -93,6 +96,8 @@ class Car:
             for line in lines:
                 is_intersect, x, y = get_vertices_intersection(vertex, line)
                 if is_intersect:
-                    self.color = [0, 0, 255]
+                    self.is_collision = True
+                    # self.color = [0, 0, 255]
                     return
-        self.color = [255, 0, 0]
+        self.is_collision = False
+        # self.color = [255, 0, 0]

@@ -50,6 +50,17 @@ class View(pyglet.window.Window):
 
         self.track, self.car = init(track, car)
 
+        self.car_imgs, self.car_sprites = [], []
+        for i, sprite in enumerate(self.car.sprites):
+            self.car_imgs.append(pyglet.image.load(sprite))
+            self.car_imgs[i].anchor_x = self.car_imgs[i].width // 2
+            self.car_imgs[i].anchor_y = self.car_imgs[i].height // 2
+            self.car_sprites.append({
+                "sprite": pyglet.sprite.Sprite(self.car_imgs[i], 0, 0),
+                "scale_x": (self.car.height + 5) / (self.car_imgs[i].height * 2),
+                "scale_y": 2 * (self.car.width + 5) / self.car_imgs[i].width
+            })
+
     def on_draw(self, dt=0.002):
         self.clear()
         action = None if self.key not in self.actions else self.actions[self.key]
@@ -57,7 +68,16 @@ class View(pyglet.window.Window):
         draw_polygons(self.track.polygons, self.track.polygons_color)
         draw_vertices(self.track.out_border_vertices, self.track.vertex_color)
         draw_vertices(self.track.in_border_vertices, self.track.vertex_color)
-        draw_polygons([self.car.points()], self.car.color)
+        # draw_polygons([self.car.points()], self.car.color)
+
+        self.car_sprites[int(self.car.is_collision)]["sprite"].update(
+            x=self.car.x_pos,
+            y=self.car.y_pos,
+            scale_x=self.car_sprites[int(self.car.is_collision)]["scale_x"],
+            scale_y=self.car_sprites[int(self.car.is_collision)]["scale_y"],
+            rotation=270-self.car.theta
+        )
+        self.car_sprites[int(self.car.is_collision)]["sprite"].draw()
 
     def on_resize(self, width, height):
         glMatrixMode(gl.GL_MODELVIEW)

@@ -1,5 +1,6 @@
 from pyglet.gl import *
 import math
+import random
 from utils import *
 from track import *
 from car import *
@@ -20,6 +21,14 @@ def color_polygon(n, color):
     for i in range(n):
         colors.extend(color)
     return colors
+
+
+def draw_polygons(polygons, color):
+    [points_to_pyglet_vertex(polygon, color).draw(gl.GL_TRIANGLE_FAN) for polygon in polygons]
+
+
+def draw_vertices(vertices, color):
+    [points_to_pyglet_vertex(vertex, color).draw(gl.GL_LINES) for vertex in vertices]
 
 
 class View(pyglet.window.Window):
@@ -45,8 +54,10 @@ class View(pyglet.window.Window):
         self.clear()
         action = None if self.key not in self.actions else self.actions[self.key]
         self.track, self.car = event_loop(self.track, self.car, action)
-        points_to_pyglet_vertex(self.car.points(), self.car.color).draw(gl.GL_TRIANGLE_FAN)
-        [points_to_pyglet_vertex(vertex, self.track.vertex_color).draw(gl.GL_LINES) for vertex in self.track.vertices]
+        draw_polygons(self.track.polygons, self.track.polygons_color)
+        draw_vertices(self.track.out_border_vertices, self.track.vertex_color)
+        draw_vertices(self.track.in_border_vertices, self.track.vertex_color)
+        draw_polygons([self.car.points()], self.car.color)
 
     def on_resize(self, width, height):
         glMatrixMode(gl.GL_MODELVIEW)

@@ -10,8 +10,10 @@ class Car:
         self.height = ratio * width
         self.speed = speed
         self.theta = theta
-        self.d_theta = 1
-        self.d_a = 0.01
+        self.d_theta = 2
+        self.d_a = 0.03
+        self.d_a_friction = 0.01
+        self.min_speed = 0.5
 
         self.color = color
 
@@ -60,10 +62,14 @@ class Car:
             self.accelerate()
         elif action == "RIGHT":
             self.rotate_right()
+            self.friction()
         elif action == "DOWN":
             self.decelerate()
         elif action == "LEFT":
             self.rotate_left()
+            self.friction()
+        else:
+            self.friction()
 
         self.x_pos, self.y_pos = rotate_point(0, self.speed, self.x_pos, self.y_pos, self.theta)
 
@@ -74,10 +80,13 @@ class Car:
         self.theta = (self.theta + self.d_theta) % 360
 
     def decelerate(self):
-        self.speed = (self.speed * (1 - self.d_a) if self.speed * (1 - self.d_a) >= 1. else 1.)
+        self.speed = (self.speed * (1 - self.d_a) if self.speed * (1 - self.d_a) >= self.min_speed else self.min_speed)
 
     def rotate_right(self):
         self.theta = (self.theta - self.d_theta) % 360
+
+    def friction(self):
+        self.speed = (self.speed * (1 - self.d_a_friction) if self.speed * (1 - self.d_a_friction) >= self.min_speed else self.min_speed)
 
     def collision(self, lines):
         for vertex in self.vertices():

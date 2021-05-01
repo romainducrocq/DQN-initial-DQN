@@ -3,7 +3,7 @@ import random
 
 
 class Car:
-    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, speed=1., theta=0, n_sonars=8):
+    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, speed=0., theta=0, n_sonars=8):
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.width = width
@@ -18,7 +18,8 @@ class Car:
         self.is_collision = False
 
         self.n_sonars = n_sonars
-        self.sonars = []
+        self.sonars = [[]]*self.n_sonars
+        self.sonar_distances = [0.]*self.n_sonars
 
         self.color = [255, 0, 0]
         self.sprites = ["./img/car_blue.png", "./img/car_red.png"]
@@ -80,19 +81,19 @@ class Car:
         self.x_pos, self.y_pos = rotate_point(0, self.speed, self.x_pos, self.y_pos, self.theta)
 
     def accelerate(self):
-        self.speed = self.speed * (1 + self.d_a)
+        self.speed = self.speed * (1 + self.d_a) if self.speed > 0 else self.min_speed
 
     def rotate_left(self):
-        self.theta = (self.theta + self.d_theta) % 360
+        self.theta = (self.theta + self.d_theta) % 360 if self.speed > 0 else self.theta
 
     def decelerate(self):
-        self.speed = (self.speed * (1 - self.d_a) if self.speed * (1 - self.d_a) >= self.min_speed else self.min_speed)
+        self.speed = (self.speed * (1 - self.d_a) if self.speed * (1 - self.d_a) >= self.min_speed else 0)
 
     def rotate_right(self):
-        self.theta = (self.theta - self.d_theta) % 360
+        self.theta = (self.theta - self.d_theta) % 360 if self.speed > 0 else self.theta
 
     def friction(self):
-        self.speed = (self.speed * (1 - self.d_a_friction) if self.speed * (1 - self.d_a_friction) >= self.min_speed else self.min_speed)
+        self.speed = (self.speed * (1 - self.d_a_friction) if self.speed * (1 - self.d_a_friction) >= self.min_speed else 0)
 
     def collision(self, lines):
         for vertex in self.vertices():
@@ -106,13 +107,13 @@ class Car:
         self.color = [255, 0, 0]
 
     def sonar(self, lines):
-        self.sonars = []
         for i in range(self.n_sonars):
-            self.sonars.append([
+            self.sonars[i] = [
                 (self.x_pos, self.y_pos),
                 point_on_circle(math.radians(self.theta) + (i * 2 * math.pi) / self.n_sonars, 2*RES[0], self.x_pos, self.y_pos)
-            ])
+            ]
             for line in lines:
                 is_intersect, x, y = get_vertices_intersection(self.sonars[i], line)
                 if is_intersect:
                     self.sonars[i][1] = (x, y)
+                    self.sonar_distances[i] = euclidean_distance(self.sonars[i][0], self.sonars[i][1])

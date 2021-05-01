@@ -33,7 +33,7 @@ def draw_vertices(vertices, color):
 
 class View(pyglet.window.Window):
 
-    def __init__(self, width, height, name, track, car):
+    def __init__(self, width, height, name):
         super(View, self).__init__(width, height, name, resizable=True)
         glClearColor(193/255, 225/255, 193/255, 1)
         self.width = width
@@ -48,7 +48,7 @@ class View(pyglet.window.Window):
             pyglet.window.key.LEFT: "LEFT"
         }
 
-        self.track, self.car = init(track, car)
+        self.track, self.car = init()
 
         self.car_imgs, self.car_sprites = [], []
         for i, sprite in enumerate(self.car.sprites):

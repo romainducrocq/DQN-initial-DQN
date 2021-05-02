@@ -3,9 +3,9 @@ import random
 
 
 class Track:
-    def __init__(self, n_vertices=random.randint(5, 10), width=150):
-        self.n_vertices = n_vertices
-        self.width = width
+    def __init__(self, n_vertices=(5, 10), width=(200, 300)):
+        self.n_vertices = random.randint(n_vertices[0], n_vertices[1])
+        self.width = random.randint(width[0], width[1])
         self.in_border_vertices = generate_polygon(n_vertices=self.n_vertices, avg_radius=(RES[0]+RES[1]-2*self.width)/2, offset=self.width+100)
         self.out_border_vertices = zoom_vertices(self.in_border_vertices, zoom=self.width)
 

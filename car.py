@@ -3,13 +3,13 @@ import random
 
 
 class Car:
-    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, speed=0., theta=0, n_sonars=8):
+    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, theta=0, n_sonars=8):
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.width = width
         self.height = ratio * width
-        self.speed = speed
         self.theta = theta
+        self.speed = 0
         self.d_theta = 2
         self.d_a = 0.03
         self.d_a_friction = 0.01

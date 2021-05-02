@@ -25,16 +25,16 @@ class Car:
         self.sprites = ["./img/car_blue.png", "./img/car_red.png"]
 
     def top_left_point(self):
-        return rotate_point(-self.width / 2, -self.height / 2, self.x_pos, self.y_pos, self.theta)
+        return rotate_point(-self.width / 2, -self.height / 2, self.x_pos, self.y_pos, math.radians(self.theta))
 
     def top_right_point(self):
-        return rotate_point(self.width / 2, -self.height / 2, self.x_pos, self.y_pos, self.theta)
+        return rotate_point(self.width / 2, -self.height / 2, self.x_pos, self.y_pos, math.radians(self.theta))
 
     def down_right_point(self):
-        return rotate_point(self.width / 2, self.height / 2, self.x_pos, self.y_pos, self.theta)
+        return rotate_point(self.width / 2, self.height / 2, self.x_pos, self.y_pos, math.radians(self.theta))
 
     def down_left_point(self):
-        return rotate_point(-self.width / 2, self.height / 2, self.x_pos, self.y_pos, self.theta)
+        return rotate_point(-self.width / 2, self.height / 2, self.x_pos, self.y_pos, math.radians(self.theta))
 
     def points(self):
         return [
@@ -78,7 +78,7 @@ class Car:
         else:
             self.friction()
 
-        self.x_pos, self.y_pos = rotate_point(0, self.speed, self.x_pos, self.y_pos, self.theta)
+        self.x_pos, self.y_pos = rotate_point(0, self.speed, self.x_pos, self.y_pos, math.radians(self.theta))
 
     def accelerate(self):
         self.speed = self.speed * (1 + self.d_a) if self.speed > 0 else self.min_speed

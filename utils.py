@@ -4,6 +4,18 @@ import random
 RES = (1920, 1080)
 
 
+def sign(n):
+    return int(n/abs(n))
+
+
+def arg_max(_list):
+    return max(range(len(_list)), key=lambda i: _list[i])
+
+
+def arg_min(_list):
+    return min(range(len(_list)), key=lambda i: _list[i])
+
+
 def clip(min_clip, max_clip, x):
     return max(min_clip, min([max_clip, x])) if min_clip < max_clip else x
 
@@ -33,10 +45,21 @@ def slope_vertex(vertex):
     return math.atan((vertex[1][1] - vertex[0][1])/(vertex[1][0] - vertex[0][0]))
 
 
+# TODO
+def slope_vertex_corrected(vertex, x_orig=0, y_orig=0):
+    x_up, y_up = vertex[max(range(len(vertex)), key=lambda i: vertex[i][1])]
+    x_down, y_up = vertex[min(range(len(vertex)), key=lambda i: vertex[i][1])]
+
+    slope = slope_vertex(vertex)
+    return slope + math.pi * (int(
+        (y_up - y_orig >= 0 and x_down - x_orig >= 0 and math.degrees(slope) < 0) or
+        (y_up - y_orig >= 0 and x_down - x_orig < 0 and math.degrees(slope) >= 0)))
+
+
 # https://stackoverflow.com/questions/39879924/rotate-a-rectangle-consisting-of-4-tuples-to-left-or-right
 def rotate_point(x_rot, y_rot, x_trans, y_trans, theta):
-    return math.cos(math.radians(theta)) * x_rot - math.sin(math.radians(theta)) * y_rot + x_trans, \
-           math.sin(math.radians(theta)) * x_rot + math.cos(math.radians(theta)) * y_rot + y_trans
+    return math.cos(theta) * x_rot - math.sin(theta) * y_rot + x_trans, \
+           math.sin(theta) * x_rot + math.cos(theta) * y_rot + y_trans
 
 
 # https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect?rq=1

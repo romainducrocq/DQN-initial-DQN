@@ -8,6 +8,7 @@ def init():
 
     track.create_polygons()
     (car.x_pos, car.y_pos), car.theta = track.start_line()
+    track.create_reward_gates()
     return track, car
 
 

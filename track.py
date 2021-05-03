@@ -10,13 +10,18 @@ class Track:
                                                    avg_radius=(RES[0] + RES[1] - 2 * self.width) / 2,
                                                    offset=self.width + 100)
         self.out_border_vertices = zoom_vertices(self.in_border_vertices, zoom=self.width)
+
         self.n_reward_gates = n_reward_gates
         self.reward_gates = []
+        self.reward_gates_direction = 1
 
-        self.vertex_color = [255, 0, 100]
-
-        self.polygons = []
-        self.polygons_color = [51, 51, 51]
+        self.polygons_track = []
+        self.colors = {
+            "polygons_track": [51, 51, 51],
+            "vertex_borders": [255, 0, 100],
+            "vertex_reward_gates": [0, 100, 255],
+            "vertex_next_reward_gate": [255, 0, 100]
+        }
 
     def border_vertices(self):
         return self.out_border_vertices + self.in_border_vertices
@@ -65,11 +70,35 @@ class Track:
                     )
                 ])
 
-    def create_polygons(self):
+    def start_reward_gate(self, start_vertices):
+        start_reward_gate_i, min_dist = 0, math.inf
+        for i in range(self.n_reward_gates):
+            dist_i = euclidean_distance(midpoint_vertex(self.reward_gates[i]), midpoint_vertex(start_vertices[2]))
+            if dist_i < min_dist:
+                is_intersect = False
+                for vertex in start_vertices:
+                    if get_vertices_intersection(vertex, self.reward_gates[i])[0]:
+                        is_intersect = True
+                        break
+                if not is_intersect:
+                    min_dist = dist_i
+                    start_reward_gate_i = i
+
+        if euclidean_distance(midpoint_vertex(start_vertices[0]), midpoint_vertex(
+                self.reward_gates[(start_reward_gate_i + self.reward_gates_direction) % self.n_reward_gates])
+        ) < euclidean_distance(midpoint_vertex(start_vertices[0]), midpoint_vertex(
+            self.reward_gates[(start_reward_gate_i - self.reward_gates_direction) % self.n_reward_gates])
+        ):
+            self.reward_gates_direction *= -1
+
+        return start_reward_gate_i
+
+    def next_reward_gate(self, i):
+        return self.reward_gates[i]
+
+    def update_next_reward_gate_index(self, i):
+        return (i + self.reward_gates_direction) % self.n_reward_gates
+
+    def create_track_polygons(self):
         for i in range(self.n_vertices):
-            self.polygons.append(
-                self.out_border_vertices[i] +
-                [self.out_border_vertices[i][1], self.in_border_vertices[i][1]] +
-                self.in_border_vertices[i][::-1] +
-                [self.in_border_vertices[i][0], self.out_border_vertices[i][0]]
-            )
+            self.polygons_track.append(create_polygon(self.out_border_vertices[i], self.in_border_vertices[i]))

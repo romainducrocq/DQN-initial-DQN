@@ -56,6 +56,10 @@ def slope_vertex_2pi(vertex):
     return slope
 
 
+def create_polygon(vertex1, vertex2):
+    return vertex1 + [vertex1[1], vertex2[1]] + vertex2[::-1] + [vertex2[0], vertex1[0]]
+
+
 # https://stackoverflow.com/questions/39879924/rotate-a-rectangle-consisting-of-4-tuples-to-left-or-right
 def rotate_point(x_rot, y_rot, x_trans, y_trans, theta):
     return math.cos(theta) * x_rot - math.sin(theta) * y_rot + x_trans, \

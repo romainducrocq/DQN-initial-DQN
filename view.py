@@ -65,12 +65,13 @@ class View(pyglet.window.Window):
         self.clear()
         action = None if self.key not in self.actions else self.actions[self.key]
         self.track, self.car = event_loop(self.track, self.car, action)
-        draw_polygons(self.track.polygons, self.track.polygons_color)
-        draw_vertices(self.track.reward_gates, self.track.vertex_color)
-        draw_vertices(self.track.out_border_vertices, self.track.vertex_color)
-        draw_vertices(self.track.in_border_vertices, self.track.vertex_color)
-        draw_vertices(self.car.sonars, self.car.color)
-        # draw_polygons([self.car.points()], self.car.color)
+        draw_polygons(self.track.polygons_track, self.track.colors["polygons_track"])
+        draw_vertices(self.track.reward_gates, self.track.colors["vertex_reward_gates"])
+        draw_vertices([self.track.next_reward_gate(self.car.next_reward_gate_i)], self.track.colors["vertex_next_reward_gate"])
+        draw_vertices(self.track.out_border_vertices, self.track.colors["vertex_borders"])
+        draw_vertices(self.track.in_border_vertices, self.track.colors["vertex_borders"])
+        draw_vertices(self.car.sonars, self.car.color[int(self.car.is_collision)])
+        # draw_polygons([self.car.points()], self.car.color[int(self.car.is_collision)])
 
         self.car_sprites[int(self.car.is_collision)]["sprite"].update(
             x=self.car.x_pos,

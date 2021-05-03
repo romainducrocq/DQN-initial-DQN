@@ -21,7 +21,10 @@ class Car:
         self.sonars = [[]]*self.n_sonars
         self.sonar_distances = [0.]*self.n_sonars
 
-        self.color = [255, 0, 0]
+        self.next_reward_gate_i = 0
+        self.score = 0
+
+        self.color = [[255, 0, 0], [0, 0, 255]]
         self.sprites = ["./img/car_blue.png", "./img/car_red.png"]
 
     def top_left_point(self):
@@ -95,25 +98,31 @@ class Car:
     def friction(self):
         self.speed = (self.speed * (1 - self.d_a_friction) if self.speed * (1 - self.d_a_friction) >= self.min_speed else 0)
 
-    def collision(self, lines):
+    def collision(self, border_vertices):
         for vertex in self.vertices():
-            for line in lines:
-                is_intersect, x, y = get_vertices_intersection(vertex, line)
+            for border_vertex in border_vertices:
+                is_intersect, x, y = get_vertices_intersection(vertex, border_vertex)
                 if is_intersect:
                     self.is_collision = True
-                    self.color = [0, 0, 255]
                     return
         self.is_collision = False
-        self.color = [255, 0, 0]
 
-    def sonar(self, lines):
+    def sonar(self, border_vertices):
         for i in range(self.n_sonars):
             self.sonars[i] = [
                 (self.x_pos, self.y_pos),
                 point_on_circle(math.radians(self.theta) + (i * 2 * math.pi) / self.n_sonars, 2*RES[0], self.x_pos, self.y_pos)
             ]
-            for line in lines:
-                is_intersect, x, y = get_vertices_intersection(self.sonars[i], line)
+            for border_vertex in border_vertices:
+                is_intersect, x, y = get_vertices_intersection(self.sonars[i], border_vertex)
                 if is_intersect:
                     self.sonars[i][1] = (x, y)
                     self.sonar_distances[i] = euclidean_distance(self.sonars[i][0], self.sonars[i][1])
+
+    def reward(self, reward_gate_vertex, update_next_reward_gate_i):
+        for vertex in self.vertices():
+            if get_vertices_intersection(vertex, reward_gate_vertex)[0]:
+                self.next_reward_gate_i = update_next_reward_gate_i
+                self.score += 1
+                print("Score:", self.score)
+                return

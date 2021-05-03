@@ -27,6 +27,8 @@ class Car:
 
         self.start_time = time.time()
 
+        self.actions = {'UP': 0, 'RIGHT': 1, 'DOWN': 2, 'LEFT': 3, 'NONE': 4}
+
         self.color = [[255, 0, 0], [0, 0, 255]]
         self.sprites = ["./img/car_blue.png", "./img/car_red.png"]
 
@@ -71,15 +73,17 @@ class Car:
         ]
 
     def move(self, action):
-        if action == "UP":
+        if action == self.actions['UP']:
             self.accelerate()
-        elif action == "RIGHT":
+        elif action == self.actions['RIGHT']:
             self.rotate_right()
             self.friction()
-        elif action == "DOWN":
+        elif action == self.actions['DOWN']:
             self.decelerate()
-        elif action == "LEFT":
+        elif action == self.actions['LEFT']:
             self.rotate_left()
+            self.friction()
+        elif action == self.actions['NONE']:
             self.friction()
         else:
             self.friction()
@@ -131,3 +135,27 @@ class Car:
 
     def get_time(self):
         return round((time.time() - self.start_time), 2)
+
+    def action_sample(self):
+        return self.actions[random.sample(list(self.actions), 1)[0]]
+
+    def action_n(self):
+        return len(self.actions)
+
+    def observation_n(self):
+        return self.n_sonars + 1
+
+    def obs(self):
+        return self.sonar_distances + [float(self.speed)]
+
+    def rew(self):
+        return self.score
+
+    def done(self):
+        return self.is_collision
+
+    def info(self):
+        return self.get_time()
+
+    def step(self):
+        return self.obs(), self.rew(), self.done(), self.info()

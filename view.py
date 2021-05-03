@@ -3,9 +3,7 @@ import math
 import random
 import time
 from utils import *
-from track import *
-from car import *
-from game import *
+from env import *
 
 
 def points_to_pyglet_vertex(points, color):
@@ -38,7 +36,7 @@ def draw_label_top_left(text, x, y, y_offset=0, margin=50, font_size=40, color=(
 
 class View(pyglet.window.Window):
 
-    def __init__(self, width, height, name):
+    def __init__(self, width, height, name, env, mode):
         super(View, self).__init__(width, height, name, resizable=True)
         glClearColor(193/255, 225/255, 193/255, 1)
         self.width = width
@@ -46,59 +44,66 @@ class View(pyglet.window.Window):
         self.name = name
         self.zoom = 1
         self.key = None
-        self.actions = {
-            pyglet.window.key.UP: "UP",
-            pyglet.window.key.RIGHT: "RIGHT",
-            pyglet.window.key.DOWN: "DOWN",
-            pyglet.window.key.LEFT: "LEFT"
+
+        self.env = env
+        self.mode = mode
+
+        self.action_keys = {
+            pyglet.window.key.UP: self.env.car.actions['UP'],
+            pyglet.window.key.RIGHT: self.env.car.actions['RIGHT'],
+            pyglet.window.key.DOWN: self.env.car.actions['DOWN'],
+            pyglet.window.key.LEFT: self.env.car.actions['LEFT']
         }
 
-        self.track, self.car = init()
-
         self.car_imgs, self.car_sprites = [], []
-        for i, sprite in enumerate(self.car.sprites):
+        for i, sprite in enumerate(self.env.car.sprites):
             self.car_imgs.append(pyglet.image.load(sprite))
             self.car_imgs[i].anchor_x = self.car_imgs[i].width // 2
             self.car_imgs[i].anchor_y = self.car_imgs[i].height // 2
             self.car_sprites.append({
                 "sprite": pyglet.sprite.Sprite(self.car_imgs[i], 0, 0),
-                "scale_x": (self.car.height + 5) / (self.car_imgs[i].height * 2),
-                "scale_y": 2 * (self.car.width + 5) / self.car_imgs[i].width
+                "scale_x": (self.env.car.height + 5) / (self.car_imgs[i].height * 2),
+                "scale_y": 2 * (self.env.car.width + 5) / self.car_imgs[i].width
             })
 
         self.debug_view = False
         self.debug_timer = time.time()
 
+        _ = self.env.reset()
+
     def on_draw(self, dt=0.002):
         self.clear()
 
-        action = None if self.key not in self.actions else self.actions[self.key]
-        self.track, self.car = event_loop(self.track, self.car, action)
+        if self.mode == "PLAY":
+            action = self.env.car.actions['NONE'] if self.key not in self.action_keys else self.action_keys[self.key]
+            _, _, done, _ = self.env.step(action)
+            if done:
+                _ = self.env.reset()
 
-        draw_polygons(self.track.polygons_track, self.track.colors["polygons_track"])
+        draw_polygons(self.env.track.polygons_track, self.env.track.colors["polygons_track"])
         if self.key == pyglet.window.key.SPACE and (time.time() - self.debug_timer) > 0.2:
             self.debug_view = not self.debug_view
             self.debug_timer = time.time()
         if self.debug_view:
-            draw_vertices(self.track.reward_gates, self.track.colors["vertex_reward_gates"])
-            draw_vertices([self.track.next_reward_gate(self.car.next_reward_gate_i)], self.track.colors["vertex_next_reward_gate"])
-            draw_vertices(self.car.sonars, self.car.color[int(self.car.is_collision)])
-        draw_vertices(self.track.out_border_vertices, self.track.colors["vertex_borders"])
-        draw_vertices(self.track.in_border_vertices, self.track.colors["vertex_borders"])
-        # draw_polygons([self.car.points()], self.car.color[int(self.car.is_collision)])
+            draw_vertices(self.env.track.reward_gates, self.env.track.colors["vertex_reward_gates"])
+            draw_vertices([self.env.track.next_reward_gate(self.env.car.next_reward_gate_i)], self.env.track.colors["vertex_next_reward_gate"])
+            draw_vertices(self.env.car.sonars, self.env.car.color[int(self.env.car.is_collision)])
+        draw_vertices(self.env.track.out_border_vertices, self.env.track.colors["vertex_borders"])
+        draw_vertices(self.env.track.in_border_vertices, self.env.track.colors["vertex_borders"])
+        # draw_polygons([self.env.car.points()], self.env.car.color[int(self.env.car.is_collision)])
 
-        self.car_sprites[int(self.car.is_collision)]["sprite"].update(
-            x=self.car.x_pos,
-            y=self.car.y_pos,
-            scale_x=self.car_sprites[int(self.car.is_collision)]["scale_x"],
-            scale_y=self.car_sprites[int(self.car.is_collision)]["scale_y"],
-            rotation=270-self.car.theta
+        self.car_sprites[int(self.env.car.is_collision)]["sprite"].update(
+            x=self.env.car.x_pos,
+            y=self.env.car.y_pos,
+            scale_x=self.car_sprites[int(self.env.car.is_collision)]["scale_x"],
+            scale_y=self.car_sprites[int(self.env.car.is_collision)]["scale_y"],
+            rotation=270-self.env.car.theta
         )
-        self.car_sprites[int(self.car.is_collision)]["sprite"].draw()
+        self.car_sprites[int(self.env.car.is_collision)]["sprite"].draw()
 
         draw_label_top_left("Debug view: SPACE", -RES[0], RES[1], y_offset=1)
-        draw_label_top_left("Time: " + str(self.car.get_time()), -RES[0], RES[1], y_offset=2)
-        draw_label_top_left("Score: " + str(self.car.score), -RES[0], RES[1], y_offset=3)
+        draw_label_top_left("Time: " + str(self.env.car.get_time()), -RES[0], RES[1], y_offset=2)
+        draw_label_top_left("Score: " + str(self.env.car.score), -RES[0], RES[1], y_offset=3)
 
     def on_resize(self, width, height):
         glMatrixMode(gl.GL_MODELVIEW)

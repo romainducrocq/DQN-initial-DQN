@@ -30,15 +30,14 @@ class Track:
         start_theta = math.degrees(slope_vertex(self.out_border_vertices[start_vertex])) + random.choice([-1, 1]) * 90
         return start_pos, start_theta
 
-    # TODO
     def create_reward_gates(self):
         border_vertices_dicts, length_total_out = [], 0
         for i in range(self.n_vertices):
             border_vertices_dicts.append({
                 "length_out": euclidean_distance(self.out_border_vertices[i][0], self.out_border_vertices[i][1]),
                 "length_in": euclidean_distance(self.in_border_vertices[i][0], self.in_border_vertices[i][1]),
-                "slope_out": slope_vertex_corrected(self.out_border_vertices[i]),
-                "slope_in": slope_vertex_corrected(self.in_border_vertices[i])
+                "slope_out": slope_vertex_2pi(self.out_border_vertices[i]),
+                "slope_in": slope_vertex_2pi(self.in_border_vertices[i])
             })
             length_total_out += border_vertices_dicts[i]["length_out"]
         for i in range(self.n_vertices):
@@ -65,8 +64,6 @@ class Track:
                         self.in_border_vertices[i][0][0], self.in_border_vertices[i][0][1]
                     )
                 ])
-
-        [print(d) for d in border_vertices_dicts]
 
     def create_polygons(self):
         for i in range(self.n_vertices):

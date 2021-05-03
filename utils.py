@@ -42,18 +42,18 @@ def midpoint_vertex(vertex):
 
 
 def slope_vertex(vertex):
-    return math.atan((vertex[1][1] - vertex[0][1])/(vertex[1][0] - vertex[0][0]))
+    return 0 if (vertex[1][0] - vertex[0][0]) == 0 else \
+        math.atan((vertex[1][1] - vertex[0][1])/(vertex[1][0] - vertex[0][0]))
 
 
-# TODO
-def slope_vertex_corrected(vertex, x_orig=0, y_orig=0):
-    x_up, y_up = vertex[max(range(len(vertex)), key=lambda i: vertex[i][1])]
-    x_down, y_up = vertex[min(range(len(vertex)), key=lambda i: vertex[i][1])]
-
+def slope_vertex_2pi(vertex):
     slope = slope_vertex(vertex)
-    return slope + math.pi * (int(
-        (y_up - y_orig >= 0 and x_down - x_orig >= 0 and math.degrees(slope) < 0) or
-        (y_up - y_orig >= 0 and x_down - x_orig < 0 and math.degrees(slope) >= 0)))
+    if (((vertex[1][1] - vertex[0][1]) >= 0 and (vertex[1][0] - vertex[0][0]) < 0)
+            or ((vertex[1][1] - vertex[0][1]) < 0 and (vertex[1][0] - vertex[0][0]) < 0)):
+        slope += math.pi
+    elif (vertex[1][1] - vertex[0][1]) < 0 and (vertex[1][0] - vertex[0][0]) >= 0:
+        slope += 2*math.pi
+    return slope
 
 
 # https://stackoverflow.com/questions/39879924/rotate-a-rectangle-consisting-of-4-tuples-to-left-or-right

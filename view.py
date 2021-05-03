@@ -66,8 +66,8 @@ class View(pyglet.window.Window):
                 "scale_y": 2 * (self.env.car.width + 5) / self.car_imgs[i].width
             })
 
-        self.debug_view = False
-        self.debug_timer = time.time()
+        self.ai_view = False
+        self.ai_view_timer = time.time()
 
         _ = self.env.reset()
 
@@ -81,10 +81,10 @@ class View(pyglet.window.Window):
                 _ = self.env.reset()
 
         draw_polygons(self.env.track.polygons_track, self.env.track.colors["polygons_track"])
-        if self.key == pyglet.window.key.SPACE and (time.time() - self.debug_timer) > 0.2:
-            self.debug_view = not self.debug_view
-            self.debug_timer = time.time()
-        if self.debug_view:
+        if self.key == pyglet.window.key.SPACE and (time.time() - self.ai_view_timer) > 0.2:
+            self.ai_view = not self.ai_view
+            self.ai_view_timer = time.time()
+        if self.ai_view:
             draw_vertices(self.env.track.reward_gates, self.env.track.colors["vertex_reward_gates"])
             draw_vertices([self.env.track.next_reward_gate(self.env.car.next_reward_gate_i)], self.env.track.colors["vertex_next_reward_gate"])
             draw_vertices(self.env.car.sonars, self.env.car.color[int(self.env.car.is_collision)])
@@ -101,7 +101,7 @@ class View(pyglet.window.Window):
         )
         self.car_sprites[int(self.env.car.is_collision)]["sprite"].draw()
 
-        draw_label_top_left("Debug view: SPACE", -RES[0], RES[1], y_offset=1)
+        draw_label_top_left("AI view: SPACE", -RES[0], RES[1], y_offset=1)
         draw_label_top_left("Time: " + str(self.env.car.get_time()), -RES[0], RES[1], y_offset=2)
         draw_label_top_left("Score: " + str(self.env.car.score), -RES[0], RES[1], y_offset=3)
 

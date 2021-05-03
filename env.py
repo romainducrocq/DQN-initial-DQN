@@ -3,10 +3,9 @@ from car import *
 
 
 class Env:
-    def __init__(self, render):
+    def __init__(self):
         self.track = Track()
         self.car = Car()
-        self.render = render
         self.action_space_n = self.car.action_n()
         self.observation_space_n = self.car.observation_n()
 
@@ -14,8 +13,7 @@ class Env:
         return self.car.action_sample()
 
     def reset_render(self):
-        if self.render:
-            self.track.create_track_polygons()
+        return self.track.create_track_polygons()
 
     def reset(self):
         self.track = Track()
@@ -25,8 +23,6 @@ class Env:
         self.track.create_reward_gates()
         self.car.next_reward_gate_i = self.track.start_reward_gate(self.car.vertices())
         self.car.sonar(self.track.border_vertices())
-
-        self.reset_render()
 
         self.test_print()
 

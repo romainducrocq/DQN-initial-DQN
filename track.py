@@ -15,7 +15,6 @@ class Track:
         self.reward_gates = []
         self.reward_gates_direction = 1
 
-        self.polygons_track = []
         self.colors = {
             "polygons_track": [51, 51, 51],
             "vertex_borders": [255, 0, 100],
@@ -100,5 +99,4 @@ class Track:
         return (i + self.reward_gates_direction) % self.n_reward_gates
 
     def create_track_polygons(self):
-        for i in range(self.n_vertices):
-            self.polygons_track.append(create_polygon(self.out_border_vertices[i], self.in_border_vertices[i]))
+        return [create_polygon(self.out_border_vertices[i], self.in_border_vertices[i]) for i in range(self.n_vertices)]

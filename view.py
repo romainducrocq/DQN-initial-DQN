@@ -70,6 +70,7 @@ class View(pyglet.window.Window):
         self.ai_view_timer = time.time()
 
         _ = self.env.reset()
+        self.polygons_track = self.env.reset_render()
 
     def on_draw(self, dt=0.002):
         self.clear()
@@ -79,8 +80,9 @@ class View(pyglet.window.Window):
             _, _, done, _ = self.env.step(action)
             if done:
                 _ = self.env.reset()
+                self.polygons_track = self.env.reset_render()
 
-        draw_polygons(self.env.track.polygons_track, self.env.track.colors["polygons_track"])
+        draw_polygons(self.polygons_track, self.env.track.colors["polygons_track"])
         if self.key == pyglet.window.key.SPACE and (time.time() - self.ai_view_timer) > 0.2:
             self.ai_view = not self.ai_view
             self.ai_view_timer = time.time()

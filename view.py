@@ -33,7 +33,7 @@ def draw_vertices(vertices, color):
 
 
 def draw_label_top_left(text, x, y, y_offset=0, margin=50, font_size=40, color=(0, 0, 0, 255)):
-    pyglet.text.Label(text, x=x+margin, y=y-y_offset*(font_size+margin), font_size=font_size, color=color).draw()
+    pyglet.text.Label(text, x=x+margin, y=y-y_offset*(font_size+margin)-margin, font_size=font_size, color=color).draw()
 
 
 class View(pyglet.window.Window):

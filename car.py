@@ -1,5 +1,6 @@
 from utils import *
 import random
+import time
 
 
 class Car:
@@ -23,6 +24,8 @@ class Car:
 
         self.next_reward_gate_i = 0
         self.score = 0
+
+        self.start_time = time.time()
 
         self.color = [[255, 0, 0], [0, 0, 255]]
         self.sprites = ["./img/car_blue.png", "./img/car_red.png"]
@@ -124,5 +127,7 @@ class Car:
             if get_vertices_intersection(vertex, reward_gate_vertex)[0]:
                 self.next_reward_gate_i = update_next_reward_gate_i
                 self.score += 1
-                print("Score:", self.score)
                 return
+
+    def get_time(self):
+        return round((time.time() - self.start_time), 2)

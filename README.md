@@ -14,7 +14,7 @@
 - pyglet, gym, torch, tensorboard, msgpack, wheel  
 > (venv) pip3 install pyglet gym torch tensorboard 'msgpack==1.0.2' wheel
 
-- Tensorboard:
+- tensorboard:
 > tensorboard --logdir ./logs/
 > rm -rv logs/*
 

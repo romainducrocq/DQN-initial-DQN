@@ -1,9 +1,6 @@
+from env.utils import RES
 from pyglet.gl import *
-import math
-import random
 import time
-from utils import *
-from env import *
 
 
 def points_to_pyglet_vertex(points, color):

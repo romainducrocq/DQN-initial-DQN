@@ -1,5 +1,5 @@
-from track import *
-from car import *
+from env.track import Track
+from env.car import Car
 
 
 class Env:

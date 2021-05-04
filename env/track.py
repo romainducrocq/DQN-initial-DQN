@@ -1,4 +1,16 @@
-from utils import *
+from env.utils import \
+    create_polygon, \
+    euclidean_distance, \
+    generate_polygon, \
+    get_vertices_intersection, \
+    midpoint_vertex, \
+    point_on_circle, \
+    sign, \
+    slope_vertex, \
+    slope_vertex_2pi, \
+    zoom_vertices, \
+    RES
+import math
 import random
 
 

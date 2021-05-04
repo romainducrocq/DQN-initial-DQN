@@ -1,6 +1,7 @@
+from env.env import Env
+from env.view import View
+from env.utils import RES
 from pyglet.gl import *
-from env import *
-from view import *
 
 
 class Play(View):

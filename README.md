@@ -1,10 +1,10 @@
 ### Software Requirements
 
 - Python 3.7  
-> wget https://www.python.org/ftp/python/3.7.10/Python-3.7.10.tar.xz  
-> tar -xvf Python-3.7.10.tar.xz && rm -v Python-3.7.10.tar.xz && cd Python-3.7.10  
-> apt-get install build-essential sqlite3 libsqlite3-dev libbz2-dev zlib1g-dev cmake  
-> ./configure && make && make altinstall  
+> sudo apt-get update
+> sudo apt-get install build-essential libpq-dev libssl-dev openssl libffi-dev sqlite3 libsqlite3-dev libbz2-dev zlib1g-dev cmake  
+> sudo apt-get install python3-pip python3.7-dev
+> sudo apt-get install python3.7
 
 - venv  
 > mkdir venv && python3.7 -m venv venv/  

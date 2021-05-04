@@ -36,7 +36,7 @@ def draw_label_top_left(text, x, y, y_offset=0, margin=50, font_size=40, color=(
 
 class View(pyglet.window.Window):
 
-    def __init__(self, width, height, name, env, mode):
+    def __init__(self, width, height, name, env):
         super(View, self).__init__(width, height, name, resizable=True)
         glClearColor(193/255, 225/255, 193/255, 1)
         self.width = width
@@ -46,15 +46,8 @@ class View(pyglet.window.Window):
         self.key = None
 
         self.env = env
-        self.mode = mode
 
-        self.action_keys = {
-            pyglet.window.key.UP: self.env.car.actions['UP'],
-            pyglet.window.key.RIGHT: self.env.car.actions['RIGHT'],
-            pyglet.window.key.DOWN: self.env.car.actions['DOWN'],
-            pyglet.window.key.LEFT: self.env.car.actions['LEFT']
-        }
-
+        self.polygons_track = []
         self.car_imgs, self.car_sprites = [], []
         for i, sprite in enumerate(self.env.car.sprites):
             self.car_imgs.append(pyglet.image.load(sprite))
@@ -69,18 +62,12 @@ class View(pyglet.window.Window):
         self.ai_view = False
         self.ai_view_timer = time.time()
 
-        _ = self.env.reset()
-        self.polygons_track = self.env.reset_render()
+        self.setup()
 
     def on_draw(self, dt=0.002):
         self.clear()
 
-        if self.mode == "PLAY":
-            action = self.env.car.actions['NONE'] if self.key not in self.action_keys else self.action_keys[self.key]
-            _, _, done, _ = self.env.step(action)
-            if done:
-                _ = self.env.reset()
-                self.polygons_track = self.env.reset_render()
+        self.loop()
 
         draw_polygons(self.polygons_track, self.env.track.colors["polygons_track"])
         if self.key == pyglet.window.key.SPACE and (time.time() - self.ai_view_timer) > 0.2:
@@ -120,3 +107,9 @@ class View(pyglet.window.Window):
     def on_key_release(self, symbol, modifiers):
         if self.key == symbol:
             self.key = None
+
+    def setup(self):
+        raise NotImplementedError
+
+    def loop(self):
+        raise NotImplementedError

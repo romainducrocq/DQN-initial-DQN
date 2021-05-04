@@ -1,4 +1,4 @@
-from env.env import Env
+from env.custom_env import CustomEnv
 from env.view import View
 from env.utils import RES
 from pyglet.gl import *
@@ -23,11 +23,14 @@ class Play(View):
         action = self.env.car.actions['NONE'] if self.key not in self.action_keys else self.action_keys[self.key]
         _, _, done, _ = self.env.step(action)
         if done:
+            """DEBUG"""
+            self.env.test_print()
+            """"""
             self.setup()
 
 
 if __name__ == "__main__":
 
-    play = Play(RES[0], RES[1], "Initial DQN - PLAY", Env())
+    play = Play(RES[0], RES[1], "Initial DQN - PLAY", CustomEnv())
     pyglet.clock.schedule_interval(play.on_draw, 0.002)
     pyglet.app.run()

@@ -5,7 +5,6 @@ from env.utils import \
     rotate_point, \
     RES
 import math
-import random
 import time
 
 
@@ -16,11 +15,12 @@ class Car:
         self.width = width
         self.height = ratio * width
         self.theta = theta
-        self.speed = 0
+        self.speed = 0.
         self.d_theta = 2
         self.d_a = 0.03
         self.d_a_friction = 0.01
         self.min_speed = 0.3
+        self.max_speed = 100.
 
         self.is_collision = False
 
@@ -30,6 +30,7 @@ class Car:
 
         self.next_reward_gate_i = 0
         self.score = 0
+        self.bonus = 0.
 
         self.start_time = time.time()
 
@@ -97,19 +98,19 @@ class Car:
         self.x_pos, self.y_pos = rotate_point(0, self.speed, self.x_pos, self.y_pos, math.radians(self.theta))
 
     def accelerate(self):
-        self.speed = self.speed * (1 + self.d_a) if self.speed > 0 else self.min_speed
+        self.speed = min([(self.speed * (1 + self.d_a) if self.speed > 0 else self.min_speed), self.max_speed])
 
     def rotate_left(self):
         self.theta = (self.theta + self.d_theta) % 360 if self.speed > 0 else self.theta
 
     def decelerate(self):
-        self.speed = (self.speed * (1 - self.d_a) if self.speed * (1 - self.d_a) >= self.min_speed else 0)
+        self.speed = (self.speed * (1 - self.d_a) if self.speed * (1 - self.d_a) >= self.min_speed else 0.)
 
     def rotate_right(self):
         self.theta = (self.theta - self.d_theta) % 360 if self.speed > 0 else self.theta
 
     def friction(self):
-        self.speed = (self.speed * (1 - self.d_a_friction) if self.speed * (1 - self.d_a_friction) >= self.min_speed else 0)
+        self.speed = (self.speed * (1 - self.d_a_friction) if self.speed * (1 - self.d_a_friction) >= self.min_speed else 0.)
 
     def collision(self, border_vertices):
         for vertex in self.vertices():
@@ -137,31 +138,14 @@ class Car:
             if get_vertices_intersection(vertex, reward_gate_vertex)[0]:
                 self.next_reward_gate_i = update_next_reward_gate_i
                 self.score += 1
+                self.bonus += self.normalize_speed()
                 return
 
     def get_time(self):
         return round((time.time() - self.start_time), 2)
 
-    def action_sample(self):
-        return self.actions[random.sample(list(self.actions), 1)[0]]
+    def normalize_sonar_distances(self):
+        return [sonar_distance / (2 * RES[0]) for sonar_distance in self.sonar_distances]
 
-    def action_n(self):
-        return len(self.actions)
-
-    def observation_n(self):
-        return self.n_sonars + 1
-
-    def obs(self):
-        return self.sonar_distances + [float(self.speed)]
-
-    def rew(self):
-        return self.score
-
-    def done(self):
-        return self.is_collision
-
-    def info(self):
-        return self.get_time()
-
-    def step(self):
-        return self.obs(), self.rew(), self.done(), self.info()
+    def normalize_speed(self):
+        return self.speed / self.max_speed

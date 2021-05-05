@@ -4,7 +4,7 @@ import random
 RES = (1920, 1080)
 
 
-def _dict(d, key, def_val):
+def safe_dict(d, key, def_val):
     return def_val if d is None or key not in d else d[key]
 
 

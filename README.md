@@ -20,4 +20,6 @@
 State space (n=9): 8 sonar distances, speed  
 Action space (n=5): up, right, down, left, none  
 Reward: score  
-https://github.com/notadamking/Stock-Trading-Environment/blob/master/env/StockTradingEnv.py
+https://github.com/notadamking/Stock-Trading-Environment/blob/master/env/StockTradingEnv.py  
+https://stats.stackexchange.com/questions/181/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-netw  
+https://eulertech.wordpress.com/2018/01/02/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-network/  

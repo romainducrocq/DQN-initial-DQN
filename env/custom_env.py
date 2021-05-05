@@ -10,7 +10,7 @@ class CustomEnv(gym.Env):
     metadata = {'render.modes': ['human']}
     MAX_FEATURES = {
         "speed": 100.,
-        "sonar_distance": 2 * RES[0]
+        "sonar_distance": 2*RES[0]
     }
 
     def __init__(self):

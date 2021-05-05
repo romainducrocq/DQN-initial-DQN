@@ -1,4 +1,4 @@
-from env.utils import \
+from .utils import \
     euclidean_distance, \
     get_vertices_intersection, \
     point_on_circle, \

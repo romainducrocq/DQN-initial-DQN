@@ -1,4 +1,4 @@
-from env.utils import \
+from .utils import \
     create_polygon, \
     euclidean_distance, \
     generate_polygon, \

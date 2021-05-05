@@ -1,6 +1,4 @@
-from env.custom_env import CustomEnv
-from env.view import View
-from env.utils import RES
+from env import Env, View, RES
 from pyglet.gl import *
 
 
@@ -31,6 +29,6 @@ class Play(View):
 
 if __name__ == "__main__":
 
-    play = Play(RES[0], RES[1], "Initial DQN - PLAY", CustomEnv())
+    play = Play(RES[0], RES[1], "Initial DQN - PLAY", Env())
     pyglet.clock.schedule_interval(play.on_draw, 0.002)
     pyglet.app.run()

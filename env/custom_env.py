@@ -1,5 +1,5 @@
-from env.track import Track
-from env.car import Car
+from .track import Track
+from .car import Car
 import gym
 from gym import spaces
 import numpy as np

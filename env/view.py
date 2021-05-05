@@ -1,4 +1,4 @@
-from env.utils import RES
+from .utils import RES
 from pyglet.gl import *
 import time
 

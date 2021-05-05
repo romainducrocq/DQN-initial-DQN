@@ -1,4 +1,4 @@
-from env import Env, View, RES
+from env import Env, View, _dict, RES
 from pyglet.gl import *
 
 
@@ -18,7 +18,7 @@ class Play(View):
         self.polygons_track = self.env.reset_render()
 
     def loop(self):
-        action = self.env.car.actions['NONE'] if self.key not in self.action_keys else self.action_keys[self.key]
+        action = _dict(self.action_keys, self.key, self.env.car.actions['NONE'])
         _, _, done, _ = self.env.step(action)
         if done:
             """DEBUG"""

@@ -3,13 +3,14 @@ from .utils import \
     get_vertices_intersection, \
     point_on_circle, \
     rotate_point, \
+    _dict, \
     RES
 import math
 import time
 
 
 class Car:
-    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, theta=0, n_sonars=8, max_speed=100., max_sonar_distance=(2*RES[0])):
+    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, theta=0, n_sonars=8, max_features=None):
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.width = width
@@ -20,8 +21,8 @@ class Car:
         self.d_a = 0.03
         self.d_a_friction = 0.01
         self.min_speed = 0.3
-        self.max_speed = max_speed
-        self.max_sonar_distance = max_sonar_distance
+        self.max_speed = _dict(max_features, "speed", 100.)
+        self.max_sonar_distance = _dict(max_features, "sonar_distance", 2*RES[0])
 
         self.is_collision = False
 

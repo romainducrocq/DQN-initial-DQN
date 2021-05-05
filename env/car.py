@@ -9,7 +9,7 @@ import time
 
 
 class Car:
-    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, theta=0, n_sonars=8):
+    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, theta=0, n_sonars=8, max_speed=100.):
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.width = width
@@ -20,7 +20,7 @@ class Car:
         self.d_a = 0.03
         self.d_a_friction = 0.01
         self.min_speed = 0.3
-        self.max_speed = 100.
+        self.max_speed = max_speed
 
         self.is_collision = False
 
@@ -30,7 +30,6 @@ class Car:
 
         self.next_reward_gate_i = 0
         self.score = 0
-        self.bonus = 0.
 
         self.start_time = time.time()
 
@@ -138,14 +137,9 @@ class Car:
             if get_vertices_intersection(vertex, reward_gate_vertex)[0]:
                 self.next_reward_gate_i = update_next_reward_gate_i
                 self.score += 1
-                self.bonus += self.normalize_speed()
-                return
+                return True
+        return False
 
     def get_time(self):
-        return round((time.time() - self.start_time), 2)
+        return (time.time() - self.start_time)
 
-    def normalize_sonar_distances(self):
-        return [sonar_distance / (2 * RES[0]) for sonar_distance in self.sonar_distances]
-
-    def normalize_speed(self):
-        return self.speed / self.max_speed

@@ -1,8 +1,12 @@
 from .track import Track
 from .car import Car
+from .utils import RES
 import gym
 from gym import spaces
 import numpy as np
+
+MAX_SONAR_DISTANCE = 2 * RES[0]
+MAX_SPEED = 100.
 
 
 class CustomEnv(gym.Env):
@@ -10,53 +14,60 @@ class CustomEnv(gym.Env):
         super(CustomEnv, self).__init__()
 
         self.track = Track()
-        self.car = Car()
+        self.car = Car(max_speed=MAX_SPEED)
 
+        self.steps = 0
+        self.total_reward = 0.
         self.action_space = spaces.Discrete(len(self.car.actions))
         self.observation_space = spaces.Box(low=0., high=1., shape=(self.car.n_sonars+1,), dtype=np.float32)
 
-        """DEBUG"""
-        self.steps = 0
-        """"""
-
     def _obs(self):
-        return np.array(self.car.normalize_sonar_distances() + [self.car.normalize_speed()], dtype=np.float32)
+        self.car.sonar(self.track.border_vertices())
+
+        obs = np.array(
+            [sonar_distance / MAX_SONAR_DISTANCE for sonar_distance in self.car.sonar_distances] +
+            [self.car.speed / MAX_SPEED],
+            dtype=np.float32)
+        return obs
 
     def _rew(self):
-        return float(self.car.score) + self.car.bonus
+        rew = 0.
+        if self.car.reward(self.track.next_reward_gate(self.car.next_reward_gate_i),
+                           self.track.update_next_reward_gate_index(self.car.next_reward_gate_i)):
+            rew += 1 + (self.car.speed / MAX_SPEED)
+        self.total_reward += rew
+        return rew
 
     def _done(self):
-        return self.car.is_collision
+        self.car.collision(self.track.border_vertices())
+        done = self.car.is_collision
+        return done
 
     def _info(self):
-        return {"r": self._rew(), "l": self.car.get_time()}
+        info = {
+            "s": self.steps,
+            "r": self.total_reward,
+            "l": self.car.get_time()
+        }
+        return info
 
     def reset(self):
+        self.steps = 0
+        self.total_reward = 0.
+
         self.track = Track()
-        self.car = Car()
+        self.car = Car(max_speed=MAX_SPEED)
 
         (self.car.x_pos, self.car.y_pos), self.car.theta = self.track.start_line()
         self.track.create_reward_gates()
         self.car.next_reward_gate_i = self.track.start_reward_gate(self.car.vertices())
-        self.car.sonar(self.track.border_vertices())
-
-        """DEBUG"""
-        self.steps = 0
-        """"""
 
         return self._obs()
 
     def step(self, action):
         self.car.move(action)
-        self.car.sonar(self.track.border_vertices())
-        self.car.reward(self.track.next_reward_gate(self.car.next_reward_gate_i),
-                        self.track.update_next_reward_gate_index(self.car.next_reward_gate_i))
 
-        self.car.collision(self.track.border_vertices())
-
-        """DEBUG"""
         self.steps += 1
-        """"""
 
         return self._obs(), self._rew(), self._done(), self._info()
 
@@ -74,6 +85,5 @@ class CustomEnv(gym.Env):
         print("Observation space n:", self.observation_space.shape[0])
         print("Obs: ", self._obs())
         print("Info: ", self._info())
-        print("Steps: ", self.steps)
         print()
     """"""

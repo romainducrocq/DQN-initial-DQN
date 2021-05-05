@@ -5,7 +5,7 @@ import gym
 from gym import spaces
 import numpy as np
 
-MAX_SONAR_DISTANCE = 2 * RES[0]
+MAX_SONAR_DISTANCE = 2*RES[0]
 MAX_SPEED = 100.
 
 
@@ -14,7 +14,7 @@ class CustomEnv(gym.Env):
         super(CustomEnv, self).__init__()
 
         self.track = Track()
-        self.car = Car(max_speed=MAX_SPEED)
+        self.car = Car(max_speed=MAX_SPEED, max_sonar_distance=MAX_SONAR_DISTANCE)
 
         self.steps = 0
         self.total_reward = 0.
@@ -56,7 +56,7 @@ class CustomEnv(gym.Env):
         self.total_reward = 0.
 
         self.track = Track()
-        self.car = Car(max_speed=MAX_SPEED)
+        self.car = Car(max_speed=MAX_SPEED, max_sonar_distance=MAX_SONAR_DISTANCE)
 
         (self.car.x_pos, self.car.y_pos), self.car.theta = self.track.start_line()
         self.track.create_reward_gates()

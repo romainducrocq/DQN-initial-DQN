@@ -9,7 +9,7 @@ import time
 
 
 class Car:
-    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, theta=0, n_sonars=8, max_speed=100.):
+    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, theta=0, n_sonars=8, max_speed=100., max_sonar_distance=(2*RES[0])):
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.width = width
@@ -21,6 +21,7 @@ class Car:
         self.d_a_friction = 0.01
         self.min_speed = 0.3
         self.max_speed = max_speed
+        self.max_sonar_distance = max_sonar_distance
 
         self.is_collision = False
 
@@ -124,7 +125,7 @@ class Car:
         for i in range(self.n_sonars):
             self.sonars[i] = [
                 (self.x_pos, self.y_pos),
-                point_on_circle(math.radians(self.theta) + (i * 2 * math.pi) / self.n_sonars, 2*RES[0], self.x_pos, self.y_pos)
+                point_on_circle(math.radians(self.theta) + (i * 2 * math.pi) / self.n_sonars, self.max_sonar_distance, self.x_pos, self.y_pos)
             ]
             for border_vertex in border_vertices:
                 is_intersect, x, y = get_vertices_intersection(self.sonars[i], border_vertex)
@@ -141,5 +142,5 @@ class Car:
         return False
 
     def get_time(self):
-        return (time.time() - self.start_time)
+        return time.time() - self.start_time
 

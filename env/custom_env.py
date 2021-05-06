@@ -48,9 +48,9 @@ class CustomEnv(gym.Env):
 
     def _info(self):
         info = {
-            "s": self.steps,
+            "l": self.steps,
             "r": self.total_reward,
-            "l": self.car.get_time()
+            "t": self.car.get_time()
         }
         return info
 

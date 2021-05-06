@@ -1,3 +1,4 @@
-from .network import DeepQNetwork
+from .make_env import make_vec_env
+from . import agent as Agents
 
-__all__ = ['DeepQNetwork']
+__all__ = ['make_vec_env', 'Agents']

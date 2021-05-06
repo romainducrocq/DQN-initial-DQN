@@ -1,5 +1,3 @@
-__all__ = ['Monitor']
-
 import time
 
 from gym.core import Wrapper

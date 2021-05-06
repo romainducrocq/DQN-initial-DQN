@@ -91,7 +91,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Initial DQN - TRAIN")
     parser.add_argument('-n_env', type=int, default=4, help='Multi-processing environments')
     parser.add_argument('-lr', type=float, default=0.00025, help='Learning rate')
-    parser.add_argument('-gamma', type=float, default=0.95, help='Discount factor')
+    parser.add_argument('-gamma', type=float, default=0.99, help='Discount factor')
     parser.add_argument('-eps_start', type=float, default=1., help='Epsilon start')
     parser.add_argument('-eps_min', type=float, default=0.01, help='Epsilon min')
     parser.add_argument('-eps_dec', type=float, default=1e6, help='Epsilon decay')

@@ -36,7 +36,7 @@ class Network(nn.Module):
         parameters = {k: T.as_tensor(v, device=self.device) for k, v in params_dict['parameters'].items()}
         self.load_state_dict(parameters)
 
-        return params_dict['step'], params_dict['episode_count'], params_dict['rew_mean'], params_dict['lean_mean']
+        return params_dict['step'], params_dict['episode_count'], params_dict['rew_mean'], params_dict['len_mean']
 
 
 class DeepQNetwork(Network):

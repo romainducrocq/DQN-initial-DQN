@@ -141,7 +141,7 @@ class DQNAgent(Agent):
     def sample_transitions(self):
         return self.transitions_to_tensor(self.replay_memory_buffer.sample_transitions())
 
-    def choose_action(self, step, obses):
+    def choose_actions(self, step, obses):
         obses_t = T.as_tensor(obses, dtype=T.float32).to(self.device)
         q_values = self.online_network(obses_t)
 
@@ -156,7 +156,7 @@ class DQNAgent(Agent):
 
     def learn(self):
         # Compute loss
-        obses_t, actions_t, rews_t, dones_t, new_obses_t = self.replay_memory_buffer.sample_transitions()
+        obses_t, actions_t, rews_t, dones_t, new_obses_t = self.sample_transitions()
 
         with T.no_grad():
             target_q_values = self.target_network(new_obses_t)

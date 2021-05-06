@@ -2,12 +2,9 @@ from env import Env
 from dqn import make_vec_env, Agents
 
 import os
-import argparse
 import time
-from collections import deque
+import argparse
 import itertools
-import numpy as np
-import random
 
 
 class Train:
@@ -44,6 +41,9 @@ class Train:
 
         self.agent.load_model()
 
+        print()
+        print(self.agent.online_network)
+
     def init_replay_memory_buffer(self):
         print()
         print("Initialize Replay Memory Buffer")
@@ -68,17 +68,23 @@ class Train:
         print()
         print("Start Training")
 
+        obses = self.env.reset()
+        for step in itertools.count(start=self.agent.resume_step):
+            actions = self.agent.choose_actions(step, obses)
 
+            new_obses, rews, dones, infos = self.env.step(actions)
 
+            self.agent.store_transitions(obses, actions, rews, dones, new_obses, infos)
 
+            obses = new_obses
 
-    def print_network(self):
-        print(self.agent.ep_info_buffer)
-        print(self.agent.replay_memory_buffer.replay_buffer)
-        print(self.agent.summary_writer)
-        print(self.agent.online_network)
-        print(self.agent.target_network)
-        print(self.agent.online_network.optimizer)
+            self.agent.learn()
+
+            self.agent.update_target_network(step)
+
+            self.agent.log(step)
+
+            self.agent.save_model(step)
 
 
 if __name__ == "__main__":
@@ -106,8 +112,6 @@ if __name__ == "__main__":
         env=Env()
     )
 
-    train.print_network()
-
     train.init_replay_memory_buffer()
 
-    print("byebye")
+    train.train_loop()

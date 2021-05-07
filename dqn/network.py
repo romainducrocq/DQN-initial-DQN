@@ -19,7 +19,7 @@ class Network(nn.Module):
     def forward(self, s):
         raise NotImplementedError
 
-    def a(self, s):
+    def actions(self, obses):
         raise NotImplementedError
 
     def save(self, save_path, step, episode_count, rew_mean, len_mean):

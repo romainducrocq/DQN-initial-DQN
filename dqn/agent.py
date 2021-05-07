@@ -1,5 +1,5 @@
 from .utils import ABCMeta, abstract_attribute
-from .replay_memory import ReplayMemory
+from .replay_memory import ReplayMemoryNaive
 from .network import DeepQNetwork
 
 import os
@@ -56,20 +56,8 @@ class Agent(metaclass=ABCMeta):
     def target_network(self):
         pass
 
-    def store_transitions(self, obses, actions, rews, dones, new_obses, infos):
-        raise NotImplementedError
-
-    def sample_transitions(self):
-        raise NotImplementedError
-
-    def choose_actions(self, step, obses):
-        raise NotImplementedError
-
     def learn(self):
         raise NotImplementedError
-
-    def epsilon(self, step):
-        return np.interp(step * self.n_env, [0, self.epsilon_decay], [self.epsilon_start, self.epsilon_min])
 
     def transitions_to_tensor(self, transitions):
         obses_t = T.as_tensor(np.asarray([t[0] for t in transitions]), dtype=T.float32).to(self.device)
@@ -79,6 +67,27 @@ class Agent(metaclass=ABCMeta):
         new_obses_t = T.as_tensor(np.asarray([t[4] for t in transitions]), dtype=T.float32).to(self.device)
 
         return obses_t, actions_t, rews_t, dones_t, new_obses_t
+
+    def store_transitions(self, obses, actions, rews, dones, new_obses, infos):
+        for i in self.replay_memory_buffer.store_transitions(obses, actions, rews, dones, new_obses):
+            if infos:
+                self.ep_info_buffer.append({'r': infos[i]['r'], 'l': infos[i]['l']})
+                self.episode_count += 1
+
+    def sample_transitions(self):
+        return self.transitions_to_tensor(self.replay_memory_buffer.sample_transitions())
+
+    def epsilon(self, step):
+        return np.interp(step * self.n_env, [0, self.epsilon_decay], [self.epsilon_start, self.epsilon_min])
+
+    def choose_actions(self, step, obses):
+        actions = self.online_network.actions(obses)
+
+        for i in range(len(actions)):
+            if random.random() <= self.epsilon(step):
+                actions[i] = random.randint(0, self.output_dim - 1)
+
+        return actions
 
     def update_target_network(self, step=0):
         if step % self.update_target_frequency == 0:
@@ -125,34 +134,12 @@ class DQNAgent(Agent):
     def __init__(self, *args, **kwargs):
         super(DQNAgent, self).__init__(*args, **kwargs)
 
-        self.replay_memory_buffer = ReplayMemory(self.buffer_size, self.batch_size)
+        self.replay_memory_buffer = ReplayMemoryNaive(self.buffer_size, self.batch_size)
 
         self.online_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
         self.target_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
 
         self.update_target_network()
-
-    def store_transitions(self, obses, actions, rews, dones, new_obses, infos):
-        for i in self.replay_memory_buffer.store_transitions(obses, actions, rews, dones, new_obses):
-            if infos:
-                self.ep_info_buffer.append({'r': infos[i]['r'], 'l': infos[i]['l']})
-                self.episode_count += 1
-
-    def sample_transitions(self):
-        return self.transitions_to_tensor(self.replay_memory_buffer.sample_transitions())
-
-    def choose_actions(self, step, obses):
-        obses_t = T.as_tensor(obses, dtype=T.float32).to(self.device)
-        q_values = self.online_network(obses_t)
-
-        max_q_indices = T.argmax(q_values, dim=1)
-        actions = max_q_indices.detach().tolist()
-
-        for i in range(len(actions)):
-            if random.random() <= self.epsilon(step):
-                actions[i] = random.randint(0, self.output_dim - 1)
-
-        return actions
 
     def learn(self):
         # Compute loss

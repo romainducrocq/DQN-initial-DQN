@@ -8,6 +8,17 @@ class ReplayMemory:
         self.replay_buffer = deque(maxlen=buffer_size)
 
     def store_transitions(self, obses, actions, rews, dones, new_obses):
+        raise NotImplementedError
+
+    def sample_transitions(self):
+        raise NotImplementedError
+
+
+class ReplayMemoryNaive(ReplayMemory):
+    def __init__(self, *args, **kwargs):
+        super(ReplayMemoryNaive, self).__init__(*args, **kwargs)
+
+    def store_transitions(self, obses, actions, rews, dones, new_obses):
         for e, (obs, action, rew, done, new_obs) in enumerate(zip(obses, actions, rews, dones, new_obses)):
             transition = (obs, action, rew, done, new_obs)
             self.replay_buffer.append(transition)

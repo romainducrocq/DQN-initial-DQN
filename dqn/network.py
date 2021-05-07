@@ -16,6 +16,12 @@ class Network(nn.Module):
 
         self.device = device
 
+    def forward(self, s):
+        raise NotImplementedError
+
+    def a(self, s):
+        raise NotImplementedError
+
     def save(self, save_path, step, episode_count, rew_mean, len_mean):
         params_dict = {
             'parameters': {k: v.detach().cpu().numpy() for k, v in self.state_dict().items()},
@@ -53,13 +59,19 @@ class DeepQNetwork(Network):
 
         self.to(self.device)
 
-    def forward(self, x_state):
-        z1 = self.fc1(x_state)
-        a1 = F.elu(z1)
-        z2 = self.fc2(a1)
-        a2 = F.elu(z2)
-        z3 = self.fc3(a2)
-        a3 = F.elu(z3)
-        y_action = self.fc4(a3)
+    def forward(self, s):
+        fc1 = F.elu(self.fc1(s))
+        fc2 = F.elu(self.fc2(fc1))
+        fc3 = F.elu(self.fc3(fc2))
+        a = self.fc4(fc3)
 
-        return y_action
+        return a
+
+    def actions(self, obses):
+        obses_t = T.as_tensor(obses, dtype=T.float32).to(self.device)
+        q_values = self(obses_t)
+
+        max_q_indices = T.argmax(q_values, dim=1)
+        actions = max_q_indices.detach().tolist()
+
+        return actions

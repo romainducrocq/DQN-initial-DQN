@@ -49,8 +49,7 @@ class CustomEnv(gym.Env):
     def _info(self):
         info = {
             "l": self.steps,
-            "r": self.total_reward,
-            "t": self.car.get_time()
+            "r": self.total_reward
         }
         return info
 
@@ -79,14 +78,3 @@ class CustomEnv(gym.Env):
 
     def render(self, mode='human'):
         pass
-
-    """DEBUG"""
-    def test_print(self):
-        print("Sample action: ", self.action_space.sample())
-        print("Sample observation: ", self.observation_space.sample())
-        print("Action space n: ", self.action_space.n)
-        print("Observation space n:", self.observation_space.shape[0])
-        print("Obs: ", self._obs())
-        print("Info: ", self._info())
-        print()
-    """"""

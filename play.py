@@ -21,9 +21,6 @@ class Play(View):
         action = safe_dict(self.action_keys, self.key, self.env.car.actions['NONE'])
         _, _, done, _ = self.env.step(action)
         if done:
-            """DEBUG"""
-            self.env.test_print()
-            """"""
             self.setup()
 
 

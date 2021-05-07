@@ -48,6 +48,8 @@ class Train:
         self.agent.load_model()
 
         print()
+        print(args.algo)
+        print()
         print(self.agent.online_network)
 
     def init_replay_memory_buffer(self):

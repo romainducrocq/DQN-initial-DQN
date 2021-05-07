@@ -1,5 +1,5 @@
 from env import Env
-from dqn import make_vec_env, Agents
+from dqn import make_env, Agents
 
 import os
 import time
@@ -12,9 +12,11 @@ class Train:
         os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
         os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
-        self.env = make_vec_env(
-            env,
-            args.n_env
+        self.env = make_env(
+            env=env,
+            repeat=2,
+            max_episode_steps=5000,
+            n_env=args.n_env
         )
 
         self.agent = getattr(Agents, args.algo)(

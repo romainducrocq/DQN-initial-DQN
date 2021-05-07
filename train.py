@@ -104,7 +104,7 @@ if __name__ == "__main__":
     parser.add_argument('-save_dir', type=str, default='./save/', help='Save directory')
     parser.add_argument('-log_dir', type=str, default='./logs/', help='Log directory')
     parser.add_argument('-load', type=bool, default=True, help='Load model')
-    parser.add_argument('-algo', type=str, default='DQNAgent', help='DQNAgent')
+    parser.add_argument('-algo', type=str, default='DoubleDQNAgent', help='DQNAgent/DoubleDQNAgent')
     parser.add_argument('-gpu', type=str, default='0', help='GPU #')
 
     train = Train(

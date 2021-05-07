@@ -160,3 +160,38 @@ class DQNAgent(Agent):
         self.online_network.optimizer.zero_grad()
         loss.backward()
         self.online_network.optimizer.step()
+
+
+class DoubleDQNAgent(Agent):
+    def __init__(self, *args, **kwargs):
+        super(DoubleDQNAgent, self).__init__(*args, **kwargs)
+
+        self.replay_memory_buffer = ReplayMemoryNaive(self.buffer_size, self.batch_size)
+
+        self.online_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+        self.target_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+
+        self.update_target_network()
+
+    def learn(self):
+        # Compute loss
+        obses_t, actions_t, rews_t, dones_t, new_obses_t = self.sample_transitions()
+
+        with T.no_grad():
+            targets_online_q_values = self.online_network(new_obses_t)
+            targets_online_best_q_indices = targets_online_q_values.argmax(dim=1, keepdim=True)
+
+            targets_target_q_values = self.target_network(new_obses_t)
+            targets_selected_q_values = T.gather(input=targets_target_q_values, dim=1, index=targets_online_best_q_indices)
+
+            targets = rews_t + (1 - dones_t) * self.gamma * targets_selected_q_values
+
+        online_q_values = self.online_network(obses_t)
+        action_q_values = T.gather(input=online_q_values, dim=1, index=actions_t)
+
+        loss = self.online_network.loss(action_q_values, targets).to(self.device)
+
+        # Gradient descent
+        self.online_network.optimizer.zero_grad()
+        loss.backward()
+        self.online_network.optimizer.step()

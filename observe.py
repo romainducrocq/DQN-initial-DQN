@@ -17,7 +17,8 @@ class Observe(View):
         super(Observe, self).__init__(width, height, name, env)
 
         self.network = getattr(Networks, {
-            "DQNAgent": "DeepQNetwork"
+            "DQNAgent": "DeepQNetwork",
+            "DoubleDQNAgent": "DeepQNetwork"
         }[args.dir.split('_')[0].split('save/')[1]])(
             device(("cuda:" + args.gpu) if cuda.is_available() else "cpu"),
             float(args.dir.split('_')[1].split('lr')[1]),

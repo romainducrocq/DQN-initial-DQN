@@ -6,6 +6,7 @@ import time
 import argparse
 import itertools
 from functools import reduce
+from datetime import timedelta
 
 REPEAT = 2
 MAX_EPISODE_STEPS = 5000
@@ -67,7 +68,7 @@ class Train:
 
             if (t+1) % 10000 == 0:
                 print(str(t+1) + ' / ' + str(self.agent.min_buffer_size))
-                print('---', round((time.time() - self.agent.start_time), 2), '---')
+                print('---', str(timedelta(seconds=round((time.time() - self.agent.start_time), 0))), '---')
 
     def train_loop(self):
         print()

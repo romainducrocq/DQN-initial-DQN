@@ -32,9 +32,6 @@ class Observe(View):
 
         self.obs = np.zeros(reduce(lambda x, y: x * y, list(self.env.observation_space.shape)), dtype=np.float32)
 
-        print()
-        print(self.network)
-
     def setup(self):
         self.obs = self.env.reset()
         self.polygons_track = self.env.reset_render()

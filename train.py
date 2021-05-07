@@ -5,6 +5,7 @@ import os
 import time
 import argparse
 import itertools
+from functools import reduce
 
 REPEAT = 2
 MAX_EPISODE_STEPS = 5000
@@ -28,7 +29,7 @@ class Train:
             epsilon_start=args.eps_start,
             epsilon_min=args.eps_min,
             epsilon_decay=args.eps_dec,
-            input_dim=env.observation_space.shape[0],
+            input_dim=reduce(lambda x, y: x*y, list(env.observation_space.shape)),
             output_dim=env.action_space.n,
             batch_size=args.bs,
             min_buffer_size=args.min_mem,

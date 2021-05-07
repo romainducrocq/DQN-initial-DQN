@@ -6,6 +6,7 @@ from pyglet.gl import *
 import os
 import argparse
 import numpy as np
+from functools import reduce
 
 from torch import device, cuda
 
@@ -23,13 +24,16 @@ class Observe(View):
         }[args.dir.split('_')[0].split('save/')[1]])(
             device(("cuda:" + args.gpu) if cuda.is_available() else "cpu"),
             float(args.dir.split('_')[1].split('lr')[1]),
-            self.env.observation_space.shape[0],
+            reduce(lambda x, y: x * y, list(self.env.observation_space.shape)),
             self.env.action_space.n
         )
 
         self.network.load(args.dir)
 
-        self.obs = np.zeros((self.env.observation_space.shape[0]), dtype=np.float32)
+        self.obs = np.zeros(reduce(lambda x, y: x * y, list(self.env.observation_space.shape)), dtype=np.float32)
+
+        print()
+        print(self.network)
 
     def setup(self):
         self.obs = self.env.reset()

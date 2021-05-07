@@ -1,5 +1,6 @@
 from env import Env, View, RES
 from dqn import make_env, Networks
+from train import REPEAT, MAX_EPISODE_STEPS
 from pyglet.gl import *
 
 import os
@@ -14,7 +15,7 @@ class Observe(View):
         os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
         os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
-        super(Observe, self).__init__(width, height, name, make_env(env=env, repeat=2, max_episode_steps=args.max_steps))
+        super(Observe, self).__init__(width, height, name, make_env(env=env, repeat=REPEAT, max_episode_steps=args.max_steps))
 
         self.network = getattr(Networks, {
             "DQNAgent": "DeepQNetwork",
@@ -45,7 +46,7 @@ class Observe(View):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Initial DQN - OBSERVE")
     parser.add_argument('-dir', type=str, default='', help='Directory', required=True)
-    parser.add_argument('-max_steps', type=int, default=5000, help='Max episode steps')
+    parser.add_argument('-max_steps', type=int, default=MAX_EPISODE_STEPS, help='Max episode steps')
     parser.add_argument('-gpu', type=str, default='0', help='GPU #')
 
     play = Observe(RES[0], RES[1], "Initial DQN - OBSERVE", Env(), parser.parse_args())

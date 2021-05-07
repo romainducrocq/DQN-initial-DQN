@@ -6,6 +6,8 @@ import time
 import argparse
 import itertools
 
+REPEAT = 2
+MAX_EPISODE_STEPS = 5000
 
 class Train:
     def __init__(self, args, env):
@@ -14,8 +16,8 @@ class Train:
 
         self.env = make_env(
             env=env,
-            repeat=2,
-            max_episode_steps=5000,
+            repeat=REPEAT,
+            max_episode_steps=MAX_EPISODE_STEPS,
             n_env=args.n_env
         )
 

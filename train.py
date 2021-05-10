@@ -1,4 +1,5 @@
 from env import Env
+from dqn.config import HYPER_PARAMS
 from dqn import make_env, Agents
 
 import os
@@ -8,8 +9,9 @@ import itertools
 from functools import reduce
 from datetime import timedelta
 
-REPEAT = 2
-MAX_EPISODE_STEPS = 5000
+REPEAT = HYPER_PARAMS['repeat']
+MAX_EPISODE_STEPS = HYPER_PARAMS['max_episode_steps']
+
 
 class Train:
     def __init__(self, args, env):
@@ -97,28 +99,28 @@ class Train:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Initial DQN - TRAIN")
-    parser.add_argument('-n_env', type=int, default=4, help='Multi-processing environments')
-    parser.add_argument('-lr', type=float, default=0.00025, help='Learning rate')
-    parser.add_argument('-gamma', type=float, default=0.99, help='Discount factor')
-    parser.add_argument('-eps_start', type=float, default=1., help='Epsilon start')
-    parser.add_argument('-eps_min', type=float, default=0.01, help='Epsilon min')
-    parser.add_argument('-eps_dec', type=float, default=1e6, help='Epsilon decay')
-    parser.add_argument('-bs', type=int, default=32, help='Batch size')
-    parser.add_argument('-min_mem', type=int, default=500000, help='Replay memory buffer min size')
-    parser.add_argument('-max_mem', type=int, default=1000000, help='Replay memory buffer max size')
-    parser.add_argument('-target_update_freq', type=int, default=50000, help='Target network update frequency')
-    parser.add_argument('-save_freq', type=int, default=10000, help='Save frequency')
-    parser.add_argument('-log_freq', type=int, default=1000, help='Log frequency')
-    parser.add_argument('-save_dir', type=str, default='./save/', help='Save directory')
-    parser.add_argument('-log_dir', type=str, default='./logs/', help='Log directory')
-    parser.add_argument('-load', type=bool, default=True, help='Load model')
-    parser.add_argument('-algo', type=str, default='DuelingDoubleDQNAgent',
+    parser.add_argument('-n_env', type=int, default=HYPER_PARAMS["n_env"], help='Multi-processing environments')
+    parser.add_argument('-lr', type=float, default=HYPER_PARAMS["lr"], help='Learning rate')
+    parser.add_argument('-gamma', type=float, default=HYPER_PARAMS["gamma"], help='Discount factor')
+    parser.add_argument('-eps_start', type=float, default=HYPER_PARAMS["eps_start"], help='Epsilon start')
+    parser.add_argument('-eps_min', type=float, default=HYPER_PARAMS["eps_min"], help='Epsilon min')
+    parser.add_argument('-eps_dec', type=float, default=HYPER_PARAMS["eps_dec"], help='Epsilon decay')
+    parser.add_argument('-bs', type=int, default=HYPER_PARAMS["bs"], help='Batch size')
+    parser.add_argument('-min_mem', type=int, default=HYPER_PARAMS["min_mem"], help='Replay memory buffer min size')
+    parser.add_argument('-max_mem', type=int, default=HYPER_PARAMS["max_mem"], help='Replay memory buffer max size')
+    parser.add_argument('-target_update_freq', type=int, default=HYPER_PARAMS["target_update_freq"], help='Target network update frequency')
+    parser.add_argument('-save_freq', type=int, default=HYPER_PARAMS["save_freq"], help='Save frequency')
+    parser.add_argument('-log_freq', type=int, default=HYPER_PARAMS["log_freq"], help='Log frequency')
+    parser.add_argument('-save_dir', type=str, default=HYPER_PARAMS["save_dir"], help='Save directory')
+    parser.add_argument('-log_dir', type=str, default=HYPER_PARAMS["log_dir"], help='Log directory')
+    parser.add_argument('-load', type=bool, default=HYPER_PARAMS["load"], help='Load model')
+    parser.add_argument('-algo', type=str, default=HYPER_PARAMS["algo"],
                         help='DQNAgent ' +
                              'DoubleDQNAgent ' +
                              'DuelingDQNAgent ' +
                              'DuelingDoubleDQNAgent '
                         )
-    parser.add_argument('-gpu', type=str, default='0', help='GPU #')
+    parser.add_argument('-gpu', type=str, default=HYPER_PARAMS["gpu"], help='GPU #')
 
     train = Train(
         args=parser.parse_args(),

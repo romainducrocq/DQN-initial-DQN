@@ -1,8 +1,9 @@
+from .config import network_config
+
 import os
 
 import torch as T
 import torch.nn as nn
-import torch.optim as optim
 
 import msgpack
 from .utils import msgpack_numpy_patch
@@ -13,29 +14,7 @@ class Network(nn.Module):
     def __init__(self, device, input_dim):
         super(Network, self).__init__()
 
-        """CHANGE NETWORK SETTINGS HERE"""
-
-        hidden_dims = (256, 256, 256)
-
-        self.fc_out_dim = 256
-
-        activation = nn.ELU()
-
-        self.net = nn.Sequential(
-            nn.Linear(input_dim, hidden_dims[0]),
-            activation,
-            nn.Linear(hidden_dims[0], hidden_dims[1]),
-            activation,
-            nn.Linear(hidden_dims[1], hidden_dims[2]),
-            activation
-        )
-
-        self.placeholders = {
-            "optimizer": (lambda params, lr: optim.Adam(params, lr=lr)),
-            "loss": (lambda: nn.SmoothL1Loss())
-        }
-
-        """"""""""""
+        self.net, self.optim_func, self.loss_func, self.fc_out_dim = network_config(input_dim)
 
         self.device = device
 
@@ -74,8 +53,8 @@ class DeepQNetwork(Network):
 
         self.fc_out = nn.Linear(self.fc_out_dim, output_dim)
 
-        self.optimizer = self.placeholders["optimizer"](self.parameters(), lr=lr)
-        self.loss = self.placeholders["loss"]()
+        self.optimizer = self.optim_func(self.parameters(), lr=lr)
+        self.loss = self.loss_func()
 
         self.to(self.device)
 
@@ -103,8 +82,8 @@ class DuelingDeepQNetwork(Network):
         self.fc_adv = nn.Linear(self.fc_out_dim, output_dim)
         self.aggregate_layer = staticmethod(lambda val, adv: T.add(val, (adv - adv.mean(dim=1, keepdim=True))))
 
-        self.optimizer = self.placeholders["optimizer"](self.parameters(), lr=lr)
-        self.loss = self.placeholders["loss"]()
+        self.optimizer = self.optim_func(self.parameters(), lr=lr)
+        self.loss = self.loss_func()
 
         self.to(self.device)
 

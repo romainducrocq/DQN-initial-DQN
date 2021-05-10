@@ -33,3 +33,6 @@ The following algorithms are implemented:
 - pyglet, gym, torch, tensorboard, msgpack, wheel  
 > (venv) pip3 install 'pyglet==1.5.0' gym torch tensorboard 'msgpack==1.0.2' wheel --no-cache-dir  
 
+****
+
+https://www.youtube.com/watch?v=dv13gl0a-FA  

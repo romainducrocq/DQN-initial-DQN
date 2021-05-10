@@ -80,7 +80,7 @@ class DuelingDeepQNetwork(Network):
 
         self.fc_val = nn.Linear(self.fc_out_dim, 1)
         self.fc_adv = nn.Linear(self.fc_out_dim, output_dim)
-        self.aggregate_layer = staticmethod(lambda val, adv: T.add(val, (adv - adv.mean(dim=1, keepdim=True))))
+        self.aggregate_layer = (lambda val, adv: T.add(val, (adv - adv.mean(dim=1, keepdim=True))))
 
         self.optimizer = self.optim_func(self.parameters(), lr=lr)
         self.loss = self.loss_func()

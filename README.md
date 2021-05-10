@@ -6,18 +6,18 @@ My own DQN library for custom environments. Supports:
 - Multi-processing learning.  
 - Tensorboard visualization.  
 
-1. Create a custom environment in env/ with pyglet opengl and wrap it in the OpenAI gym framework in env/custom_env.py.  
+1. Create a custom environment in env/ with pyglet and wrap it in gym in env/custom_env.py.  
 2. Configure the hyperparameters and neural net architecture in dqn/config/dqn_config.py.  
 3. Train the model with `python3 train.py`.  
 4. Observe the AI with `python3 observe.py -dir save/my_model.pack`.  
-5. Visualize the learning curves in tensorboard with `tensorboard --logdir ./logs/ && firefox http://localhost:6006/`.  
+5. Visualize the learning curves in tensorboard with `tensorboard --logdir ./logs/`.  
 6. And beat the AI with `python3 play.py` to assert dominance on the machines.  
  
-The following algorithms are implemented:
-- DQN.
-- Double DQN.
-- Dueling DQN.
-- Priority Experience Replay DQN (in progress).
+The following algorithms are implemented:  
+- DQN.  
+- Double DQN.  
+- Dueling DQN.  
+- Priority Experience Replay DQN (in progress).  
 
 ### Software Requirements
 

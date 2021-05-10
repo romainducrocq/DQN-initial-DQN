@@ -1,3 +1,24 @@
+### initial-DQN
+
+My own DQN library for custom environments. Supports:  
+- Custom environments in OpenAI gym framework.  
+- Dynamic save and load with msgpack.
+- Multi-processing learning.  
+- Tensorboard visualization.  
+
+1. Create a custom environment in env/ with pyglet opengl and wrap it in the OpenAI gym framework in env/custom_env.py.  
+2. Configure the hyperparameters and neural net architecture in dqn/config/dqn_config.py.  
+3. Train the model with `python3 train.py`.  
+4. Observe the AI with `python3 observe.py -dir save/my_model.pack`.  
+5. Visualize the learning curves in tensorboard with `tensorboard --logdir ./logs/ && firefox http://localhost:6006/`.  
+6. And beat the AI with `python3 play.py` to assert dominance on the machines.  
+ 
+The following algorithms are implemented:
+- DQN.
+- Double DQN.
+- Dueling DQN.
+- Priority Experience Replay DQN (in progress).
+
 ### Software Requirements
 
 - Python 3.7  
@@ -9,17 +30,5 @@
 > deactivate  
 
 - pyglet, gym, torch, tensorboard, msgpack, wheel  
-> (venv) pip3 install 'pyglet==1.5.0' gym torch tensorboard 'msgpack==1.0.2' wheel --no-cache-dir
+> (venv) pip3 install 'pyglet==1.5.0' gym torch tensorboard 'msgpack==1.0.2' wheel --no-cache-dir  
 
-- tensorboard:
-> tensorboard --logdir ./logs/
-> rm -rv logs/*
-
-****
-
-State space (n=9): 8 sonar distances, speed  
-Action space (n=5): up, right, down, left, none  
-Reward: score  
-https://github.com/notadamking/Stock-Trading-Environment/blob/master/env/StockTradingEnv.py  
-https://stats.stackexchange.com/questions/181/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-netw  
-https://eulertech.wordpress.com/2018/01/02/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-network/  

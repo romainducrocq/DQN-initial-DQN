@@ -28,7 +28,7 @@ HYPER_PARAMS = {
 
 # """CHANGE NETWORK CONFIG HERE"""
 def network_config(input_dim):
-    hidden_dims = (256, 256, 256)
+    hidden_dims = (256, 256)
 
     activation = nn.ELU()
 
@@ -36,8 +36,6 @@ def network_config(input_dim):
         nn.Linear(input_dim, hidden_dims[0]),
         activation,
         nn.Linear(hidden_dims[0], hidden_dims[1]),
-        activation,
-        nn.Linear(hidden_dims[1], hidden_dims[2]),
         activation
     )
 

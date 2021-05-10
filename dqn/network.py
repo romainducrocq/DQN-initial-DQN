@@ -19,15 +19,15 @@ class Network(nn.Module):
 
         self.fc_out_dim = 256
 
-        self.activation = nn.ELU()
+        activation = nn.ELU()
 
         self.net = nn.Sequential(
             nn.Linear(input_dim, hidden_dims[0]),
-            self.activation,
+            activation,
             nn.Linear(hidden_dims[0], hidden_dims[1]),
-            self.activation,
+            activation,
             nn.Linear(hidden_dims[1], hidden_dims[2]),
-            self.activation
+            activation
         )
 
         self.placeholders = {

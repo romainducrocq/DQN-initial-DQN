@@ -1,6 +1,6 @@
 from .utils import ABCMeta, abstract_attribute
 from .replay_memory import ReplayMemoryNaive
-from .network import DeepQNetwork
+from .network import DeepQNetwork, DuelingDeepQNetwork
 
 import os
 import time
@@ -131,16 +131,21 @@ class Agent(metaclass=ABCMeta):
         return i_mean if not math.isnan(i_mean) else 0.
 
 
-class DQNAgent(Agent):
+class SimpleAgent(Agent):
     def __init__(self, *args, **kwargs):
-        super(DQNAgent, self).__init__(*args, **kwargs)
+        super(SimpleAgent, self).__init__(*args, **kwargs)
 
-        self.replay_memory_buffer = ReplayMemoryNaive(self.buffer_size, self.batch_size)
+    @abstract_attribute
+    def replay_memory_buffer(self):
+        pass
 
-        self.online_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
-        self.target_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+    @abstract_attribute
+    def online_network(self):
+        pass
 
-        self.update_target_network()
+    @abstract_attribute
+    def target_network(self):
+        pass
 
     def learn(self):
         # Compute loss
@@ -163,16 +168,21 @@ class DQNAgent(Agent):
         self.online_network.optimizer.step()
 
 
-class DoubleDQNAgent(Agent):
+class DoubleAgent(Agent):
     def __init__(self, *args, **kwargs):
-        super(DoubleDQNAgent, self).__init__(*args, **kwargs)
+        super(DoubleAgent, self).__init__(*args, **kwargs)
 
-        self.replay_memory_buffer = ReplayMemoryNaive(self.buffer_size, self.batch_size)
+    @abstract_attribute
+    def replay_memory_buffer(self):
+        pass
 
-        self.online_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
-        self.target_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+    @abstract_attribute
+    def online_network(self):
+        pass
 
-        self.update_target_network()
+    @abstract_attribute
+    def target_network(self):
+        pass
 
     def learn(self):
         # Compute loss
@@ -196,3 +206,51 @@ class DoubleDQNAgent(Agent):
         self.online_network.optimizer.zero_grad()
         loss.backward()
         self.online_network.optimizer.step()
+
+
+class DQNAgent(SimpleAgent):
+    def __init__(self, *args, **kwargs):
+        super(DQNAgent, self).__init__(*args, **kwargs)
+
+        self.replay_memory_buffer = ReplayMemoryNaive(self.buffer_size, self.batch_size)
+
+        self.online_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+        self.target_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+
+        self.update_target_network()
+
+
+class DoubleDQNAgent(DoubleAgent):
+    def __init__(self, *args, **kwargs):
+        super(DoubleDQNAgent, self).__init__(*args, **kwargs)
+
+        self.replay_memory_buffer = ReplayMemoryNaive(self.buffer_size, self.batch_size)
+
+        self.online_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+        self.target_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+
+        self.update_target_network()
+
+
+class DuelingDQNAgent(SimpleAgent):
+    def __init__(self, *args, **kwargs):
+        super(DuelingDQNAgent, self).__init__(*args, **kwargs)
+
+        self.replay_memory_buffer = ReplayMemoryNaive(self.buffer_size, self.batch_size)
+
+        self.online_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+        self.target_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+
+        self.update_target_network()
+
+
+class DuelingDoubleDQNAgent(DoubleAgent):
+    def __init__(self, *args, **kwargs):
+        super(DuelingDoubleDQNAgent, self).__init__(*args, **kwargs)
+
+        self.replay_memory_buffer = ReplayMemoryNaive(self.buffer_size, self.batch_size)
+
+        self.online_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+        self.target_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+
+        self.update_target_network()

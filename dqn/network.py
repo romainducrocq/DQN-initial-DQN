@@ -2,7 +2,6 @@ import os
 
 import torch as T
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
 
 import msgpack
@@ -11,8 +10,32 @@ msgpack_numpy_patch()
 
 
 class Network(nn.Module):
-    def __init__(self, device):
+    def __init__(self, device, input_dim):
         super(Network, self).__init__()
+
+        """CHANGE NETWORK SETTINGS HERE"""
+
+        hidden_dims = (256, 256, 256)
+
+        self.fc_out_dim = 256
+
+        self.activation = nn.ELU()
+
+        self.net = nn.Sequential(
+            nn.Linear(input_dim, hidden_dims[0]),
+            self.activation,
+            nn.Linear(hidden_dims[0], hidden_dims[1]),
+            self.activation,
+            nn.Linear(hidden_dims[1], hidden_dims[2]),
+            self.activation
+        )
+
+        self.placeholders = {
+            "optimizer": (lambda params, lr: optim.Adam(params, lr=lr)),
+            "loss": (lambda: nn.SmoothL1Loss())
+        }
+
+        """"""""""""
 
         self.device = device
 
@@ -46,24 +69,19 @@ class Network(nn.Module):
 
 
 class DeepQNetwork(Network):
-    def __init__(self, device, lr, input_dim, output_dim, hidden_dim=(256, 256, 256)):
-        super(DeepQNetwork, self).__init__(device)
+    def __init__(self, device, lr, input_dim, output_dim):
+        super(DeepQNetwork, self).__init__(device, input_dim)
 
-        self.fc1 = nn.Linear(input_dim, hidden_dim[0])
-        self.fc2 = nn.Linear(hidden_dim[0], hidden_dim[1])
-        self.fc3 = nn.Linear(hidden_dim[1], hidden_dim[2])
-        self.fc4 = nn.Linear(hidden_dim[2], output_dim)
+        self.fc_out = nn.Linear(self.fc_out_dim, output_dim)
 
-        self.optimizer = optim.Adam(self.parameters(), lr=lr)
-        self.loss = nn.SmoothL1Loss()
+        self.optimizer = self.placeholders["optimizer"](self.parameters(), lr=lr)
+        self.loss = self.placeholders["loss"]()
 
         self.to(self.device)
 
     def forward(self, s):
-        fc1 = F.elu(self.fc1(s))
-        fc2 = F.elu(self.fc2(fc1))
-        fc3 = F.elu(self.fc3(fc2))
-        a = self.fc4(fc3)
+        net = self.net(s)
+        a = self.fc_out(net)
 
         return a
 
@@ -73,5 +91,48 @@ class DeepQNetwork(Network):
 
         max_q_indices = T.argmax(q_values, dim=1)
         actions = max_q_indices.detach().tolist()
+
+        return actions
+
+
+class DuelingDeepQNetwork(Network):
+    def __init__(self, device, lr, input_dim, output_dim):
+        super(DuelingDeepQNetwork, self).__init__(device, input_dim)
+
+        self.fc_val = nn.Linear(self.fc_out_dim, 1)
+        self.fc_adv = nn.Linear(self.fc_out_dim, output_dim)
+        self.aggregate_layer = staticmethod(lambda val, adv: T.add(val, (adv - adv.mean(dim=1, keepdim=True))))
+
+        self.optimizer = self.placeholders["optimizer"](self.parameters(), lr=lr)
+        self.loss = self.placeholders["loss"]()
+
+        self.to(self.device)
+
+    def forward(self, s):
+        net = self.net(s)
+        val = self.fc_val(net)
+        adv = self.fc_adv(net)
+        agg = self.aggregate_layer(val, adv)
+
+        return agg
+
+    def value(self, s):
+        net = self.net(s)
+        val = self.fc_val(net)
+
+        return val
+
+    def advantages(self, s):
+        net = self.net(s)
+        adv = self.fc_adv(net)
+
+        return adv
+
+    def actions(self, obses):
+        obses_t = T.as_tensor(obses, dtype=T.float32).to(self.device)
+        adv_q_values = self.advantages(obses_t)
+
+        max_adv_q_indices = T.argmax(adv_q_values, dim=1)
+        actions = max_adv_q_indices.detach().tolist()
 
         return actions

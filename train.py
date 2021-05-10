@@ -9,9 +9,6 @@ import itertools
 from functools import reduce
 from datetime import timedelta
 
-REPEAT = HYPER_PARAMS['repeat']
-MAX_EPISODE_STEPS = HYPER_PARAMS['max_episode_steps']
-
 
 class Train:
     def __init__(self, args, env):
@@ -20,8 +17,8 @@ class Train:
 
         self.env = make_env(
             env=env,
-            repeat=REPEAT,
-            max_episode_steps=MAX_EPISODE_STEPS,
+            repeat=HYPER_PARAMS['repeat'],
+            max_episode_steps=HYPER_PARAMS['max_episode_steps'],
             n_env=args.n_env
         )
 

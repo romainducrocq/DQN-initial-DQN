@@ -6,6 +6,7 @@ My own DQN library for custom environments. Supports:
 - Multi-processing learning.  
 - Tensorboard visualization.  
 
+How to use:  
 1. Create a custom environment in env/ with pyglet and wrap it in gym in env/custom_env.py.  
 2. Configure the hyperparameters and neural net architecture in dqn/config/dqn_config.py.  
 3. Train the model with `python3 train.py`.  

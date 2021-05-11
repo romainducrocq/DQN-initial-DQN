@@ -18,7 +18,8 @@ HYPER_PARAMS = {
     'save_dir': './save/',            # Save directory
     'log_dir': './logs/',             # Log directory
     'load': True,                     # Load model
-    'algo': 'DuelingDoubleDQNAgent',  # DQNAgent/DoubleDQNAgent/DuelingDQNAgent/DuelingDoubleDQNAgent
+    'max_total_steps': 0,             # Max total training steps if > 0, else inf training
+    'algo': 'DuelingDoubleDQNAgent',  # DQNAgent/DoubleDQNAgent/DuelingDoubleDQNAgent
     'gpu': '0',                       # GPU #
 
     'repeat': 2,                      # Repeat action

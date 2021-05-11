@@ -51,6 +51,8 @@ class Train:
         print()
         print(self.agent.online_network)
 
+        self.max_total_steps = args.max_total_steps
+
     def init_replay_memory_buffer(self):
         print()
         print("Initialize Replay Memory Buffer")
@@ -93,6 +95,9 @@ class Train:
 
             self.agent.save_model(step)
 
+            if bool(self.max_total_steps) and step >= self.max_total_steps:
+                break
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Initial DQN - TRAIN")
@@ -111,10 +116,10 @@ if __name__ == "__main__":
     parser.add_argument('-save_dir', type=str, default=HYPER_PARAMS["save_dir"], help='Save directory')
     parser.add_argument('-log_dir', type=str, default=HYPER_PARAMS["log_dir"], help='Log directory')
     parser.add_argument('-load', type=bool, default=HYPER_PARAMS["load"], help='Load model')
+    parser.add_argument('-max_total_steps', type=bool, default=HYPER_PARAMS["max_total_steps"], help='Max total training steps')
     parser.add_argument('-algo', type=str, default=HYPER_PARAMS["algo"],
                         help='DQNAgent ' +
                              'DoubleDQNAgent ' +
-                             'DuelingDQNAgent ' +
                              'DuelingDoubleDQNAgent '
                         )
     parser.add_argument('-gpu', type=str, default=HYPER_PARAMS["gpu"], help='GPU #')

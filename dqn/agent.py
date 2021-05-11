@@ -232,18 +232,6 @@ class DoubleDQNAgent(DoubleAgent):
         self.update_target_network()
 
 
-class DuelingDQNAgent(SimpleAgent):
-    def __init__(self, *args, **kwargs):
-        super(DuelingDQNAgent, self).__init__(*args, **kwargs)
-
-        self.replay_memory_buffer = ReplayMemoryNaive(self.buffer_size, self.batch_size)
-
-        self.online_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
-        self.target_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
-
-        self.update_target_network()
-
-
 class DuelingDoubleDQNAgent(DoubleAgent):
     def __init__(self, *args, **kwargs):
         super(DuelingDoubleDQNAgent, self).__init__(*args, **kwargs)

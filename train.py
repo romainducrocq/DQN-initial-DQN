@@ -116,7 +116,7 @@ if __name__ == "__main__":
     parser.add_argument('-save_dir', type=str, default=HYPER_PARAMS["save_dir"], help='Save directory')
     parser.add_argument('-log_dir', type=str, default=HYPER_PARAMS["log_dir"], help='Log directory')
     parser.add_argument('-load', type=bool, default=HYPER_PARAMS["load"], help='Load model')
-    parser.add_argument('-max_total_steps', type=bool, default=HYPER_PARAMS["max_total_steps"], help='Max total training steps')
+    parser.add_argument('-max_total_steps', type=int, default=HYPER_PARAMS["max_total_steps"], help='Max total training steps')
     parser.add_argument('-algo', type=str, default=HYPER_PARAMS["algo"],
                         help='DQNAgent ' +
                              'DoubleDQNAgent ' +

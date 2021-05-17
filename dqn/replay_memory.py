@@ -21,7 +21,6 @@ class ReplayMemory(metaclass=ABCMeta):
         raise NotImplementedError
 
 
-# https://danieltakeshi.github.io/2019/07/14/per/
 class ReplayMemoryNaive(ReplayMemory):
     def __init__(self, *args, **kwargs):
         super(ReplayMemoryNaive, self).__init__(*args, **kwargs)
@@ -40,6 +39,7 @@ class ReplayMemoryNaive(ReplayMemory):
         return random.sample(self.replay_buffer, self.batch_size)
 
 
+# https://danieltakeshi.github.io/2019/07/14/per/
 class ReplayMemoryPrioritized(ReplayMemory):
     def __init__(self, buffer_size, batch_size, eps_dec):
         super(ReplayMemoryPrioritized, self).__init__(buffer_size, batch_size)

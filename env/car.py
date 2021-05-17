@@ -19,6 +19,7 @@ class Car:
         self.speed = 0.
         self.d_theta = 2
         self.d_a = 0.03
+        self.d_da = 0.05
         self.d_a_friction = 0.01
         self.min_speed = 0.3
         self.max_speed = safe_dict(max_features, "speed", 100.)
@@ -105,7 +106,7 @@ class Car:
         self.theta = (self.theta + self.d_theta) % 360 if self.speed > 0 else self.theta
 
     def decelerate(self):
-        self.speed = (self.speed * (1 - self.d_a) if self.speed * (1 - self.d_a) >= self.min_speed else 0.)
+        self.speed = (self.speed * (1 - self.d_da) if self.speed * (1 - self.d_da) >= self.min_speed else 0.)
 
     def rotate_right(self):
         self.theta = (self.theta - self.d_theta) % 360 if self.speed > 0 else self.theta

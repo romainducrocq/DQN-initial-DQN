@@ -218,7 +218,7 @@ class DQNAgent(SimpleAgent):
         self.online_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
         self.target_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
 
-        self.update_target_network()
+        self.update_target_network(force=True)
 
 
 class DoubleDQNAgent(DoubleAgent):
@@ -230,7 +230,7 @@ class DoubleDQNAgent(DoubleAgent):
         self.online_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
         self.target_network = DeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
 
-        self.update_target_network()
+        self.update_target_network(force=True)
 
 
 class DuelingDoubleDQNAgent(DoubleAgent):
@@ -242,4 +242,4 @@ class DuelingDoubleDQNAgent(DoubleAgent):
         self.online_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
         self.target_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
 
-        self.update_target_network()
+        self.update_target_network(force=True)

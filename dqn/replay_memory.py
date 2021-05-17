@@ -41,8 +41,8 @@ class ReplayMemoryNaive(ReplayMemory):
 
 
 class ReplayMemoryPrioritized(ReplayMemory):
-    def __init__(self, *args, **kwargs):
-        super(ReplayMemoryPrioritized, self).__init__(*args, **kwargs)
+    def __init__(self, buffer_size, batch_size, eps_dec):
+        super(ReplayMemoryPrioritized, self).__init__(buffer_size, batch_size)
 
         self.replay_buffer = SumTree(self.buffer_size)
 
@@ -50,7 +50,7 @@ class ReplayMemoryPrioritized(ReplayMemory):
         self.alpha = 0.6
         self.beta_start = 0.4
         self.beta_end = 1.
-        self.beta_inc = 1e6
+        self.beta_inc = 5 * eps_dec
         self.max_priority_high = 1.
 
     def store_transitions(self, obses, actions, rews, dones, new_obses):

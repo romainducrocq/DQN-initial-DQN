@@ -6,13 +6,10 @@ while true; do
 done
 '
 
-echo "train lr"
 echo ""
 
-python3 train.py -lr 0.01 -max_total_steps 2000000
-python3 train.py -lr 0.001 -max_total_steps 2000000
-python3 train.py -lr 0.0001 -max_total_steps 2000000
-python3 train.py -lr 0.00001 -max_total_steps 2000000
+mkdir logs/train/DuelingDoubleDQNAgent_lr5e-05_train/
+cp -rv logs/DuelingDoubleDQNAgent_lr5e-05/* logs/train/DuelingDoubleDQNAgent_lr5e-05_train/ && tensorboard --logdir logs/train
 
 exit
 

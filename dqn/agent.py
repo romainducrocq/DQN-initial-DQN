@@ -33,6 +33,7 @@ class Agent(metaclass=ABCMeta):
         self.log_frequency = log_frequency
         self.load = load
 
+        self.step = 0
         self.resume_step = 0
         self.episode_count = 0
         self.ep_info_buffer = deque([], maxlen=100)
@@ -76,22 +77,22 @@ class Agent(metaclass=ABCMeta):
                 self.episode_count += 1
 
     def sample_transitions(self):
-        return self.transitions_to_tensor(self.replay_memory_buffer.sample_transitions())
+        return self.transitions_to_tensor(self.replay_memory_buffer.sample_transitions(self.step * self.n_env))
 
-    def epsilon(self, step):
-        return np.interp(step * self.n_env, [0, self.epsilon_decay], [self.epsilon_start, self.epsilon_min])
+    def epsilon(self):
+        return np.interp(self.step * self.n_env, [0, self.epsilon_decay], [self.epsilon_start, self.epsilon_min])
 
-    def choose_actions(self, step, obses):
+    def choose_actions(self, obses):
         actions = self.online_network.actions(obses)
 
         for i in range(len(actions)):
-            if random.random() <= self.epsilon(step):
+            if random.random() <= self.epsilon():
                 actions[i] = random.randint(0, self.output_dim - 1)
 
         return actions
 
-    def update_target_network(self, step=0):
-        if step % self.update_target_frequency == 0:
+    def update_target_network(self, force=False):
+        if self.step % self.update_target_frequency == 0 or force:
             self.target_network.load_state_dict(self.online_network.state_dict())
 
     def load_model(self):
@@ -102,29 +103,29 @@ class Agent(metaclass=ABCMeta):
             [self.ep_info_buffer.append({'r': rew_mean, 'l': len_mean}) for _ in range(np.min([self.episode_count, self.ep_info_buffer.maxlen]))]
             print("Step: ", self.resume_step, ", Episodes: ", self.episode_count, ", Avg Rew: ", rew_mean, ", Avg Ep Len: ", len_mean)
 
-            self.update_target_network()
+            self.update_target_network(force=True)
 
-    def save_model(self, step):
-        if step % self.save_frequency == 0 and step > self.resume_step:
+    def save_model(self):
+        if self.step % self.save_frequency == 0 and self.step > self.resume_step:
             print()
             print("Saving model...")
-            self.online_network.save(self.save_path, step, self.episode_count, self.info_mean('r'), self.info_mean('l'))
+            self.online_network.save(self.save_path, self.step, self.episode_count, self.info_mean('r'), self.info_mean('l'))
             print("OK!")
 
-    def log(self, step):
-        if step % self.log_frequency == 0 and step > self.resume_step:
+    def log(self):
+        if self.step % self.log_frequency == 0 and self.step > self.resume_step:
             rew_mean, len_mean = self.info_mean('r'), self.info_mean('l')
 
             print()
-            print('Step: ', step)
+            print('Step: ', self.step)
             print('Avg Rew: ', rew_mean)
             print('Avg Ep Len: ', len_mean)
             print('Episodes: ', self.episode_count)
             print('---', str(timedelta(seconds=round((time.time() - self.start_time), 0))), '---')
 
-            self.summary_writer.add_scalar('AvgRew', rew_mean, global_step=step)
-            self.summary_writer.add_scalar('AvgEpLen', len_mean, global_step=step)
-            self.summary_writer.add_scalar('Episodes', self.episode_count, global_step=step)
+            self.summary_writer.add_scalar('AvgRew', rew_mean, global_step=self.step)
+            self.summary_writer.add_scalar('AvgEpLen', len_mean, global_step=self.step)
+            self.summary_writer.add_scalar('Episodes', self.episode_count, global_step=self.step)
 
     def info_mean(self, i):
         i_mean = np.mean([e[i] for e in self.ep_info_buffer])

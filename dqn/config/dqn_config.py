@@ -4,7 +4,7 @@ import torch.optim as optim
 # """CHANGE HYPER PARAMETERS HERE"""
 HYPER_PARAMS = {
     'n_env': 4,                       # Multi-processing environments
-    'lr': 0.00025,                    # Learning rate
+    'lr': 5e-05,                      # Learning rate
     'gamma': 0.99,                    # Discount factor
     'eps_start': 1.,                  # Epsilon start
     'eps_min': 0.01,                  # Epsilon min
@@ -43,6 +43,6 @@ def network_config(input_dim):
     optim_func = (lambda params, lr: optim.Adam(params, lr=lr))
     loss_func = (lambda: nn.SmoothL1Loss())
 
-    fc_out_dim = 256
+    fc_out_dim = hidden_dims[-1]
 
     return net, optim_func, loss_func, fc_out_dim

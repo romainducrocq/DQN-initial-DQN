@@ -79,7 +79,9 @@ class Train:
 
         obses = self.env.reset()
         for step in itertools.count(start=self.agent.resume_step):
-            actions = self.agent.choose_actions(step, obses)
+            self.agent.step = step
+
+            actions = self.agent.choose_actions(obses)
 
             new_obses, rews, dones, infos = self.env.step(actions)
 
@@ -89,11 +91,11 @@ class Train:
 
             self.agent.learn()
 
-            self.agent.update_target_network(step)
+            self.agent.update_target_network()
 
-            self.agent.log(step)
+            self.agent.log()
 
-            self.agent.save_model(step)
+            self.agent.save_model()
 
             if bool(self.max_total_steps) and step >= self.max_total_steps:
                 break

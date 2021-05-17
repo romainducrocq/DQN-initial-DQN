@@ -10,7 +10,7 @@ import time
 
 
 class Car:
-    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, theta=0, n_sonars=8, max_features=None):
+    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, theta=0, n_sonars=16, max_features=None):
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.width = width
@@ -133,6 +133,28 @@ class Car:
                 if is_intersect:
                     self.sonars[i][1] = (x, y)
                     self.sonar_distances[i] = euclidean_distance(self.sonars[i][0], self.sonars[i][1])
+        """
+        k = 16
+        for i in range(self.n_sonars):
+            theta = 0
+            if i < k:
+                theta += (i * 2 * math.pi) / k
+            else:
+                if i % 2 == 0:
+                    theta += math.pi / 2 - math.pi / pow(2, (i-k)/2 + 4)
+                else:
+                    theta += math.pi / 2 + math.pi / pow(2, (i-k-1)/2 + 4)
+            self.sonars[i] = [
+                (self.x_pos, self.y_pos),
+                point_on_circle(math.radians(self.theta) + theta, self.max_sonar_distance, self.x_pos, self.y_pos)
+            ]
+
+            for border_vertex in border_vertices:
+                is_intersect, x, y = get_vertices_intersection(self.sonars[i], border_vertex)
+                if is_intersect:
+                    self.sonars[i][1] = (x, y)
+                    self.sonar_distances[i] = euclidean_distance(self.sonars[i][0], self.sonars[i][1])
+        """
 
     def reward(self, reward_gate_vertex, update_next_reward_gate_i):
         for vertex in self.vertices():

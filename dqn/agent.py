@@ -76,9 +76,6 @@ class Agent(metaclass=ABCMeta):
                 self.ep_info_buffer.append({'r': infos[i]['r'], 'l': infos[i]['l']})
                 self.episode_count += 1
 
-    def sample_transitions(self):
-        return self.transitions_to_tensor(self.replay_memory_buffer.sample_transitions(self.step * self.n_env))
-
     def epsilon(self):
         return np.interp(self.step * self.n_env, [0, self.epsilon_decay], [self.epsilon_start, self.epsilon_min])
 
@@ -150,7 +147,8 @@ class SimpleAgent(Agent):
 
     def learn(self):
         # Compute loss
-        obses_t, actions_t, rews_t, dones_t, new_obses_t = self.sample_transitions()
+        transitions = self.replay_memory_buffer.sample_transitions()
+        obses_t, actions_t, rews_t, dones_t, new_obses_t = self.transitions_to_tensor(transitions)
 
         with T.no_grad():
             target_q_values = self.target_network(new_obses_t)
@@ -187,7 +185,8 @@ class DoubleAgent(Agent):
 
     def learn(self):
         # Compute loss
-        obses_t, actions_t, rews_t, dones_t, new_obses_t = self.sample_transitions()
+        transitions = self.replay_memory_buffer.sample_transitions()
+        obses_t, actions_t, rews_t, dones_t, new_obses_t = self.transitions_to_tensor(transitions)
 
         with T.no_grad():
             targets_online_q_values = self.online_network(new_obses_t)
@@ -243,3 +242,8 @@ class DuelingDoubleDQNAgent(DoubleAgent):
         self.target_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
 
         self.update_target_network(force=True)
+
+
+
+# def sample_transitions(self):
+#    return self.transitions_to_tensor(self.replay_memory_buffer.sample_transitions(self.step * self.n_env))

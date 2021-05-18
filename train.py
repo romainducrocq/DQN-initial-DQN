@@ -60,7 +60,7 @@ class Train:
         obses = self.env.reset()
         for t in range(self.agent.min_buffer_size):
             if t >= self.agent.min_buffer_size - self.agent.resume_step:
-                actions = self.agent.choose_actions(0, obses)
+                actions = self.agent.choose_actions(obses)
             else:
                 actions = [self.env.action_space.sample() for _ in range(self.agent.n_env)]
 

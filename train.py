@@ -122,7 +122,8 @@ if __name__ == "__main__":
     parser.add_argument('-algo', type=str, default=HYPER_PARAMS["algo"],
                         help='DQNAgent ' +
                              'DoubleDQNAgent ' +
-                             'DuelingDoubleDQNAgent '
+                             'DuelingDoubleDQNAgent ' +
+                             'PerDuelingDoubleDQNAgent'
                         )
     parser.add_argument('-gpu', type=str, default=HYPER_PARAMS["gpu"], help='GPU #')
 

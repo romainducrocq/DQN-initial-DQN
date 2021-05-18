@@ -1,5 +1,5 @@
 from .utils import ABCMeta, abstract_attribute
-from .replay_memory import ReplayMemoryNaive
+from .replay_memory import ReplayMemoryNaive, ReplayMemoryPrioritized
 from .network import DeepQNetwork, DuelingDeepQNetwork
 
 import os
@@ -208,6 +208,52 @@ class DoubleAgent(Agent):
         self.online_network.optimizer.step()
 
 
+class PerDoubleAgent(Agent):
+    def __init__(self, *args, **kwargs):
+        super(PerDoubleAgent, self).__init__(*args, **kwargs)
+
+    @abstract_attribute
+    def replay_memory_buffer(self):
+        pass
+
+    @abstract_attribute
+    def online_network(self):
+        pass
+
+    @abstract_attribute
+    def target_network(self):
+        pass
+
+    def learn(self):
+        # Compute loss
+        is_weights, tree_indices, transitions = self.replay_memory_buffer.sample_transitions(self.step * self.n_env)
+        is_weights_t = T.as_tensor(np.asarray(is_weights), dtype=T.float32).to(self.device).unsqueeze(-1)
+        obses_t, actions_t, rews_t, dones_t, new_obses_t = self.transitions_to_tensor(transitions)
+
+        with T.no_grad():
+            targets_online_q_values = self.online_network(new_obses_t)
+            targets_online_best_q_indices = targets_online_q_values.argmax(dim=1, keepdim=True)
+
+            targets_target_q_values = self.target_network(new_obses_t)
+            targets_selected_q_values = T.gather(input=targets_target_q_values, dim=1, index=targets_online_best_q_indices)
+
+            targets = rews_t + (1 - dones_t) * self.gamma * targets_selected_q_values
+
+        online_q_values = self.online_network(obses_t)
+        action_q_values = T.gather(input=online_q_values, dim=1, index=actions_t)
+
+        with T.no_grad():
+            abs_td_errors = T.abs(targets - action_q_values).detach().tolist()
+            self.replay_memory_buffer.update_batch_priorities(tree_indices, abs_td_errors)
+
+        loss = self.online_network.loss(is_weights_t * action_q_values, is_weights_t * targets).to(self.device)
+
+        # Gradient descent
+        self.online_network.optimizer.zero_grad()
+        loss.backward()
+        self.online_network.optimizer.step()
+
+
 class DQNAgent(SimpleAgent):
     def __init__(self, *args, **kwargs):
         super(DQNAgent, self).__init__(*args, **kwargs)
@@ -244,6 +290,13 @@ class DuelingDoubleDQNAgent(DoubleAgent):
         self.update_target_network(force=True)
 
 
+class PerDuelingDoubleDQNAgent(PerDoubleAgent):
+    def __init__(self, *args, **kwargs):
+        super(PerDuelingDoubleDQNAgent, self).__init__(*args, **kwargs)
 
-# def sample_transitions(self):
-#    return self.transitions_to_tensor(self.replay_memory_buffer.sample_transitions(self.step * self.n_env))
+        self.replay_memory_buffer = ReplayMemoryPrioritized(self.buffer_size, self.batch_size, self.epsilon_decay)
+
+        self.online_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+        self.target_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+
+        self.update_target_network(force=True)

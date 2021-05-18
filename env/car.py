@@ -10,7 +10,7 @@ import time
 
 
 class Car:
-    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, theta=0, n_sonars=22, max_features=None):
+    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, theta=0, n_sonars=16, max_features=None):
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.width = width
@@ -19,7 +19,7 @@ class Car:
         self.speed = 0.
         self.d_theta = 2
         self.d_a = 0.03
-        self.d_da = 0.06
+        self.d_da = 0.05
         self.d_a_friction = 0.01
         self.min_speed = 0.3
         self.max_speed = safe_dict(max_features, "speed", 100.)
@@ -124,7 +124,7 @@ class Car:
         self.is_collision = False
 
     def sonar(self, border_vertices):
-        """
+        """"""
         for i in range(self.n_sonars):
             self.sonars[i] = [
                 (self.x_pos, self.y_pos),
@@ -156,7 +156,7 @@ class Car:
                 if is_intersect:
                     self.sonars[i][1] = (x, y)
                     self.sonar_distances[i] = euclidean_distance(self.sonars[i][0], self.sonars[i][1])
-        """"""
+        """
 
     def reward(self, reward_gate_vertex, update_next_reward_gate_i):
         for vertex in self.vertices():

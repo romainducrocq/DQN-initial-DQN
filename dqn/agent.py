@@ -243,8 +243,8 @@ class PerDoubleAgent(Agent):
         action_q_values = T.gather(input=online_q_values, dim=1, index=actions_t)
 
         with T.no_grad():
-            abs_td_errors = T.abs(targets - action_q_values).detach().tolist()
-            self.replay_memory_buffer.update_batch_priorities(tree_indices, abs_td_errors)
+            abs_td_errors_np = T.abs(targets - action_q_values).detach().numpy()
+            self.replay_memory_buffer.update_batch_priorities(tree_indices, abs_td_errors_np)
 
         loss = self.online_network.loss(is_weights_t * action_q_values, is_weights_t * targets).to(self.device)
 

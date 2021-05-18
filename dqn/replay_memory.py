@@ -91,8 +91,8 @@ class ReplayMemoryPrioritized(ReplayMemory):
 
         return is_weights, tree_indices, transitions
 
-    def update_batch_priorities(self, tree_indices, abs_td_errors):
-        priorities = np.power(np.minimum(abs_td_errors + self.epsilon, self.max_priority_high), self.alpha)
+    def update_batch_priorities(self, tree_indices, abs_td_errors_np):
+        priorities = list(np.power(np.minimum(abs_td_errors_np + self.epsilon, self.max_priority_high), self.alpha))
 
         for i, p in zip(tree_indices, priorities):
             self.replay_buffer.update(i, p)

@@ -44,7 +44,7 @@ def network_config(input_dim):
     )
 
     optim_func = (lambda params, lr: optim.Adam(params, lr=lr))
-    loss_func = (lambda: nn.SmoothL1Loss())
+    loss_func = (lambda reduction: nn.SmoothL1Loss(reduction=reduction))
 
     fc_out_dim = hidden_dims[-1]
 

@@ -48,13 +48,13 @@ class Network(nn.Module):
 
 
 class DeepQNetwork(Network):
-    def __init__(self, device, lr, input_dim, output_dim):
+    def __init__(self, device, lr, input_dim, output_dim, reduction='mean'):
         super(DeepQNetwork, self).__init__(device, input_dim)
 
         self.fc_out = nn.Linear(self.fc_out_dim, output_dim)
 
         self.optimizer = self.optim_func(self.parameters(), lr=lr)
-        self.loss = self.loss_func()
+        self.loss = self.loss_func(reduction=reduction)
 
         self.to(self.device)
 
@@ -75,7 +75,7 @@ class DeepQNetwork(Network):
 
 
 class DuelingDeepQNetwork(Network):
-    def __init__(self, device, lr, input_dim, output_dim):
+    def __init__(self, device, lr, input_dim, output_dim, reduction='mean'):
         super(DuelingDeepQNetwork, self).__init__(device, input_dim)
 
         self.fc_val = nn.Linear(self.fc_out_dim, 1)
@@ -83,7 +83,7 @@ class DuelingDeepQNetwork(Network):
         self.aggregate_layer = (lambda val, adv: T.add(val, (adv - adv.mean(dim=1, keepdim=True))))
 
         self.optimizer = self.optim_func(self.parameters(), lr=lr)
-        self.loss = self.loss_func()
+        self.loss = self.loss_func(reduction=reduction)
 
         self.to(self.device)
 

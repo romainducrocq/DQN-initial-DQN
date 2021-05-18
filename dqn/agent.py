@@ -246,7 +246,7 @@ class PerDoubleAgent(Agent):
             abs_td_errors_np = T.abs(targets - action_q_values).detach().numpy()
             self.replay_memory_buffer.update_batch_priorities(tree_indices, abs_td_errors_np)
 
-        loss = self.online_network.loss(is_weights_t * action_q_values, is_weights_t * targets).to(self.device)
+        loss = T.mean(is_weights_t * self.online_network.loss(action_q_values, targets)).to(self.device)
 
         # Gradient descent
         self.online_network.optimizer.zero_grad()
@@ -296,7 +296,7 @@ class PerDuelingDoubleDQNAgent(PerDoubleAgent):
 
         self.replay_memory_buffer = ReplayMemoryPrioritized(self.buffer_size, self.batch_size, self.epsilon_decay)
 
-        self.online_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
-        self.target_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim)
+        self.online_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim, reduction='none')
+        self.target_network = DuelingDeepQNetwork(self.device, self.lr, self.input_dim, self.output_dim, reduction='none')
 
         self.update_target_network(force=True)

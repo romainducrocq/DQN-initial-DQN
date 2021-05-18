@@ -10,7 +10,7 @@ class SumTree:
         self.data_pointer = 0
         self.size = 0
         self.max_priority_index = capacity - 1
-        self.min_priority_index = 2 * capacity - 2
+        self.min_priority_index = capacity - 1
 
     def update(self, tree_index, priority):
         max_p, min_p = self.tree[self.max_priority_index], self.tree[self.min_priority_index]
@@ -21,11 +21,11 @@ class SumTree:
         if priority >= max_p:
             self.max_priority_index = tree_index
         elif tree_index == self.max_priority_index:
-            self.max_priority_index = np.argmax(self.tree[-self.capacity:]) + self.capacity - 1
+            self.max_priority_index = np.argmax(self.tree[self.capacity-1:self.capacity+self.size-1]) + self.capacity - 1
         if priority <= min_p:
             self.min_priority_index = tree_index
         elif tree_index == self.min_priority_index:
-            self.min_priority_index = np.argmin(self.tree[-self.capacity:]) + self.capacity - 1
+            self.min_priority_index = np.argmin(self.tree[self.capacity-1:self.capacity+self.size-1]) + self.capacity - 1
 
         while not tree_index == 0:
             tree_index = (tree_index - 1) // 2

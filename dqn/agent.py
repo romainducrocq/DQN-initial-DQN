@@ -15,7 +15,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 
 class Agent(metaclass=ABCMeta):
-    def __init__(self, n_env, lr, gamma, epsilon_start, epsilon_min, epsilon_decay, input_dim, output_dim, batch_size,
+    def __init__(self, n_env, lr, gamma, epsilon_start, epsilon_min, epsilon_decay, epsilon_exp_decay, input_dim, output_dim, batch_size,
                  min_buffer_size, buffer_size, update_target_frequency, save_frequency, log_frequency, save_dir, log_dir, load, algo, gpu):
         self.n_env = n_env
         self.lr = lr
@@ -23,6 +23,7 @@ class Agent(metaclass=ABCMeta):
         self.epsilon_start = epsilon_start
         self.epsilon_min = epsilon_min
         self.epsilon_decay = epsilon_decay
+        self.epsilon_exp_decay = epsilon_exp_decay
         self.input_dim = input_dim
         self.output_dim = output_dim
         self.batch_size = batch_size
@@ -77,7 +78,10 @@ class Agent(metaclass=ABCMeta):
                 self.episode_count += 1
 
     def epsilon(self):
-        return np.interp(self.step * self.n_env, [0, self.epsilon_decay], [self.epsilon_start, self.epsilon_min])
+        if self.epsilon_exp_decay:
+            return np.exp(np.interp(self.step * self.n_env, [0, self.epsilon_decay], [np.log(self.epsilon_start), np.log(self.epsilon_min)]))
+        else:
+            return np.interp(self.step * self.n_env, [0, self.epsilon_decay], [self.epsilon_start, self.epsilon_min])
 
     def choose_actions(self, obses):
         actions = self.online_network.actions(obses)
@@ -101,6 +105,7 @@ class Agent(metaclass=ABCMeta):
             print("Step: ", self.resume_step, ", Episodes: ", self.episode_count, ", Avg Rew: ", rew_mean, ", Avg Ep Len: ", len_mean)
 
             self.update_target_network(force=True)
+            self.step = self.resume_step
 
     def save_model(self):
         if self.step % self.save_frequency == 0 and self.step > self.resume_step:

@@ -34,11 +34,11 @@ def point_on_circle(theta, radius, x_orig, y_orig):
 
 def theta_right_triangle(o=None, a=None, h=None, f=None):
     if f == "sin":
-        return math.asin(o/h)
+        return 0 if h == 0 else math.asin(o/h)
     if f == "cos":
-        return math.acos(a/h)
+        return 0 if h == 0 else math.acos(a/h)
     if f == "tan":
-        return math.atan(o/a)
+        return 0 if a == 0 else math.atan(o/a)
 
 
 def midpoint_vertex(vertex):
@@ -117,7 +117,9 @@ def generate_polygon(x_orig=0, y_orig=0, avg_radius=(RES[0]+RES[1])/2, irregular
     for i in range(n_vertices):
         w_h = int(-math.cos(diagonal_theta) <= math.cos(theta) <= math.cos(diagonal_theta))
 
-        r_i = clip(-res[w_h] + offset, res[w_h] - offset, random.gauss(avg_radius, spikeyness))
+        r_i = 0
+        while r_i == 0:
+            r_i = clip(-res[w_h] + offset, res[w_h] - offset, random.gauss(avg_radius, spikeyness))
         x = x_orig + r_i*math.cos(theta)
         y = y_orig + r_i*math.sin(theta)
         points.append((int(x), int(y)))

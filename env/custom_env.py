@@ -37,7 +37,7 @@ class CustomEnv(gym.Env):
         rew = 0.
         if self.car.reward(self.track.next_reward_gate(self.car.next_reward_gate_i),
                            self.track.update_next_reward_gate_index(self.car.next_reward_gate_i)):
-            rew += 1 + (self.car.speed / self.MAX_FEATURES["speed"])
+            rew += 1
         self.total_reward += rew
         return rew
 

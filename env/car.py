@@ -10,16 +10,16 @@ import time
 
 
 class Car:
-    def __init__(self, x_pos=0, y_pos=0, width=20, ratio=2, theta=0, n_sonars=16, max_features=None):
-        self.x_pos = x_pos
-        self.y_pos = y_pos
-        self.width = width
-        self.height = ratio * width
-        self.theta = theta
+    def __init__(self, max_features=None):
+        self.x_pos = 0
+        self.y_pos = 0
+        self.width = 20
+        self.height = 2 * self.width
+        self.theta = 0
         self.speed = 0.
         self.d_theta = 2
         self.d_a = 0.03
-        self.d_da = 0.05
+        self.d_da = 0.06
         self.d_a_friction = 0.01
         self.min_speed = 0.3
         self.max_speed = safe_dict(max_features, "speed", 100.)
@@ -27,7 +27,7 @@ class Car:
 
         self.is_collision = False
 
-        self.n_sonars = n_sonars
+        self.n_sonars = 36
         self.sonars = [[]]*self.n_sonars
         self.sonar_distances = [0.]*self.n_sonars
 
@@ -124,7 +124,7 @@ class Car:
         self.is_collision = False
 
     def sonar(self, border_vertices):
-        """"""
+        """
         for i in range(self.n_sonars):
             self.sonars[i] = [
                 (self.x_pos, self.y_pos),
@@ -136,16 +136,29 @@ class Car:
                     self.sonars[i][1] = (x, y)
                     self.sonar_distances[i] = euclidean_distance(self.sonars[i][0], self.sonars[i][1])
         """
-        k = 16
+        a, b, c = 4, 6, 10
         for i in range(self.n_sonars):
             theta = 0
-            if i < k:
-                theta += (i * 2 * math.pi) / k
+            if i < a:
+                theta += (i * 2 * math.pi) / a
+            elif a <= i < a + 2 * b:
+                theta += ((((i - a) // b) + 1) * 2 - 1) * math.pi / 2 + \
+                         (2 * (i % 2) - 1) * math.pi / pow(2, (i - (i % 2) - a - b * ((i - a) // b)) / 2 + 3)
+            else:
+                theta += ((i - (a + 2 * b)) // c) * math.pi + \
+                         (2 * (i % 2) - 1) * ((i - (i % 2) - a - b * 2 - c * ((i - (a + 2 * b)) // c)) / 2 + 1) * math.pi / 16
+            """
+            elif m <= i < m + n:
+                if i % 2 == 0:
+                    theta += math.pi / 2 - math.pi / pow(2, (i-m)/2 + 4)
+                else:
+                    theta += math.pi / 2 + math.pi / pow(2, (i-m-1)/2 + 4)
             else:
                 if i % 2 == 0:
-                    theta += math.pi / 2 - math.pi / pow(2, (i-k)/2 + 4)
+                    theta += 3 * math.pi / 2 - math.pi / pow(2, (i-m-n)/2 + 4)
                 else:
-                    theta += math.pi / 2 + math.pi / pow(2, (i-k-1)/2 + 4)
+                    theta += 3 * math.pi / 2 + math.pi / pow(2, (i-m-n-1)/2 + 4)
+                """
             self.sonars[i] = [
                 (self.x_pos, self.y_pos),
                 point_on_circle(math.radians(self.theta) + theta, self.max_sonar_distance, self.x_pos, self.y_pos)
@@ -156,7 +169,7 @@ class Car:
                 if is_intersect:
                     self.sonars[i][1] = (x, y)
                     self.sonar_distances[i] = euclidean_distance(self.sonars[i][0], self.sonars[i][1])
-        """
+        """"""
 
     def reward(self, reward_gate_vertex, update_next_reward_gate_i):
         for vertex in self.vertices():

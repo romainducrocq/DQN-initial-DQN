@@ -17,8 +17,8 @@ class Train:
 
         self.env = make_env(
             env=env,
-            repeat=HYPER_PARAMS['repeat'],
-            max_episode_steps=HYPER_PARAMS['max_episode_steps'],
+            repeat=args.repeat,
+            max_episode_steps=args.max_episode_steps,
             n_env=args.n_env
         )
 
@@ -29,6 +29,7 @@ class Train:
             epsilon_start=args.eps_start,
             epsilon_min=args.eps_min,
             epsilon_decay=args.eps_dec,
+            epsilon_exp_decay=args.eps_dec_exp,
             input_dim=reduce(lambda x, y: x*y, list(env.observation_space.shape)),
             output_dim=env.action_space.n,
             batch_size=args.bs,
@@ -103,12 +104,14 @@ class Train:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Initial DQN - TRAIN")
+    parser.add_argument('-gpu', type=str, default=HYPER_PARAMS["gpu"], help='GPU #')
     parser.add_argument('-n_env', type=int, default=HYPER_PARAMS["n_env"], help='Multi-processing environments')
     parser.add_argument('-lr', type=float, default=HYPER_PARAMS["lr"], help='Learning rate')
     parser.add_argument('-gamma', type=float, default=HYPER_PARAMS["gamma"], help='Discount factor')
     parser.add_argument('-eps_start', type=float, default=HYPER_PARAMS["eps_start"], help='Epsilon start')
     parser.add_argument('-eps_min', type=float, default=HYPER_PARAMS["eps_min"], help='Epsilon min')
     parser.add_argument('-eps_dec', type=float, default=HYPER_PARAMS["eps_dec"], help='Epsilon decay')
+    parser.add_argument('-eps_dec_exp', type=bool, default=HYPER_PARAMS["eps_dec_exp"], help='Epsilon exponential decay')
     parser.add_argument('-bs', type=int, default=HYPER_PARAMS["bs"], help='Batch size')
     parser.add_argument('-min_mem', type=int, default=HYPER_PARAMS["min_mem"], help='Replay memory buffer min size')
     parser.add_argument('-max_mem', type=int, default=HYPER_PARAMS["max_mem"], help='Replay memory buffer max size')
@@ -118,6 +121,8 @@ if __name__ == "__main__":
     parser.add_argument('-save_dir', type=str, default=HYPER_PARAMS["save_dir"], help='Save directory')
     parser.add_argument('-log_dir', type=str, default=HYPER_PARAMS["log_dir"], help='Log directory')
     parser.add_argument('-load', type=bool, default=HYPER_PARAMS["load"], help='Load model')
+    parser.add_argument('-repeat', type=int, default=HYPER_PARAMS["repeat"], help='Steps repeat action')
+    parser.add_argument('-max_episode_steps', type=int, default=HYPER_PARAMS["max_episode_steps"], help='Episode step limit')
     parser.add_argument('-max_total_steps', type=int, default=HYPER_PARAMS["max_total_steps"], help='Max total training steps')
     parser.add_argument('-algo', type=str, default=HYPER_PARAMS["algo"],
                         help='DQNAgent ' +
@@ -125,7 +130,6 @@ if __name__ == "__main__":
                              'DuelingDoubleDQNAgent ' +
                              'PerDuelingDoubleDQNAgent'
                         )
-    parser.add_argument('-gpu', type=str, default=HYPER_PARAMS["gpu"], help='GPU #')
 
     train = Train(
         args=parser.parse_args(),

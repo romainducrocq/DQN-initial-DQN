@@ -15,15 +15,15 @@ import random
 
 
 class Track:
-    def __init__(self, n_vertices=(5, 10), width=(200, 300), n_reward_gates=40):
-        self.n_vertices = random.randint(n_vertices[0], n_vertices[1])
-        self.width = random.randint(width[0], width[1])
+    def __init__(self):
+        self.n_vertices = random.randint(5, 10)
+        self.width = random.randint(200, 300)
         self.in_border_vertices = generate_polygon(n_vertices=self.n_vertices,
                                                    avg_radius=(RES[0] + RES[1] - 2 * self.width) / 2,
                                                    offset=self.width + 100)
         self.out_border_vertices = zoom_vertices(self.in_border_vertices, zoom=self.width)
 
-        self.n_reward_gates = n_reward_gates
+        self.n_reward_gates = 100
         self.reward_gates = []
         self.reward_gates_direction = 1
 

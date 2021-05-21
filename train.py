@@ -52,7 +52,7 @@ class Train:
         print()
         print(self.agent.online_network)
         print()
-        [print(arg, ":", getattr(args, arg)) for arg in vars(args)]
+        [print(arg, "=", getattr(args, arg)) for arg in vars(args)]
 
         self.max_total_steps = args.max_total_steps
 

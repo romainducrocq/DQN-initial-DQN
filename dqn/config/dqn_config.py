@@ -15,7 +15,7 @@ HYPER_PARAMS = {
     'min_mem': 1000000,                  # Replay memory buffer min size
     'max_mem': 1000000,                  # Replay memory buffer max size
     'target_update_freq': 50000,         # Target network update frequency
-    'target_soft_update': True,          # Target network soft update
+    'target_soft_update': False,         # Target network soft update
     'target_soft_update_tau': 1e-03,     # Target network soft update tau rate
     'save_freq': 10000,                  # Save frequency
     'log_freq': 1000,                    # Log frequency

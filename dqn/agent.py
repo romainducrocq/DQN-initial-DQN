@@ -15,8 +15,9 @@ from torch.utils.tensorboard import SummaryWriter
 
 
 class Agent(metaclass=ABCMeta):
-    def __init__(self, n_env, lr, gamma, epsilon_start, epsilon_min, epsilon_decay, epsilon_exp_decay, input_dim, output_dim, batch_size,
-                 min_buffer_size, buffer_size, update_target_frequency, save_frequency, log_frequency, save_dir, log_dir, load, algo, gpu):
+    def __init__(self, n_env, lr, gamma, epsilon_start, epsilon_min, epsilon_decay, epsilon_exp_decay, input_dim, output_dim,
+                 batch_size, min_buffer_size, buffer_size, update_target_frequency, target_soft_update, target_soft_update_tau,
+                 save_frequency, log_frequency, save_dir, log_dir, load, algo, gpu):
         self.n_env = n_env
         self.lr = lr
         self.gamma = gamma
@@ -30,6 +31,8 @@ class Agent(metaclass=ABCMeta):
         self.min_buffer_size = min_buffer_size
         self.buffer_size = buffer_size
         self.update_target_frequency = update_target_frequency
+        self.target_soft_update = target_soft_update
+        self.target_soft_update_tau = target_soft_update_tau
         self.save_frequency = save_frequency
         self.log_frequency = log_frequency
         self.load = load
@@ -93,8 +96,14 @@ class Agent(metaclass=ABCMeta):
         return actions
 
     def update_target_network(self, force=False):
-        if self.step % self.update_target_frequency == 0 or force:
+        if (not self.target_soft_update and self.step % (self.update_target_frequency // self.n_env) == 0) or force:
             self.target_network.load_state_dict(self.online_network.state_dict())
+        else:
+            for target_network_param, online_network_param in zip(self.target_network.parameters(), self.online_network.parameters()):
+                target_network_param.data.copy_(
+                    (self.target_soft_update_tau * self.n_env) * online_network_param.data +
+                    (1. - (self.target_soft_update_tau * self.n_env)) * target_network_param.data
+                )
 
     def load_model(self):
         if self.load and os.path.exists(self.save_path):
@@ -102,7 +111,7 @@ class Agent(metaclass=ABCMeta):
             print("Resume training from " + self.save_path + "...")
             self.resume_step, self.episode_count, rew_mean, len_mean = self.online_network.load(self.save_path)
             [self.ep_info_buffer.append({'r': rew_mean, 'l': len_mean}) for _ in range(np.min([self.episode_count, self.ep_info_buffer.maxlen]))]
-            print("Step: ", self.resume_step, ", Episodes: ", self.episode_count, ", Avg Rew: ", rew_mean, ", Avg Ep Len: ", len_mean)
+            print("Step: ", self.resume_step * self.n_env, ", Episodes: ", self.episode_count, ", Avg Rew: ", rew_mean, ", Avg Ep Len: ", len_mean)
 
             self.update_target_network(force=True)
             self.step = self.resume_step
@@ -119,15 +128,15 @@ class Agent(metaclass=ABCMeta):
             rew_mean, len_mean = self.info_mean('r'), self.info_mean('l')
 
             print()
-            print('Step: ', self.step)
+            print('Step: ', self.step * self.n_env, ' (' + str(self.step) + 'x' + str(self.n_env) + ')')
             print('Avg Rew: ', rew_mean)
             print('Avg Ep Len: ', len_mean)
             print('Episodes: ', self.episode_count)
             print('---', str(timedelta(seconds=round((time.time() - self.start_time), 0))), '---')
 
-            self.summary_writer.add_scalar('AvgRew', rew_mean, global_step=self.step)
-            self.summary_writer.add_scalar('AvgEpLen', len_mean, global_step=self.step)
-            self.summary_writer.add_scalar('Episodes', self.episode_count, global_step=self.step)
+            self.summary_writer.add_scalar('AvgRew', rew_mean, global_step=(self.step * self.n_env))
+            self.summary_writer.add_scalar('AvgEpLen', len_mean, global_step=(self.step * self.n_env))
+            self.summary_writer.add_scalar('Episodes', self.episode_count, global_step=(self.step * self.n_env))
 
     def info_mean(self, i):
         i_mean = np.mean([e[i] for e in self.ep_info_buffer])

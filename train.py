@@ -35,7 +35,9 @@ class Train:
             batch_size=args.bs,
             min_buffer_size=args.min_mem,
             buffer_size=args.max_mem,
-            update_target_frequency=(args.target_update_freq // args.n_env),
+            update_target_frequency=args.target_update_freq,
+            target_soft_update=args.target_soft_update,
+            target_soft_update_tau=args.target_soft_update_tau,
             save_frequency=args.save_freq,
             log_frequency=args.log_freq,
             save_dir=args.save_dir,
@@ -61,8 +63,8 @@ class Train:
         print("Initialize Replay Memory Buffer")
 
         obses = self.env.reset()
-        for t in range(self.agent.min_buffer_size):
-            if t >= self.agent.min_buffer_size - self.agent.resume_step:
+        for t in range(self.agent.min_buffer_size // self.agent.n_env):
+            if t >= (self.agent.min_buffer_size // self.agent.n_env) - self.agent.resume_step:
                 actions = self.agent.choose_actions(obses)
             else:
                 actions = [self.env.action_space.sample() for _ in range(self.agent.n_env)]
@@ -72,8 +74,8 @@ class Train:
 
             obses = new_obses
 
-            if (t+1) % 10000 == 0:
-                print(str(t+1) + ' / ' + str(self.agent.min_buffer_size))
+            if (t+1) % (10000 // self.agent.n_env) == 0:
+                print(str((t+1) * self.agent.n_env) + ' / ' + str(self.agent.min_buffer_size))
                 print('---', str(timedelta(seconds=round((time.time() - self.agent.start_time), 0))), '---')
 
     def train_loop(self):
@@ -118,6 +120,8 @@ if __name__ == "__main__":
     parser.add_argument('-min_mem', type=int, default=HYPER_PARAMS["min_mem"], help='Replay memory buffer min size')
     parser.add_argument('-max_mem', type=int, default=HYPER_PARAMS["max_mem"], help='Replay memory buffer max size')
     parser.add_argument('-target_update_freq', type=int, default=HYPER_PARAMS["target_update_freq"], help='Target network update frequency')
+    parser.add_argument('-target_soft_update', type=bool, default=HYPER_PARAMS["target_soft_update"], help='Target network soft update')
+    parser.add_argument('-target_soft_update_tau', type=float, default=HYPER_PARAMS["target_soft_update_tau"], help='Target network soft update tau rate')
     parser.add_argument('-save_freq', type=int, default=HYPER_PARAMS["save_freq"], help='Save frequency')
     parser.add_argument('-log_freq', type=int, default=HYPER_PARAMS["log_freq"], help='Log frequency')
     parser.add_argument('-save_dir', type=str, default=HYPER_PARAMS["save_dir"], help='Save directory')

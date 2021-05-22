@@ -124,18 +124,6 @@ class Car:
         self.is_collision = False
 
     def sonar(self, border_vertices):
-        """
-        for i in range(self.n_sonars):
-            self.sonars[i] = [
-                (self.x_pos, self.y_pos),
-                point_on_circle(math.radians(self.theta) + (i * 2 * math.pi) / self.n_sonars, self.max_sonar_distance, self.x_pos, self.y_pos)
-            ]
-            for border_vertex in border_vertices:
-                is_intersect, x, y = get_vertices_intersection(self.sonars[i], border_vertex)
-                if is_intersect:
-                    self.sonars[i][1] = (x, y)
-                    self.sonar_distances[i] = euclidean_distance(self.sonars[i][0], self.sonars[i][1])
-        """
         a, b, c = 4, 6, 10
         for i in range(self.n_sonars):
             theta = 0
@@ -147,18 +135,7 @@ class Car:
             else:
                 theta += ((i - (a + 2 * b)) // c) * math.pi + \
                          (2 * (i % 2) - 1) * ((i - (i % 2) - a - b * 2 - c * ((i - (a + 2 * b)) // c)) / 2 + 1) * math.pi / 16
-            """
-            elif m <= i < m + n:
-                if i % 2 == 0:
-                    theta += math.pi / 2 - math.pi / pow(2, (i-m)/2 + 4)
-                else:
-                    theta += math.pi / 2 + math.pi / pow(2, (i-m-1)/2 + 4)
-            else:
-                if i % 2 == 0:
-                    theta += 3 * math.pi / 2 - math.pi / pow(2, (i-m-n)/2 + 4)
-                else:
-                    theta += 3 * math.pi / 2 + math.pi / pow(2, (i-m-n-1)/2 + 4)
-                """
+
             self.sonars[i] = [
                 (self.x_pos, self.y_pos),
                 point_on_circle(math.radians(self.theta) + theta, self.max_sonar_distance, self.x_pos, self.y_pos)
@@ -169,7 +146,6 @@ class Car:
                 if is_intersect:
                     self.sonars[i][1] = (x, y)
                     self.sonar_distances[i] = euclidean_distance(self.sonars[i][0], self.sonars[i][1])
-        """"""
 
     def reward(self, reward_gate_vertex, update_next_reward_gate_i):
         for vertex in self.vertices():

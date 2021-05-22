@@ -9,8 +9,8 @@ import numpy as np
 class CustomEnv(gym.Env):
     metadata = {'render.modes': ['human']}
     MAX_FEATURES = {
-        "speed": 100.,
-        "sonar_distance": 2*RES[0]
+        "speed": 50.,
+        "sonar_distance": RES[0]
     }
 
     def __init__(self):
@@ -24,19 +24,15 @@ class CustomEnv(gym.Env):
         self.action_space = spaces.Discrete(len(self.car.actions))
         self.observation_space = spaces.Box(low=0., high=1., shape=(self.car.n_sonars+1,), dtype=np.float32)
 
-    @staticmethod
-    def _log_scale(x, x_max):
-        return np.log(x + 1) / np.log(x_max + 1)
-
     def _obs(self):
         self.car.sonar(self.track.border_vertices())
 
         obs = np.array(
             [
-                self._log_scale(sonar_distance, self.MAX_FEATURES["sonar_distance"])
+                sonar_distance / self.MAX_FEATURES["sonar_distance"]
                 for sonar_distance in self.car.sonar_distances
             ] + [
-                self._log_scale(self.car.speed, self.MAX_FEATURES["speed"])
+                self.car.speed / self.MAX_FEATURES["speed"]
             ], dtype=np.float32)
         return obs
 

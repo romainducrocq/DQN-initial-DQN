@@ -7,9 +7,9 @@ HYPER_PARAMS = {
     'n_env': 4,                          # Multi-processing environments
     'lr': 5e-05,                         # Learning rate
     'gamma': 0.99,                       # Discount factor
-    'eps_start': 0.6,                    # Epsilon start
-    'eps_min': 0.02,                     # Epsilon min
-    'eps_dec': 2e7,                      # Epsilon decay
+    'eps_start': 1,                      # Epsilon start
+    'eps_min': 0.01,                     # Epsilon min
+    'eps_dec': 2e6,                      # Epsilon decay
     'eps_dec_exp': True,                 # Epsilon exponential decay
     'bs': 32,                            # Batch size
     'min_mem': 1000000,                  # Replay memory buffer min size

@@ -98,7 +98,8 @@ class Agent(metaclass=ABCMeta):
     def update_target_network(self, force=False):
         if (not self.target_soft_update and self.step % (self.update_target_frequency // self.n_env) == 0) or force:
             self.target_network.load_state_dict(self.online_network.state_dict())
-        else:
+
+        elif self.target_soft_update:
             for target_network_param, online_network_param in zip(self.target_network.parameters(), self.online_network.parameters()):
                 target_network_param.data.copy_(
                     (self.target_soft_update_tau * self.n_env) * online_network_param.data +

@@ -22,7 +22,7 @@ HYPER_PARAMS = {
     'save_dir': './save/',               # Save directory
     'log_dir': './logs/',                # Log directory
     'load': True,                        # Load model
-    'repeat': 4,                         # Repeat action
+    'repeat': 8,                         # Repeat action
     'max_episode_steps': 5000,           # Time limit episode steps
     'max_total_steps': 0,                # Max total training steps if > 0, else inf training
     'algo': 'PerDuelingDoubleDQNAgent'   # DQNAgent

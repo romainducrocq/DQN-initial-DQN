@@ -50,7 +50,7 @@ class ReplayMemoryPrioritized(ReplayMemory):
         self.alpha = 0.6
         self.beta_start = 0.4
         self.beta_end = 1.
-        self.beta_inc = 2 * eps_dec
+        self.beta_inc = eps_dec
         self.max_priority_high = 1.
 
     def store_transitions(self, obses, actions, rews, dones, new_obses):

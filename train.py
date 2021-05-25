@@ -102,7 +102,7 @@ class Train:
 
             self.agent.save_model()
 
-            if bool(self.max_total_steps) and step >= (self.max_total_steps * self.agent.n_env):
+            if bool(self.max_total_steps) and (step * self.agent.n_env) >= self.max_total_steps:
                 break
 
 

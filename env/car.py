@@ -22,7 +22,7 @@ class Car:
         self.d_da = 0.06
         self.d_a_friction = 0.01
         self.min_speed = 0.3
-        self.max_speed = safe_dict(max_features, "speed", 50.)
+        self.max_speed = safe_dict(max_features, "speed", 20.)
         self.max_sonar_distance = safe_dict(max_features, "sonar_distance", RES[0])
 
         self.is_collision = False

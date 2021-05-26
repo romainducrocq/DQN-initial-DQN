@@ -8,13 +8,14 @@ import numpy as np
 
 class CustomEnv(gym.Env):
     metadata = {'render.modes': ['human']}
-    MAX_FEATURES = {
-        "speed": 35.,
-        "sonar_distance": RES[0]
-    }
 
-    def __init__(self):
+    def __init__(self, train=False):
         super(CustomEnv, self).__init__()
+
+        self.MAX_FEATURES = {
+            "speed": 50. if train else 35.,
+            "sonar_distance": RES[0]
+        }
 
         self.track = Track()
         self.car = Car(max_features=self.MAX_FEATURES)

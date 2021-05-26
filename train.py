@@ -139,7 +139,7 @@ if __name__ == "__main__":
 
     train = Train(
         args=parser.parse_args(),
-        env=Env()
+        env=Env(train=True)
     )
 
     train.init_replay_memory_buffer()

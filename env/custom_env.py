@@ -9,7 +9,7 @@ import numpy as np
 class CustomEnv(gym.Env):
     metadata = {'render.modes': ['human']}
     MAX_FEATURES = {
-        "speed": 20.,
+        "speed": 35.,
         "sonar_distance": RES[0]
     }
 

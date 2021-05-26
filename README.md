@@ -9,8 +9,8 @@ My own DQN library for custom environments. Supports:
 How to use:  
 1. Create a custom environment in env/ with pyglet and wrap it in gym in env/custom_env.py.  
 2. Configure the hyperparameters and neural net architecture in dqn/config/dqn_config.py.  
-3. Train the model with `python3 train.py`.  
-4. Observe the AI with `python3 observe.py -dir save/my_model.pack`.  
+3. Train the model with `python3 train.py -algo DuelingDoubleDQNAgent`.  
+4. Observe the AI with `python3 observe.py -dir save/DuelingDoubleDQNAgent_lr5e-05_model.pack -max_steps 500`.  
 5. Visualize the learning curves in tensorboard with `tensorboard --logdir ./logs/`.  
 6. And beat the AI with `python3 play.py` to assert dominance on the machines.  
  

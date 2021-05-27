@@ -36,6 +36,7 @@ The following algorithms are implemented:
 ### Demo
 
 ![Demo gif](demo/demo.gif)
+![Demo 2 gif](demo/demo2.gif)
 
 ****
 

@@ -37,6 +37,8 @@ The following algorithms are implemented:
 
 ![Demo gif](demo/demo.gif)
 
+![Demo tensorboard png](demo/demo_tensorboard.png)
+
 ****
 
 https://www.youtube.com/watch?v=dv13gl0a-FA  

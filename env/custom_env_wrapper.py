@@ -24,13 +24,12 @@ class CustomEnvWrapper(gym.Env):
         # """ENV CONSTRUCT"""
         self.track = Track()
         self.car = Car()
-        self.res = RES
         ######
 
         # """FEATURE SCALES"""
         self.MAX_FEATURES = {
             "speed": 50. if self.train else 35.,
-            "sonar_distance": self.res[0]
+            "sonar_distance": RES[0]
         }
         ######
 

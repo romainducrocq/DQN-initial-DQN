@@ -27,13 +27,6 @@ class Track:
         self.reward_gates = []
         self.reward_gates_direction = 1
 
-        self.colors = {
-            "polygons_track": [51, 51, 51],
-            "vertex_borders": [255, 0, 100],
-            "vertex_reward_gates": [0, 100, 255],
-            "vertex_next_reward_gate": [255, 0, 100]
-        }
-
         self.polygons_track = []
 
     def border_vertices(self):

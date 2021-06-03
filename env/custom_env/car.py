@@ -38,9 +38,6 @@ class Car:
 
         self.actions = {'UP': 0, 'RIGHT': 1, 'DOWN': 2, 'LEFT': 3, 'NOOP': 4}
 
-        self.color = [[255, 0, 0], [0, 0, 255]]
-        self.sprites = ["./env/img/car_blue.png", "./env/img/car_red.png"]
-
     def top_left_point(self):
         return rotate_point(-self.width / 2, -self.height / 2, self.x_pos, self.y_pos, math.radians(self.theta))
 

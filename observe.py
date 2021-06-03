@@ -60,7 +60,7 @@ if __name__ == "__main__":
     parser.add_argument('-gpu', type=str, default='0', help='GPU #')
 
     # """CHANGE IF NOT PYGLET VIEW"""
-    play = Observe("OBSERVE", Env(), parser.parse_args())
-    pyglet.clock.schedule_interval(play.on_draw, 0.002)
+    observe = Observe("OBSERVE", Env(), parser.parse_args())
+    pyglet.clock.schedule_interval(observe.on_draw, 0.002)
     pyglet.app.run()
     ######

@@ -23,16 +23,16 @@ class CustomEnv(gym.Env):
         #####################
         # """INIT ENV HERE"""
 
+        # """ENV CONSTRUCT"""
+        self.track = Track()
+        self.car = Car()
+        ######
+
         # """FEATURE SCALES"""
         self.MAX_FEATURES = {
             "speed": 50. if self.train else 35.,
             "sonar_distance": RES[0]
         }
-        ######
-
-        # """ENV CONSTRUCT"""
-        self.track = Track()
-        self.car = Car(max_features=self.MAX_FEATURES)
         ######
 
         # """ACT/OBS SPACES"""

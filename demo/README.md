@@ -19,7 +19,7 @@ No uncommented section should require modification, especially no code related t
 	- 2.4: Define the initial state in `reset`, the transition dynamics in `step`.  
 	- 2.5: (Optional) Define rendering instructions in `reset_render` and `step_render`, for the view only.  
 3. **View with Pyglet:**  
-The implementation uses Pyglet for the view by default, and provides the two abstract methods `setup` and `loop`. The `Play` and `Observe` classes in the entry programs inherit from the view and implement these methods to interact with the environment. This is done by callbacks on the Pyglet clock.  
+The implementation uses Pyglet for the view by default, and provides the two abstract methods `setup` and `loop`. The `Play` and `Observe` classes in the entry programs inherit from the view and implement these methods to interact with the environment.  
 - In `env/view.py`, wrap the environment view in the `View` class:  
 	- 3.1: Import the environment utils.  
 	- 3.2: In `__init__`: initilialize the Pyglet parameters and define the view setup.  
@@ -27,7 +27,7 @@ The implementation uses Pyglet for the view by default, and provides the two abs
 - In `play.py`, define the noop case, the action key set.  
 - (Optional) In `observe.py`, synchronize the frame rate in case of frame skipping.  
 4. **View without Pyglet:**  
-It is possible to implement a view without Pyglet, but it has to be done from scratch. The `View` class must however be kept to preserve the inheritance relationship with the entry programs.  
+It is possible to implement a view without Pyglet. The `View` class must be kept to preserve the inheritance with the entry programs.  
 - In `env/view.py`, create the environment view in the `View` class:  
 	- 4.1: Create a view, even if empty. Keep the two abstract methods `setup` and `loop`.  
 	- 4.2: If not built-in, add a `run` method to call an infinite event loop from the entry programs.  

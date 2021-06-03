@@ -69,11 +69,14 @@ The implementation uses Pyglet for the view by default, and provides the two abs
 4. **View Without Pyglet:**  
 It is possible to implement a view without Pyglet, but it has to be done from scratch. The `View` class must however be kept to preserve the inheritance relationship with the entry programs.  
 - In `env/view.py`, create the environment view in the `View` class.
-	- 3.1: Create a view, even if empty. Keep the two abstract methods `setup` and `loop`.  
-	- 3.2: If not built-in, add a `run` method to call an infinite event loop from the entry programs.  
+	- 4.1: Create a view, even if empty. Keep the two abstract methods `setup` and `loop`.  
+	- 4.2: If not built-in, add a `run` method to call an infinite event loop from the entry programs.  
 - In `play.py` and `observe.py`, create the view and launch the `run` method.
-5. **Hyperparameter configuration:**
-As for the DQN algorithms, only the hyperparameters should be changed for tuning. This is done 
+5. **Hyperparameter configuration:**  
+As for the DQN algorithms, only the hyperparameters should be changed for tuning.  
+- In the dedicated configuration file `dqn/config/dqn_config.py`, tune the hyperparameters:  
+	- 5.1: 
+
 
 ****
 

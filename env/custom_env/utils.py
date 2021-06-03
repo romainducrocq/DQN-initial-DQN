@@ -1,7 +1,7 @@
 import math
 import random
 
-# """CHANGE SCREEN RESOLUTION HERE"""
+# """CHANGE WINDOW RESOLUTION HERE"""
 RES = (1920, 1080)
 ######
 

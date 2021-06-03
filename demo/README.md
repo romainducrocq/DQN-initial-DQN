@@ -24,6 +24,7 @@ The implementation uses Pyglet for the view by default, and provides the two abs
 	- 3.1: Import the environment utils.  
 	- 3.2: In `__init__`: initilialize the Pyglet parameters and define the view setup.  
 	- 3.3: Define the view loop in `on_draw`.  
+- In `env/custom_env/utils.py`, define the window resolution.  
 - In `play.py`, `Play` class, define the noop case, the action key set.  
 - (Optional) In `observe.py`, `Observe` class, synchronize the frame rate in case of frame skipping.  
 4. **View without Pyglet:**  

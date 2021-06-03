@@ -50,12 +50,20 @@ No uncommented section should require any modification, especially no code relat
 - The DQN hyperparameter configuration file `dqn/config/dqn_config.py`.
 
 1. In the `env/custom_env/` folder, create the environment model. Do so in an object-oriented fashion, as the transition dynamic is wrapped in an external controller. E.g: car.py, track.py, utils.py.
-2. In the `env/custom_env_wrapper.py` file, wrap the environment controller in gym:  
+2. In the `env/custom_env_wrapper.py` file, wrap the environment controller in the `CustomEnvWrapper` class:  
 	- Import the environment model,  
 	- In `__init__`: construct the environment, define the feature scaling, and the action/observation spaces,  
-	- Define the observation in `_obs`, the reward in `_rew`, the end condition in `_done`, and (Optional) add infos in `_info`,  
+	- Define the observation in `_obs`, the reward in `_rew`, the end condition in `_done`, and add infos in `_info`,  
 	- Define the initial state in `reset`, and the transition dynamics in `step`,  
 	- (Optional) Define additional rendering instructions in `reset_render` and `step_render`, for the view only.  
+<br>
+**With Pyglet**  
+The framework uses Pyglet for the view by default.
+3. In the `env/view.py` file, wrap the environment view in the `View` class:
+	- Import the environment utils,
+	- In `__init__`: initilialize the Pyglet parameters and define the view setup,
+	- Defin the view loop in `on_draw`. 
+
 
 
 

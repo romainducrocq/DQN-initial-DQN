@@ -43,10 +43,10 @@ The following algorithms are implemented:
 
 This library provides a framework designed to wrap and support any custom environment for applying DQN algorithms. All sections to be modified are indicated by comments.
 No uncommented section should require any modification, especially no code related to the DQN algorithms. Are to be modified only:
-- The environment model folder `env/custom_env/`,
-- The environment view file `env/view.py`,
-- The environment controller wrapper file `env/custom_env_wrapper.py`,
-- The entry programs interacting with the view `play.py` and `observe.py`,
+- The environment model folder `env/custom_env/`.
+- The environment view file `env/view.py`.
+- The environment controller wrapper file `env/custom_env_wrapper.py`.
+- The entry programs interacting with the view `play.py` and `observe.py`.
 - The DQN hyperparameter configuration file `dqn/config/dqn_config.py`.
 
 1. **Model:**  
@@ -66,14 +66,14 @@ The implementation uses Pyglet for the view by default, and provides the two abs
 	- 3.3: Define the view loop in `on_draw`.  
 - In `play.py`, define the action set by keys and noop.  
 - (Optional) In `observe.py`, synchronize the frame rate in case of frame skipping.  
-
 4. **View Without Pyglet:**  
-It is possible to implement a view without Pyglet, thus this must be done from scratch. The `View` class must however be kept to preserve the inheritance relationship with the entry programs.  
+It is possible to implement a view without Pyglet, but it has to be done from scratch. The `View` class must however be kept to preserve the inheritance relationship with the entry programs.  
 - In `env/view.py`, create the environment view in the `View` class.
-	- 3.1: Create a view, even if empty.  
-	- 3.2: Keep the two abstract methods `setup` and `loop`.  
-	- 3.3: If not built-in, add a `run` method to call an infinite event loop from the entry programs.  
-- In `play`
+	- 3.1: Create a view, even if empty. Keep the two abstract methods `setup` and `loop`.  
+	- 3.2: If not built-in, add a `run` method to call an infinite event loop from the entry programs.  
+- In `play.py` and `observe.py`, create the view and launch the `run` method.
+5. **Hyperparameter configuration:**
+As for the DQN algorithms, only the hyperparameters should be changed for tuning. This is done 
 
 ****
 

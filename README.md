@@ -76,7 +76,7 @@ It is possible to implement a view without Pyglet, but it has to be done from sc
 For the DQN algorithms, only the hyperparameters should be changed for tuning.  
 - In the dedicated configuration file `dqn/config/dqn_config.py`, tune the hyperparameters:  
 	- 5.1: Define the set of hyperparameters in `HYPER_PARAMS`.
-	- 5.2: Define the network architecture in `network_config`: the network, the optimizer, the loss function, the output dimension entering the dueling layer. If the network is not dense, the last layer must be flattened and its ouput dimension must be computed in order to match with the fully connected dueling layer. The the optimizer and the loss function must be kept as lambdas, as there arguments are passed afterwards and vary between the algorithms.
+	- 5.2: Define the network architecture in `network_config`: the network, the optimizer, the loss, the output dimension passed to the dueling layer. If the network is not dense, the last layer must be flattened and its ouput dimension must be computed in order to match with the fully connected dueling layer. The optimizer and the loss must be kept as lambdas, as there arguments are given afterwards and vary  between algorithms.
 
 
 ****

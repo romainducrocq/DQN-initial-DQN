@@ -107,7 +107,7 @@ class Train:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Initial DQN - TRAIN")
+    parser = argparse.ArgumentParser(description="TRAIN")
     parser.add_argument('-gpu', type=str, default=HYPER_PARAMS["gpu"], help='GPU #')
     parser.add_argument('-n_env', type=int, default=HYPER_PARAMS["n_env"], help='Multi-processing environments')
     parser.add_argument('-lr', type=float, default=HYPER_PARAMS["lr"], help='Learning rate')

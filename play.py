@@ -25,6 +25,6 @@ class Play(View):
 
 if __name__ == "__main__":
 
-    play = Play(RES[0], RES[1], "Initial DQN - PLAY", Env())
+    play = Play(RES[0], RES[1], "PLAY", Env())
     pyglet.clock.schedule_interval(play.on_draw, 0.002)
     pyglet.app.run()

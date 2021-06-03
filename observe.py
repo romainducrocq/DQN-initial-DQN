@@ -10,6 +10,8 @@ from functools import reduce
 
 from torch import device, cuda
 
+import time
+
 
 class Observe(View):
     def __init__(self, width, height, name, env, args):
@@ -44,9 +46,11 @@ class Observe(View):
         if done:
             self.setup()
 
+        time.sleep(0.)
+
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Initial DQN - OBSERVE")
+    parser = argparse.ArgumentParser(description="OBSERVE")
     parser.add_argument('-dir', type=str, default='', help='Directory', required=True)
     parser.add_argument('-max_steps', type=int, default=HYPER_PARAMS['max_episode_steps'], help='Max episode steps')
     parser.add_argument('-gpu', type=str, default='0', help='GPU #')

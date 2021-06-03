@@ -45,25 +45,25 @@ This library provides a framework designed to wrap and support any custom enviro
 No uncommented section should require any modification, especially no code related to the DQN algorithms. Are to be modified only:
 - The environment model folder `env/custom_env/`,
 - The environment view file `env/view.py`,
-- The environment controller wrapper filer `env/custom_env_wrapper.py`,
+- The environment controller wrapper file `env/custom_env_wrapper.py`,
 - The entry programs interacting with the view `play.py` and `observe.py`,
 - The DQN hyperparameter configuration file `dqn/config/dqn_config.py`.
 
 1. **Model:**  
-- 1.1: In the `env/custom_env/` folder, create the environment model. Do so in an object-oriented fashion, as the transition dynamic is wrapped in an external controller. E.g: car.py, track.py, utils.py.  
-2. **Controller:**  
-- 2.1: In the `env/custom_env_wrapper.py` file, wrap the environment controller in the `CustomEnvWrapper` class:  
-	- Import the environment model,  
-	- In `__init__`: construct the environment, define the feature scaling, and the action/observation spaces,  
-	- Define the observation in `_obs`, the reward in `_rew`, the end condition in `_done`, and add infos in `_info`,  
-	- Define the initial state in `reset`, and the transition dynamics in `step`,  
-	- (Optional) Define additional rendering instructions in `reset_render` and `step_render`, for the view only.  
-3. **With Pyglet**  
-The framework uses Pyglet for the view by default.  
-3. In the `env/view.py` file, wrap the environment view in the `View` class:  
-	- Import the environment utils,  
-	- In `__init__`: initilialize the Pyglet parameters and define the view setup,  
-	- Defin the view loop in `on_draw`.   
+- In the `env/custom_env/` folder, create the environment model. Do so in an object-oriented fashion, as the transition dynamic is wrapped in an external controller. E.g: car.py, track.py, utils.py.  
+2. **Controller wrapper:**  
+- In the `env/custom_env_wrapper.py` file, wrap the environment controller in the `CustomEnvWrapper` class:  
+	- 2.1: Import the environment model.  
+	- 2.2: In `__init__`: construct the environment, define the feature scaling, and the action/observation spaces.  
+	- 2.3: Define the observation in `_obs`, the reward in `_rew`, the end condition in `_done`, and add infos in `_info`.  
+	- 2.4: Define the initial state in `reset`, and the transition dynamics in `step`.  
+	- 2.5: (Optional) Define additional rendering instructions in `reset_render` and `step_render`, for the view only.  
+3. **View With Pyglet**  
+The framework uses Pyglet for the view by default. 
+- In the `env/view.py` file, wrap the environment view in the `View` class:  
+	- 3.1: Import the environment utils.  
+	- 3.2: In `__init__`: initilialize the Pyglet parameters and define the view setup.  
+	- 3.3: Define the view loop in `on_draw`.   
 
 
 

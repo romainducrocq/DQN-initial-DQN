@@ -52,18 +52,20 @@ No uncommented section should require any modification, especially no code relat
 1. **Model:**  
 - In the `env/custom_env/` folder, create the environment model. Do so in an object-oriented fashion, as the transition dynamic is wrapped in an external controller. E.g: car.py, track.py, utils.py.  
 2. **Controller wrapper:**  
-- In the `env/custom_env_wrapper.py` file, wrap the environment controller in the `CustomEnvWrapper` class:  
+- In `env/custom_env_wrapper.py`, wrap the environment controller in the `CustomEnvWrapper` class:  
 	- 2.1: Import the environment model.  
 	- 2.2: In `__init__`: construct the environment, define the feature scaling, the action/observation spaces.  
 	- 2.3: Define the observation in `_obs`, the reward in `_rew`, the end condition in `_done`, add infos in `_info`.  
 	- 2.4: Define the initial state in `reset`, the transition dynamics in `step`.  
 	- 2.5: (Optional) Define rendering instructions in `reset_render` and `step_render`, for the view only.  
-3. **View With Pyglet**  
-The framework uses Pyglet for the view by default. 
-- In the `env/view.py` file, wrap the environment view in the `View` class:  
+3. **View With Pyglet:**  
+The implementation uses Pyglet for the view by default, and provides the two abstract methods `setup` and `loop`. The `Play` and `Observe` classes in the entry programs inherit from the view and implement these methods to interact with the environment. This is done by callbacks on the Pyglet clock.
+- In `env/view.py`, wrap the environment view in the `View` class:  
 	- 3.1: Import the environment utils.  
 	- 3.2: In `__init__`: initilialize the Pyglet parameters and define the view setup.  
-	- 3.3: Define the view loop in `on_draw`.   
+	- 3.3: Define the view loop in `on_draw`.  
+- In `play.py`, define the action set by keys and noop.  
+- (Optional) In `observe.py`, synchronize the frame rate in case of frame skipping.  
 
 
 

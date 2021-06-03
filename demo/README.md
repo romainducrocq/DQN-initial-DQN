@@ -9,8 +9,8 @@ No uncommented section should require modification, especially no code related t
 - The DQN hyperparameter configuration file `dqn/config/dqn_config.py`.  
 
 1. **Model:**  
-- In the `env/custom_env/` folder, create the environment model. Do so in an object-oriented fashion, as the transition dynamic is wrapped in an external controller.  
-- E.g: car.py, track.py, utils.py.  
+- In the `env/custom_env/` folder, create the environment model.  
+  Do so in an object-oriented fashion, as the transition dynamic is wrapped in an external controller. E.g: car.py, track.py, utils.py.  
 2. **Controller wrapper:**  
 - In `env/custom_env_wrapper.py`, wrap the environment controller in the `CustomEnvWrapper` class:  
 	- 2.1: Import the environment model.  

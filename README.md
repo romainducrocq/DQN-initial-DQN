@@ -67,8 +67,13 @@ The implementation uses Pyglet for the view by default, and provides the two abs
 - In `play.py`, define the action set by keys and noop.  
 - (Optional) In `observe.py`, synchronize the frame rate in case of frame skipping.  
 
-
-
+4. **View Without Pyglet:**  
+It is possible to implement a view without Pyglet, thus this must be done from scratch.  
+- In `env/view.py`, create the environment view in the `View` class. It is important to keep the class and to sustain the inheritance relationship with the entry programs.  
+	- 3.1: Create a view, even if empty.  
+	- 3.2: Keep the two abstract methods `setup` and `loop`.  
+	- 3.3: If not built-in, add a `run` method to call an infinite event loop from the entry programs.  
+- In `play`
 
 ****
 

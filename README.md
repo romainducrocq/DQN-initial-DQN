@@ -51,9 +51,9 @@ No uncommented section should require any modification, especially no code relat
 
 1. In the `env/custom_env/` folder, create the environment model. Do so in an object-oriented fashion, as the transition dynamic is wrapped in an external controller. E.g: car.py, track.py, utils.py.
 2. In the `env/custom_env_wrapper.py` file, wrap the environment controller in gym:  
-	- Import the model,  
-	- Initialize the environment in `__init__`: construct the environment, define the feature scaling, and the action/observation spaces,  
-	- Define the observation function in `_obs`, the reward function in `_rew`, the end function in `_done`, and (Optional) add infos in `_info`,  
+	- Import the environment model,  
+	- In `__init__`: construct the environment, define the feature scaling, and the action/observation spaces,  
+	- Define the observation in `_obs`, the reward in `_rew`, the end condition in `_done`, and (Optional) add infos in `_info`,  
 	- Define the initial state in `reset`, and the transition dynamics in `step`,  
 	- (Optional) Define additional rendering instructions in `reset_render` and `step_render`, for the view only.  
 

@@ -56,13 +56,13 @@ No uncommented section should require any modification, especially no code relat
 	- Define the observation in `_obs`, the reward in `_rew`, the end condition in `_done`, and add infos in `_info`,  
 	- Define the initial state in `reset`, and the transition dynamics in `step`,  
 	- (Optional) Define additional rendering instructions in `reset_render` and `step_render`, for the view only.  
-<br>
+
 **With Pyglet**  
-The framework uses Pyglet for the view by default.
-3. In the `env/view.py` file, wrap the environment view in the `View` class:
-	- Import the environment utils,
-	- In `__init__`: initilialize the Pyglet parameters and define the view setup,
-	- Defin the view loop in `on_draw`. 
+The framework uses Pyglet for the view by default.  
+3. In the `env/view.py` file, wrap the environment view in the `View` class:  
+	- Import the environment utils,  
+	- In `__init__`: initilialize the Pyglet parameters and define the view setup,  
+	- Defin the view loop in `on_draw`.   
 
 
 

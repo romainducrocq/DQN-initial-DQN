@@ -54,10 +54,10 @@ No uncommented section should require any modification, especially no code relat
 2. **Controller wrapper:**  
 - In the `env/custom_env_wrapper.py` file, wrap the environment controller in the `CustomEnvWrapper` class:  
 	- 2.1: Import the environment model.  
-	- 2.2: In `__init__`: construct the environment, define the feature scaling, and the action/observation spaces.  
-	- 2.3: Define the observation in `_obs`, the reward in `_rew`, the end condition in `_done`, and add infos in `_info`.  
-	- 2.4: Define the initial state in `reset`, and the transition dynamics in `step`.  
-	- 2.5: (Optional) Define additional rendering instructions in `reset_render` and `step_render`, for the view only.  
+	- 2.2: In `__init__`: construct the environment, define the feature scaling, the action/observation spaces.  
+	- 2.3: Define the observation in `_obs`, the reward in `_rew`, the end condition in `_done`, add infos in `_info`.  
+	- 2.4: Define the initial state in `reset`, the transition dynamics in `step`.  
+	- 2.5: (Optional) Define rendering instructions in `reset_render` and `step_render`, for the view only.  
 3. **View With Pyglet**  
 The framework uses Pyglet for the view by default. 
 - In the `env/view.py` file, wrap the environment view in the `View` class:  

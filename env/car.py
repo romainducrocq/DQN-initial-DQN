@@ -36,7 +36,7 @@ class Car:
 
         self.start_time = time.time()
 
-        self.actions = {'UP': 0, 'RIGHT': 1, 'DOWN': 2, 'LEFT': 3, 'NONE': 4}
+        self.actions = {'UP': 0, 'RIGHT': 1, 'DOWN': 2, 'LEFT': 3, 'NOOP': 4}
 
         self.color = [[255, 0, 0], [0, 0, 255]]
         self.sprites = ["./env/img/car_blue.png", "./env/img/car_red.png"]
@@ -92,7 +92,7 @@ class Car:
         elif action == self.actions['LEFT']:
             self.rotate_left()
             self.friction()
-        elif action == self.actions['NONE']:
+        elif action == self.actions['NOOP']:
             self.friction()
         else:
             self.friction()

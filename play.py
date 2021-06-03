@@ -1,5 +1,6 @@
-# """FIT TO ENV"""
-from env import Env, View, safe_dict, RES
+from env import Env, View
+
+# """CHANGE IF NOT PYGLET VIEW"""
 from pyglet.gl import *
 ######
 
@@ -22,7 +23,7 @@ class Play(View):
 
     def loop(self):
         # """FIT TO ACTIONS"""
-        action = safe_dict(self.action_keys, self.key, self.env.car.actions['NONE'])
+        action = self.env.car.actions['NOOP'] if self.key not in self.action_keys else self.action_keys[self.key]
         ######
 
         _, _, done, _ = self.env.step(action)
@@ -32,8 +33,8 @@ class Play(View):
 
 if __name__ == "__main__":
 
-    # """FIT TO VIEW IF NOT PYGLET"""
-    play = Play(RES[0], RES[1], "PLAY", Env())
+    # """CHANGE IF NOT PYGLET VIEW"""
+    play = Play("PLAY", Env())
     pyglet.clock.schedule_interval(play.on_draw, 0.002)
     pyglet.app.run()
     ######

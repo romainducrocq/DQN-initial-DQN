@@ -1,5 +1,5 @@
 #################################
-# """FIT TO VIEW IF NOT PYGLET"""
+# """CHANGE IF NOT PYGLET VIEW"""
 
 from .utils import RES
 from pyglet.gl import *
@@ -43,13 +43,14 @@ def load_sprite(path, anchor_x=0.5, anchor_y=0.5):
 
 class View(pyglet.window.Window):
 
-    def __init__(self, width, height, name, env):
-        super(View, self).__init__(width, height, name, resizable=True)
+    def __init__(self, name, env):
+        # """CHANGE VIEW INIT HERE"""
+        (width, height) = RES
         background_color = [193, 225, 193]
-        glClearColor(background_color[0]/255, background_color[1]/255, background_color[2]/255, 1)
-        self.width = width
-        self.height = height
-        self.name = name
+        ######
+
+        super(View, self).__init__(width, height, name, resizable=True)
+        glClearColor(background_color[0] / 255, background_color[1] / 255, background_color[2] / 255, 1)
         self.zoom = 1
         self.key = None
 
@@ -119,10 +120,10 @@ class View(pyglet.window.Window):
         if self.key == symbol:
             self.key = None
 
+    #################################
+
     def setup(self):
         raise NotImplementedError
 
     def loop(self):
         raise NotImplementedError
-
-#################################

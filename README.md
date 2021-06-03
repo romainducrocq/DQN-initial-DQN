@@ -72,10 +72,11 @@ It is possible to implement a view without Pyglet, but it has to be done from sc
 	- 4.1: Create a view, even if empty. Keep the two abstract methods `setup` and `loop`.  
 	- 4.2: If not built-in, add a `run` method to call an infinite event loop from the entry programs.  
 - In `play.py` and `observe.py`, create the view and launch the `run` method.
-5. **Hyperparameter configuration:**  
-As for the DQN algorithms, only the hyperparameters should be changed for tuning.  
+5. **DQN Hyperparameter configuration:**  
+For the DQN algorithms, only the hyperparameters should be changed for tuning.  
 - In the dedicated configuration file `dqn/config/dqn_config.py`, tune the hyperparameters:  
-	- 5.1: 
+	- 5.1: Define the set of hyperparameters in `HYPER_PARAMS`.
+	- 5.2: Define the network architecture in `network_config`: the network, the loss function, the optimizer, the output dimension entering the dueling layer. If the network is not dense, the last layer must be flattened and its ouput dimension must be computed in order to match with the fully connected dueling layer. 
 
 
 ****

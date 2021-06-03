@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch.optim as optim
 
+####################################
 # """CHANGE HYPER PARAMETERS HERE"""
 HYPER_PARAMS = {
     'gpu': '0',                          # GPU #
@@ -31,9 +32,13 @@ HYPER_PARAMS = {
                                          # PerDuelingDoubleDQNAgent
 }
 
+####################################
 
+
+##################################
 # """CHANGE NETWORK CONFIG HERE"""
 def network_config(input_dim):
+    # """NETWORK"""
     hidden_dims = (256, 256)
 
     activation = nn.ELU()
@@ -44,10 +49,20 @@ def network_config(input_dim):
         nn.Linear(hidden_dims[0], hidden_dims[1]),
         activation
     )
+    ######
 
+    # """OPTIMIZER"""
     optim_func = (lambda params, lr: optim.Adam(params, lr=lr))
-    loss_func = (lambda reduction: nn.SmoothL1Loss(reduction=reduction))
+    ######
 
+    # """LOSS"""
+    loss_func = (lambda reduction: nn.SmoothL1Loss(reduction=reduction))
+    ######
+
+    # """FC DUELING LAYER OUTPUT DIM"""
     fc_out_dim = hidden_dims[-1]
+    ######
 
     return net, optim_func, loss_func, fc_out_dim
+
+##################################

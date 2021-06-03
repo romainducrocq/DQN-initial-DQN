@@ -1,7 +1,10 @@
+# """FIT TO ENV"""
 from env import Env, View, RES
+from pyglet.gl import *
+######
+
 from dqn.config import HYPER_PARAMS
 from dqn import make_env, Networks
-from pyglet.gl import *
 
 import os
 import argparse
@@ -46,7 +49,9 @@ class Observe(View):
         if done:
             self.setup()
 
+        # """FIT TO FRAME SKIP"""
         time.sleep(0.)
+        ######
 
 
 if __name__ == "__main__":
@@ -55,6 +60,8 @@ if __name__ == "__main__":
     parser.add_argument('-max_steps', type=int, default=HYPER_PARAMS['max_episode_steps'], help='Max episode steps')
     parser.add_argument('-gpu', type=str, default='0', help='GPU #')
 
-    play = Observe(RES[0], RES[1], "Initial DQN - OBSERVE", Env(), parser.parse_args())
+    # """FIT TO VIEW IF NOT PYGLET"""
+    play = Observe(RES[0], RES[1], "OBSERVE", Env(), parser.parse_args())
     pyglet.clock.schedule_interval(play.on_draw, 0.002)
     pyglet.app.run()
+    ######

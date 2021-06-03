@@ -1,3 +1,6 @@
+#################################
+# """FIT TO VIEW IF NOT PYGLET"""
+
 from .utils import RES
 from pyglet.gl import *
 import time
@@ -42,7 +45,8 @@ class View(pyglet.window.Window):
 
     def __init__(self, width, height, name, env):
         super(View, self).__init__(width, height, name, resizable=True)
-        glClearColor(193/255, 225/255, 193/255, 1)
+        background_color = [193, 225, 193]
+        glClearColor(background_color[0]/255, background_color[1]/255, background_color[2]/255, 1)
         self.width = width
         self.height = height
         self.name = name
@@ -51,6 +55,7 @@ class View(pyglet.window.Window):
 
         self.env = env
 
+        # """CHANGE VIEW SETUP HERE"""
         self.car_imgs, self.car_sprites = [], []
         for i, sprite in enumerate(self.env.car.sprites):
             self.car_imgs.append(pyglet.image.load(sprite))
@@ -64,6 +69,7 @@ class View(pyglet.window.Window):
 
         self.ai_view = False
         self.ai_view_timer = time.time()
+        ######
 
         self.setup()
 
@@ -72,6 +78,7 @@ class View(pyglet.window.Window):
 
         self.loop()
 
+        # """CHANGE VIEW LOOP HERE"""
         draw_polygons(self.env.track.polygons_track, self.env.track.colors["polygons_track"])
         if self.key == pyglet.window.key.SPACE and (time.time() - self.ai_view_timer) > 0.2:
             self.ai_view = not self.ai_view
@@ -96,6 +103,7 @@ class View(pyglet.window.Window):
         draw_label_top_left("AI view: SPACE", -RES[0], RES[1], y_offset=1)
         draw_label_top_left("Time: " + str(round(self.env.car.get_time(), 2)), -RES[0], RES[1], y_offset=2)
         draw_label_top_left("Score: " + str(self.env.car.score), -RES[0], RES[1], y_offset=3)
+        ######
 
     def on_resize(self, width, height):
         glMatrixMode(gl.GL_MODELVIEW)
@@ -116,3 +124,5 @@ class View(pyglet.window.Window):
 
     def loop(self):
         raise NotImplementedError
+
+#################################

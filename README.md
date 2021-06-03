@@ -10,7 +10,7 @@ How to use:
 1. Create a custom environment in env/ with a pyglet view and wrap it in gym in env/custom_env_wrapper.py.  
 2. Configure the hyperparameters and neural net architecture in dqn/config/dqn_config.py.  
 3. Train the model with `python3 train.py -algo PerDuelingDoubleDQNAgent -max_total_steps 18000000`.  
-4. Observe the AI with `python3 observe.py -dir save/PerDuelingDoubleDQNAgent_lr5e-05_model.pack -max_steps 500`.  
+4. Observe with `python3 observe.py -dir save/PerDuelingDoubleDQNAgent_lr5e-05_model.pack -max_steps 500`.  
 5. Visualize the learning curves in tensorboard with `tensorboard --logdir ./logs/`.  
 6. And beat the AI with `python3 play.py` to assert dominance on the machines.  
  

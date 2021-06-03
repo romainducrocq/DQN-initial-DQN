@@ -32,8 +32,8 @@ It is possible to implement a view without Pyglet. The `View` class must be kept
 	- 4.1: Create a view, even if empty. Keep the two abstract methods `setup` and `loop`.  
 	- 4.2: If not built-in, add a `run` method to call an infinite event loop from the entry programs.  
 - In `play.py` and `observe.py`, launch the view:
-	- 4.3: In `__main__`, construct the view and launch the `run` method.
-	- 4.4: In `Play`, adjust to the view if needed.
+	- 4.3: In `__main__`: construct the view and launch the `run` method.
+	- 4.4: Adjust to the view if needed in the `Play` class and the `Observe` class.
 5. **DQN hyperparameter configuration:**  
 For the DQN algorithms, only the hyperparameters should be changed for tuning.  
 - In the dedicated configuration file `dqn/config/dqn_config.py`, tune the hyperparameters:  

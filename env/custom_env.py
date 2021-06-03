@@ -97,10 +97,10 @@ class CustomEnv(gym.Env):
         (self.car.x_pos, self.car.y_pos), self.car.theta = self.track.start_line()
         self.track.create_reward_gates()
         self.car.next_reward_gate_i = self.track.start_reward_gate(self.car.vertices())
+        ######
 
         if not self.train:
-            self.track.create_track_polygons()
-        ######
+            self.reset_render()
 
         return self._obs()
 
@@ -109,9 +109,22 @@ class CustomEnv(gym.Env):
         self.car.move(action)
         ######
 
+        if not self.train:
+            self.step_render()
+
         self.steps += 1
 
         return self._obs(), self._rew(), self._done(), self._info()
+
+    def reset_render(self):
+        # """CHANGE RESET RENDER HERE"""
+        self.track.create_track_polygons()
+        ######
+
+    def step_render(self):
+        # """CHANGE STEP RENDER HERE"""
+        pass
+        ######
 
     def render(self, mode='human'):
         pass

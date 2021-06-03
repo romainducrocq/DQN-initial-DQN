@@ -1,7 +1,7 @@
 ### How To Build a Custom Environment
 
 This library provides a framework designed to wrap and support any custom environment for applying DQN algorithms. All sections to be modified are indicated by comments.
-No uncommented section should require any modification, especially no code related to the DQN algorithms. Are to be modified only:  
+No uncommented section should require modification, especially no code related to the DQN algorithms. Are to be modified only:  
 - The environment model folder `env/custom_env/`.  
 - The environment view file `env/view.py`.  
 - The environment controller wrapper file `env/custom_env_wrapper.py`.  
@@ -9,7 +9,8 @@ No uncommented section should require any modification, especially no code relat
 - The DQN hyperparameter configuration file `dqn/config/dqn_config.py`.  
 
 1. **Model:**  
-- In the `env/custom_env/` folder, create the environment model. Do so in an object-oriented fashion, as the transition dynamic is wrapped in an external controller. E.g: car.py, track.py, utils.py.  
+- In the `env/custom_env/` folder, create the environment model. Do so in an object-oriented fashion, as the transition dynamic is wrapped in an external controller.  
+- E.g: car.py, track.py, utils.py.  
 2. **Controller wrapper:**  
 - In `env/custom_env_wrapper.py`, wrap the environment controller in the `CustomEnvWrapper` class:  
 	- 2.1: Import the environment model.  

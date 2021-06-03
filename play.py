@@ -10,6 +10,7 @@ class Play(View):
         super(Play, self).__init__(*args, **kwargs)
 
         # """FIT TO ACTIONS"""
+        self.noop = self.env.car.actions['NOOP']
         self.action_keys = {
             pyglet.window.key.UP: self.env.car.actions['UP'],
             pyglet.window.key.RIGHT: self.env.car.actions['RIGHT'],
@@ -23,7 +24,7 @@ class Play(View):
 
     def loop(self):
         # """FIT TO ACTIONS"""
-        action = self.env.car.actions['NOOP'] if self.key not in self.action_keys else self.action_keys[self.key]
+        action = self.noop if self.key not in self.action_keys else self.action_keys[self.key]
         ######
 
         _, _, done, _ = self.env.step(action)

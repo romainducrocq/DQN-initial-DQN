@@ -7,10 +7,10 @@ My own DQN library for custom environments. Supports:
 - Tensorboard visualization.  
 
 How to use:  
-1. Create a custom environment in env/ with a pyglet view and wrap it in gym in env/custom_env_wrapper.py.  
+1. Create a custom environment in env/ with a pyglet view and a gym wrapper.  
 2. Configure the hyperparameters and neural net architecture in dqn/config/dqn_config.py.  
 3. Train the model with `python3 train.py -algo PerDuelingDoubleDQNAgent -max_total_steps 18000000`.  
-4. Observe with `python3 observe.py -dir save/PerDuelingDoubleDQNAgent_lr5e-05_model.pack -max_steps 500`.  
+4. Observe the AI with `python3 observe.py -dir save/PerDuelingDoubleDQNAgent_lr5e-05_model.pack -max_steps 500`.  
 5. Visualize the learning curves in tensorboard with `tensorboard --logdir ./logs/`.  
 6. And beat the AI with `python3 play.py` to assert dominance on the machines.  
  
@@ -38,6 +38,26 @@ The following algorithms are implemented:
 ![Demo gif](demo/demo.gif)
 
 ![Demo tensorboard png](demo/demo_tensorboard.png)
+
+### How To Build a Custom Environment
+
+This library provides a framework designed to wrap and support any custom environment for applying DQN algorithms. All sections to be modified are indicated by comments.
+No uncommented section should require any modification, especially no code related to the DQN algorithms. Are to be modified only:
+- The environment model folder `env/custom_env/`,
+- The environment view file `env/view.py`,
+- The environment controller wrapper filer `env/custom_env_wrapper.py`,
+- The entry programs interacting with the view `play.py` and `observe.py`,
+- The DQN hyperparameter configuration file `dqn/config/dqn_config.py`.
+
+1. In the `env/custom_env/` folder, create the environment model. Do so in an object-oriented fashion, as the transition dynamic is wrapped in an external controller. e.g.: car.py, track.py, utils.py.
+2. In the `env/custom_env_wrapper.py` file, wrap the environment controller in gym:  
+	- Import the model,  
+	- Initialize the environment in `__init__`: construct the environment, define the feature scaling constants, define the action and observation spaces,  
+	- Define the observation function in `_obs`, the reward function in `_rew`, the end function in `_done`, (Optional) add infos in `_info`,  
+	- Define the initial state in `reset`, the transition dynamics in `step`,  
+	- (Optional) Define additional rendering instructions in `reset_render` and `step_render`, for the view only.  
+
+
 
 ****
 

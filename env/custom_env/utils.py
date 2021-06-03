@@ -6,9 +6,6 @@ RES = (1920, 1080)
 ######
 
 
-#########################
-# """CHANGE UTILS HERE"""
-
 def safe_dict(d, key, def_val):
     return def_val if d is None or key not in d else d[key]
 
@@ -160,5 +157,3 @@ def zoom_vertices(vertices, zoom=150, x_orig=0, y_orig=0):
             new_vertex.append(point_on_circle(theta, h + zoom, x_orig, y_orig))
         new_vertices.append(new_vertex)
     return new_vertices
-
-#########################

@@ -1,7 +1,5 @@
-# """IMPORT ENV HERE"""
-from .track import Track
-from .car import Car
-from .utils import RES
+# """IMPORT CUSTOM ENV HERE"""
+from .custom_env import Track, Car, RES
 ######
 
 import gym
@@ -9,11 +7,11 @@ from gym import spaces
 import numpy as np
 
 
-class CustomEnv(gym.Env):
+class CustomEnvWrapper(gym.Env):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, train=False):
-        super(CustomEnv, self).__init__()
+        super(CustomEnvWrapper, self).__init__()
 
         self.train = train
 
@@ -26,12 +24,13 @@ class CustomEnv(gym.Env):
         # """ENV CONSTRUCT"""
         self.track = Track()
         self.car = Car()
+        self.res = RES
         ######
 
         # """FEATURE SCALES"""
         self.MAX_FEATURES = {
             "speed": 50. if self.train else 35.,
-            "sonar_distance": RES[0]
+            "sonar_distance": self.res[0]
         }
         ######
 

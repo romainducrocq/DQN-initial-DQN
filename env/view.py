@@ -1,7 +1,6 @@
 #################################
 # """CHANGE IF NOT PYGLET VIEW"""
 
-from .utils import RES
 from pyglet.gl import *
 import time
 
@@ -45,7 +44,7 @@ class View(pyglet.window.Window):
 
     def __init__(self, name, env):
         # """CHANGE VIEW INIT HERE"""
-        (width, height) = RES
+        (width, height) = env.res
         background_color = [193, 225, 193]
         ######
 
@@ -101,9 +100,9 @@ class View(pyglet.window.Window):
         )
         self.car_sprites[int(self.env.car.is_collision)]["sprite"].draw()
 
-        draw_label_top_left("AI view: SPACE", -RES[0], RES[1], y_offset=1)
-        draw_label_top_left("Time: " + str(round(self.env.car.get_time(), 2)), -RES[0], RES[1], y_offset=2)
-        draw_label_top_left("Score: " + str(self.env.car.score), -RES[0], RES[1], y_offset=3)
+        draw_label_top_left("AI view: SPACE", -self.env.res[0], self.env.res[1], y_offset=1)
+        draw_label_top_left("Time: " + str(round(self.env.car.get_time(), 2)), -self.env.res[0], self.env.res[1], y_offset=2)
+        draw_label_top_left("Score: " + str(self.env.car.score), -self.env.res[0], self.env.res[1], y_offset=3)
         ######
 
     def on_resize(self, width, height):

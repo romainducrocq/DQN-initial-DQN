@@ -1,4 +1,4 @@
-from .custom_env import CustomEnv as Env
+from .custom_env_wrapper import CustomEnvWrapper as Env
 from .view import View
 
 __all__ = ['Env', 'View']

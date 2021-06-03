@@ -12,16 +12,19 @@ class CustomEnv(gym.Env):
     def __init__(self, train=False):
         super(CustomEnv, self).__init__()
 
+        self.train = train
+
+        self.steps = 0
+        self.total_reward = 0.
+
         self.MAX_FEATURES = {
-            "speed": 50. if train else 35.,
+            "speed": 50. if self.train else 35.,
             "sonar_distance": RES[0]
         }
 
         self.track = Track()
         self.car = Car(max_features=self.MAX_FEATURES)
 
-        self.steps = 0
-        self.total_reward = 0.
         self.action_space = spaces.Discrete(len(self.car.actions))
         self.observation_space = spaces.Box(low=0., high=1., shape=(self.car.n_sonars+1,), dtype=np.float32)
 
@@ -68,6 +71,9 @@ class CustomEnv(gym.Env):
         self.track.create_reward_gates()
         self.car.next_reward_gate_i = self.track.start_reward_gate(self.car.vertices())
 
+        if not self.train:
+            self.track.create_track_polygons()
+
         return self._obs()
 
     def step(self, action):
@@ -76,9 +82,6 @@ class CustomEnv(gym.Env):
         self.steps += 1
 
         return self._obs(), self._rew(), self._done(), self._info()
-
-    def reset_render(self):
-        return self.track.create_track_polygons()
 
     def render(self, mode='human'):
         pass

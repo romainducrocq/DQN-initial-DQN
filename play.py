@@ -15,7 +15,6 @@ class Play(View):
 
     def setup(self):
         _ = self.env.reset()
-        self.polygons_track = self.env.reset_render()
 
     def loop(self):
         action = safe_dict(self.action_keys, self.key, self.env.car.actions['NONE'])

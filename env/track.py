@@ -34,6 +34,8 @@ class Track:
             "vertex_next_reward_gate": [255, 0, 100]
         }
 
+        self.polygons_track = []
+
     def border_vertices(self):
         return self.out_border_vertices + self.in_border_vertices
 
@@ -111,4 +113,6 @@ class Track:
         return (i + self.reward_gates_direction) % self.n_reward_gates
 
     def create_track_polygons(self):
-        return [create_polygon(self.out_border_vertices[i], self.in_border_vertices[i]) for i in range(self.n_vertices)]
+        self.polygons_track = [
+            create_polygon(self.out_border_vertices[i], self.in_border_vertices[i]) for i in range(self.n_vertices)
+        ]

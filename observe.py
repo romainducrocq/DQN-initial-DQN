@@ -36,7 +36,6 @@ class Observe(View):
 
     def setup(self):
         self.obs = self.env.reset()
-        self.polygons_track = self.env.reset_render()
 
     def loop(self):
         action = self.network.actions([self.obs.tolist()])[0]

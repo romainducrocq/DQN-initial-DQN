@@ -29,7 +29,7 @@ Wrap the environment controller in gym.
 2. `__init__()`:  
     - 2.1: construct the environment objects.  
     - 2.2: `MAX_FEATURES` -> _dict_: set the feature scaling.  
-    - 2.3: `action_space` -> _gym.spaces.Discrete<\int>_: set the action space.  
+    - 2.3: `action_space` -> _gym.spaces.Discrete\<int>_: set the action space.  
     - 2.4: `observation_space`: -> _gym.spaces.Box<np.float32>_: set the observation space.  
 3. `_obs()` -> _np.ndarray<np.float32>_: define the observation function, scaled in [0, 1].  
 4. `_rew()` -> _float_: define the step reward function, scaled in [0, 1].  
@@ -49,7 +49,7 @@ Wrap the environment view in pyglet.
 **file `env/view.py`**, **class `View`**   
 1. `import`: import the environment utils global constants.  
 2. `__init__()`:  
-    - 2.1: `(width, height)`, `background_color` -> <\int>: initialize the pyglet parameters.  
+    - 2.1: `(width, height)`, `background_color` -> \<int>: initialize the pyglet parameters.  
     - 2.2: define the view setup.  
 3. `on_draw()`: define the view loop.  
 

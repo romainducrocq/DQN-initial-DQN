@@ -13,7 +13,7 @@ The following algorithms are implemented:
 - Per3DQN: Dueling Double DQN with Priority Experience Replay.  
 
 How to use:  
-1. Create a custom environment in `env/` and tune its hyperparameters in `dqn/config/dqn_config.py` (see `demo/`).  
+1. Create a custom environment in `env/` and tune its hyperparameters in `dqn/config/dqn_config.py` (`demo/`).  
 2. Train the model with `python3 train.py -algo PerDuelingDoubleDQNAgent -max_total_steps 18000000`.  
 3. Observe the AI with `python3 observe.py -dir save/PerDuelingDoubleDQNAgent_lr5e-05_model.pack -max_steps 500`.  
 4. Visualize the learning curves in tensorboard with `tensorboard --logdir ./logs/`.  

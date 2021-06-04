@@ -86,10 +86,11 @@ Tune the hyperparameters and the network configuration.
 
 0. venv
 ```
+VIRTUAL ENVIRONMENT
+
 source venv/bin/activate
 
 deactivate
-
 ```
 
 1. play.py
@@ -97,7 +98,6 @@ deactivate
 PLAY
 
 python3 play.py
-
 ```
 
 2. tensorboard
@@ -107,7 +107,6 @@ VISUALIZE
 tensorboard --logdir ./logs/
 
 http://localhost:6006/
-
 ```
 
 3. observe.py
@@ -121,7 +120,6 @@ optional arguments:
   -dir DIR              Directory
   -max_steps MAX_STEPS  Max episode steps
   -gpu GPU              GPU #
-
 ```
 
 4. train.py

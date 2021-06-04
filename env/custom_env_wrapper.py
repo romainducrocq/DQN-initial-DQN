@@ -35,7 +35,8 @@ class CustomEnvWrapper(gym.Env):
         observation_space_n = self.car.n_sonars + 1
         ################################################################################################################
 
-        self.lim_features["reward"] = (0., 1.) if "reward" not in self.lim_features else self.lim_features["reward"]
+        if "reward" not in self.lim_features:
+            self.lim_features["reward"] = (0., 1.)
 
         self.action_space = spaces.Discrete(action_space_n)
         self.observation_space = spaces.Box(low=0., high=1., shape=(observation_space_n,), dtype=np.float32)

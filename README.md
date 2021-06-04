@@ -7,8 +7,8 @@ My own DQN library for custom environments. Supports:
 - Tensorboard visualization.  
 
 How to use:  
-1. Create a custom environment in env/ with a pyglet view and a gym wrapper.  
-2. Configure the hyperparameters and neural net architecture in dqn/config/dqn_config.py.  
+1. Create a custom environment in env/ with a pyglet view and a gym wrapper (see demo/).  
+2. Configure the hyperparameters and neural net architecture in dqn/config/dqn_config.py (see demo/).  
 3. Train the model with `python3 train.py -algo PerDuelingDoubleDQNAgent -max_total_steps 18000000`.  
 4. Observe the AI with `python3 observe.py -dir save/PerDuelingDoubleDQNAgent_lr5e-05_model.pack -max_steps 500`.  
 5. Visualize the learning curves in tensorboard with `tensorboard --logdir ./logs/`.  
@@ -39,7 +39,7 @@ The following algorithms are implemented:
 
 ![Demo tensorboard png](demo/demo_tensorboard.png)
 
-See `demo/` for a complete guide on how to build a custom environment.
+See `demo/` for a complete guide on how to build a custom environment and run the programs.
 
 ****
 

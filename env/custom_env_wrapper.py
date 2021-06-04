@@ -24,31 +24,36 @@ class CustomEnvWrapper(gym.Env):
         ################################################################################################################
 
         # """CHANGE FEATURE SCALING HERE""" ############################################################################
-        self.MAX_FEATURES = {
-            "speed": 50. if self.train else 35.,
-            "sonar_distance": RES[0]
+        self.lim_features = {
+            "speed": (0., 50. if self.train else 35.),
+            "sonar_distance": (0., RES[0])
         }
         ################################################################################################################
 
-        # """CHANGE ACTION AND OBSERVATION SPACES HERE""" ##############################################################
-        self.action_space = spaces.Discrete(len(self.car.actions))
-        self.observation_space = spaces.Box(low=0., high=1., shape=(self.car.n_sonars+1,), dtype=np.float32)
+        # """CHANGE ACTION AND OBSERVATION SPACE SIZES HERE""" #########################################################
+        action_space_n = len(self.car.actions)
+        observation_space_n = self.car.n_sonars + 1
         ################################################################################################################
 
+        self.lim_features["reward"] = (0., 1.) if "reward" not in self.lim_features else self.lim_features["reward"]
+
+        self.action_space = spaces.Discrete(action_space_n)
+        self.observation_space = spaces.Box(low=0., high=1., shape=(observation_space_n,), dtype=np.float32)
+
+    def scale(self, x, feature):
+        return (x - self.lim_features[feature][0]) / (self.lim_features[feature][1] - self.lim_features[feature][0])
+
     def _obs(self):
+        obs = []
+
         # """CHANGE OBSERVATION HERE""" ################################################################################
         self.car.sonar(self.track.border_vertices())
 
-        obs = np.array(
-            [
-                sonar_distance / self.MAX_FEATURES["sonar_distance"]
-                for sonar_distance in self.car.sonar_distances
-            ] + [
-                self.car.speed / self.MAX_FEATURES["speed"]
-            ], dtype=np.float32)
+        obs += [self.scale(sonar_distance, "sonar_distance") for sonar_distance in self.car.sonar_distances]
+        obs += [self.scale(self.car.speed, "speed")]
         ################################################################################################################
 
-        return obs
+        return np.array(obs, dtype=np.float32)
 
     def _rew(self):
         rew = 0.
@@ -59,13 +64,17 @@ class CustomEnvWrapper(gym.Env):
             rew += 1
         ################################################################################################################
 
+        rew = self.scale(rew, "reward")
         self.total_reward += rew
         return rew
 
     def _done(self):
+        done = False
+
         # """CHANGE DONE HERE""" #######################################################################################
         self.car.collision(self.track.border_vertices())
-        done = self.car.is_collision
+        if self.car.is_collision:
+            done = True
         ################################################################################################################
 
         return done
@@ -85,7 +94,7 @@ class CustomEnvWrapper(gym.Env):
 
         # """CHANGE RESET HERE""" ######################################################################################
         self.track = Track()
-        self.car = Car(max_features=self.MAX_FEATURES)
+        self.car = Car(lim_features=self.lim_features)
 
         (self.car.x_pos, self.car.y_pos), self.car.theta = self.track.start_line()
         self.track.create_reward_gates()

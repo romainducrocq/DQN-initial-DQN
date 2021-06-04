@@ -27,9 +27,9 @@ Wrap the environment controller in gym.
 1. `import`: import the environment model.  
 2. `__init__()`:  
     - 2.1: construct the environment objects.  
-    - 2.2: `MAX_FEATURES` -> _dict_: set the feature scaling.  
-    - 2.3: `action_space` -> _gym.spaces.Discrete\<int>_: set the action space.  
-    - 2.4: `observation_space`: -> _gym.spaces.Box<np.float32>_: set the observation space.  
+    - 2.2: `lim_features` -> _dict_: set the feature scaling (min, max).  
+    - 2.3: `action_space_n` -> _int_: set the action space size.  
+    - 2.4: `observation_space_n`: -> _int_: set the observation space size.  
 3. `_obs()` -> _np.ndarray<np.float32>_: define the observation function, scaled in [0, 1].  
 4. `_rew()` -> _float_: define the step reward function, scaled in [0, 1].  
 5. `_done()` -> _bool_: define the end function.  

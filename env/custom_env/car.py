@@ -10,7 +10,7 @@ import time
 
 
 class Car:
-    def __init__(self, max_features=None):
+    def __init__(self, lim_features=None):
         self.x_pos = 0
         self.y_pos = 0
         self.width = 20
@@ -22,8 +22,8 @@ class Car:
         self.d_da = 0.06
         self.d_a_friction = 0.01
         self.min_speed = 0.3
-        self.max_speed = safe_dict(max_features, "speed", 35.)
-        self.max_sonar_distance = safe_dict(max_features, "sonar_distance", RES[0])
+        self.max_speed = safe_dict(lim_features, "speed", (0., 35.))[1]
+        self.max_sonar_distance = safe_dict(lim_features, "sonar_distance", (0., RES[0]))[1]
 
         self.is_collision = False
 

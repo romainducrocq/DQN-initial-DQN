@@ -82,20 +82,39 @@ Tune the hyperparameters and the network configuration.
 
 ****
 
-### Run `play.py`, `observe.py`, `train.py`
+### Run the programs
 
-- play.py
+0. venv
 ```
+source venv/bin/activate
+
+deactivate
+
+```
+
+1. play.py
+```
+PLAY
+
 python3 play.py
 
-PLAY
 ```
 
-- observe.py
+2. tensorboard
 ```
-python3 observe.py [-h] -dir DIR [-max_steps MAX_STEPS] [-gpu GPU]
+VISUALIZE
 
+tensorboard --logdir ./logs/
+
+http://localhost:6006/
+
+```
+
+3. observe.py
+```
 OBSERVE
+
+python3 observe.py [-h] -dir DIR [-max_steps MAX_STEPS] [-gpu GPU]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -105,8 +124,10 @@ optional arguments:
 
 ```
 
-- train.py
+4. train.py
 ```
+TRAIN
+
 python3 train.py [-h] [-gpu GPU] [-n_env N_ENV] [-lr LR] [-gamma GAMMA]
                  [-eps_start EPS_START] [-eps_min EPS_MIN] [-eps_dec EPS_DEC]
                  [-eps_dec_exp EPS_DEC_EXP] [-bs BS] [-min_mem MIN_MEM]
@@ -117,8 +138,6 @@ python3 train.py [-h] [-gpu GPU] [-n_env N_ENV] [-lr LR] [-gamma GAMMA]
                  [-save_dir SAVE_DIR] [-log_dir LOG_DIR] [-load LOAD]
                  [-repeat REPEAT] [-max_episode_steps MAX_EPISODE_STEPS]
                  [-max_total_steps MAX_TOTAL_STEPS] [-algo ALGO]
-
-TRAIN
 
 optional arguments:
   -h, --help            show this help message and exit

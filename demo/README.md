@@ -1,4 +1,4 @@
-### How To Build a Custom Environment
+### Build a custom environment
 
 This library provides a framework designed to wrap custom environments for applying DQN algorithms.  
 All sections to be modified are indicated by comments. Are to be modified only:  
@@ -29,7 +29,7 @@ Wrap the environment controller in gym.
 2. `__init__()`:  
     - 2.1: construct the environment objects.  
     - 2.2: `MAX_FEATURES` -> _dict_: set the feature scaling.  
-    - 2.3: `action_space` -> _gym.spaces.Discrete<int>_: set the action space.  
+    - 2.3: `action_space` -> _gym.spaces.Discrete<\int>_: set the action space.  
     - 2.4: `observation_space`: -> _gym.spaces.Box<np.float32>_: set the observation space.  
 3. `_obs()` -> _np.ndarray<np.float32>_: define the observation function, scaled in [0, 1].  
 4. `_rew()` -> _float_: define the step reward function, scaled in [0, 1].  
@@ -42,14 +42,14 @@ Wrap the environment controller in gym.
 
 ### 3. View
 
-**3. 1 View with pyglet**  
+**3.1 View with pyglet**  
 
 Wrap the environment view in pyglet.  
 
 **file `env/view.py`**, **class `View`**   
 1. `import`: import the environment utils global constants.  
 2. `__init__()`:  
-    - 2.1: `(width, height)`, `background_color` -> <int>: initialize the pyglet parameters.  
+    - 2.1: `(width, height)`, `background_color` -> <\int>: initialize the pyglet parameters.  
     - 2.2: define the view setup.  
 3. `on_draw()`: define the view loop.  
 
@@ -84,10 +84,84 @@ Create the environment view without pyglet.
 Tune the hyperparameters and the network configuration.  
 
 **file `dqn/config/dqn_config.py`**   
-1. `HYPER_PARAMS` -> _dict_: Set the hyperparameters.  
+1. `HYPER_PARAMS` -> _dict_: set the hyperparameters.  
 2. `network_config(input_dim)` -> _(torch.nn.Sequential, function, function, int)_:  
     - 2.1 `net` -> _torch.nn.Sequential_: define the neural network.  
     - 2.2 `optim_func` -> _function_: define the optimizer function.  
     - 2.3 `loss_func` -> _function_: define the loss function.  
     - 2.4 `fc_out_dim` -> _int_: set the output dimension passed to the dueling layer.  
+
+****
+
+### Run `play.py`, `observe.py`, `train.py`
+
+- play.py
+```
+python3 play.py
+
+PLAY
+```
+
+- observe.py
+```
+python3 observe.py [-h] -dir DIR [-max_steps MAX_STEPS] [-gpu GPU]
+
+OBSERVE
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -dir DIR              Directory
+  -max_steps MAX_STEPS  Max episode steps
+  -gpu GPU              GPU #
+
+```
+
+- train.py
+```
+python3 train.py [-h] [-gpu GPU] [-n_env N_ENV] [-lr LR] [-gamma GAMMA]
+                 [-eps_start EPS_START] [-eps_min EPS_MIN] [-eps_dec EPS_DEC]
+                 [-eps_dec_exp EPS_DEC_EXP] [-bs BS] [-min_mem MIN_MEM]
+                 [-max_mem MAX_MEM] [-target_update_freq TARGET_UPDATE_FREQ]
+                 [-target_soft_update TARGET_SOFT_UPDATE]
+                 [-target_soft_update_tau TARGET_SOFT_UPDATE_TAU]
+                 [-save_freq SAVE_FREQ] [-log_freq LOG_FREQ]
+                 [-save_dir SAVE_DIR] [-log_dir LOG_DIR] [-load LOAD]
+                 [-repeat REPEAT] [-max_episode_steps MAX_EPISODE_STEPS]
+                 [-max_total_steps MAX_TOTAL_STEPS] [-algo ALGO]
+
+TRAIN
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -gpu GPU              GPU #
+  -n_env N_ENV          Multi-processing environments
+  -lr LR                Learning rate
+  -gamma GAMMA          Discount factor
+  -eps_start EPS_START  Epsilon start
+  -eps_min EPS_MIN      Epsilon min
+  -eps_dec EPS_DEC      Epsilon decay
+  -eps_dec_exp EPS_DEC_EXP
+                        Epsilon exponential decay
+  -bs BS                Batch size
+  -min_mem MIN_MEM      Replay memory buffer min size
+  -max_mem MAX_MEM      Replay memory buffer max size
+  -target_update_freq TARGET_UPDATE_FREQ
+                        Target network update frequency
+  -target_soft_update TARGET_SOFT_UPDATE
+                        Target network soft update
+  -target_soft_update_tau TARGET_SOFT_UPDATE_TAU
+                        Target network soft update tau rate
+  -save_freq SAVE_FREQ  Save frequency
+  -log_freq LOG_FREQ    Log frequency
+  -save_dir SAVE_DIR    Save directory
+  -log_dir LOG_DIR      Log directory
+  -load LOAD            Load model
+  -repeat REPEAT        Steps repeat action
+  -max_episode_steps MAX_EPISODE_STEPS
+                        Episode step limit
+  -max_total_steps MAX_TOTAL_STEPS
+                        Max total training steps
+  -algo ALGO            DQNAgent DoubleDQNAgent DuelingDoubleDQNAgent
+                        PerDuelingDoubleDQNAgent
+```
 

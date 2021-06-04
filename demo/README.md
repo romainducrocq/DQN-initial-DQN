@@ -1,43 +1,93 @@
 ### How To Build a Custom Environment
 
-This library provides a framework designed to wrap and support any custom environment for applying DQN algorithms. All sections to be modified are indicated by comments.
-No uncommented section should require modification, especially no code related to the DQN algorithms. Are to be modified only:  
-- The environment model folder `env/custom_env/`.  
-- The environment view file `env/view.py`.  
-- The environment controller wrapper file `env/custom_env_wrapper.py`.  
-- The entry programs interacting with the view `play.py` and `observe.py`.  
-- The DQN hyperparameter configuration file `dqn/config/dqn_config.py`.  
+This library provides a framework designed to wrap custom environments for applying DQN algorithms.  
+All sections to be modified are indicated by comments. Are to be modified only:  
+- The environment model package: `env/custom_env/`.  
+- The environment view file: `env/view.py`.  
+- The environment controller wrapper file: `env/custom_env_wrapper.py`.  
+- The entry program files interacting with the view: `play.py` and `observe.py`.  
+- The DQN hyperparameter configuration file: `dqn/config/dqn_config.py`.  
 
-1. **Model:**  
-- In the `env/custom_env/` folder, create the environment model.  
-  Do so in an object-oriented fashion, as the transition dynamic is wrapped in an external controller. E.g: car.py, track.py, utils.py.  
-2. **Controller wrapper:**  
-- In `env/custom_env_wrapper.py`, `CustomEnvWrapper` class, wrap the environment controller:  
-	- 2.1: Import the environment model.  
-	- 2.2: In `__init__`: construct the environment, define the feature scaling, the action/observation spaces.  
-	- 2.3: Define the observation in `_obs`, the reward in `_rew`, the end condition in `_done`, (Optional) add infos in `_info`.  
-	- 2.4: Define the initial state in `reset`, the transition dynamics in `step`.  
-	- 2.5: (Optional) Define rendering instructions in `reset_render` and `step_render`, for the view only.  
-3. **View with Pyglet:**  
-The implementation uses Pyglet for the view by default, and provides the two abstract methods `setup` and `loop`. The `Play` and `Observe` classes in the entry programs inherit from the view and implement these methods to interact with the environment.  
-- In `env/view.py`, `View` class, wrap the environment view:  
-	- 3.1: Import the environment utils.  
-	- 3.2: In `__init__`: initilialize the Pyglet parameters and define the view setup.  
-	- 3.3: Define the view loop in `on_draw`.  
-- In `env/custom_env/utils.py`, define the window resolution.  
-- In `play.py`, `Play` class, define the noop case, the action key set.  
-- (Optional) In `observe.py`, `Observe` class, synchronize the frame rate in case of frame skipping.  
-4. **View without Pyglet:**  
-It is possible to implement a view without Pyglet. The `View` class must be kept to preserve the inheritance with the entry programs.  
-- In `env/view.py`, `View` class, create the environment view:  
-	- 4.1: Create a view, even if empty. Keep the two abstract methods `setup` and `loop`.  
-	- 4.2: If not built-in, add a `run` method to call an infinite event loop from the entry programs.  
-- In `play.py` and `observe.py`, launch the view:
-	- 4.3: In `__main__`: construct the view and launch the `run` method.
-	- 4.4: Adjust to the view if needed in the `Play` class and the `Observe` class.
-5. **DQN hyperparameter configuration:**  
-For the DQN algorithms, only the hyperparameters should be changed for tuning.  
-- In the dedicated configuration file `dqn/config/dqn_config.py`, tune the hyperparameters:  
-	- 5.1: Define the set of hyperparameters in `HYPER_PARAMS`.  
-	- 5.2: Define the network architecture in `network_config`: the network, the optimizer, the loss, the output dimension passed to the dueling layer. If the network is not dense, the last layer must be flattened and its ouput dimension must be computed to match with the fully connected dueling layer. The optimizer and the loss must be kept as lambdas, as the arguments vary  between algorithms.  
+### 1. Model
+
+Create the custom environment model.  
+
+**package `env/custom_env/`**  
+1. create the environment model classes. E.g: car.py, track.py.  
+2. create additional resources. E.g: utils.py, img/.  
+
+**file `env/custom_env/utils.py`**  
+1. `RES` -> _(int, int)_: set the window resolution.  
+2. define the global constants and functions.  
+
+### 2. Controller
+
+Wrap the environment controller in gym.  
+
+**file `env/custom_env_wrapper.py`**, **class `CustomEnvWrapper`**   
+1. `import`: import the environment model.  
+2. `__init__()`:  
+    - 2.1: construct the environment objects.  
+    - 2.2: `MAX_FEATURES` -> _dict_: set the feature scaling.  
+    - 2.3: `action_space` -> _gym.spaces.Discrete<int>_: set the action space.  
+    - 2.4: `observation_space`: -> _gym.spaces.Box<np.float32>_: set the observation space.  
+3. `_obs()` -> _np.ndarray<np.float32>_: define the observation function, scaled in [0, 1].  
+4. `_rew()` -> _float_: define the step reward function, scaled in [0, 1].  
+5. `_done()` -> _bool_: define the end function.  
+6. `_info()` -> _dict_: (optional) add log infos.  
+7. `reset()` -> _np.ndarray_: define the initial state.  
+8. `step(action)` -> _(np.ndarray, float, bool, dict)_: define the transition dynamic for one timestep.  
+9. `reset_render()`: (optional) add reset instructions for the view only.  
+10. `step_render()`: (optional) add step instructions for the view only.  
+
+### 3. View
+
+**3. 1 View with pyglet**  
+
+Wrap the environment view in pyglet.  
+
+**file `env/view.py`**, **class `View`**   
+1. `import`: import the environment utils global constants.  
+2. `__init__()`:  
+    - 2.1: `(width, height)`, `background_color` -> <int>: initialize the pyglet parameters.  
+    - 2.2: define the view setup.  
+3. `on_draw()`: define the view loop.  
+
+**file `play.py`**, **class `Play`**   
+1. `__init__()`:   
+    - 1.1: `noop` -> _int_: set the noop action.  
+    - 1.2: `action_keys` -> _dict_: set the action keys.  
+
+**file `observe.py`**, **class `Observe`**   
+1. `loop()`: (optional) synchronize the frame rate in case of frame skipping.  
+
+**3.2 View without pyglet**  
+
+Create the environment view without pyglet.  
+
+**file `env/view.py`**, **class `View`**   
+1. create the environment view.  
+2. `setup()`, `loop()`: keep.  
+3. `run()`: create an infinite event loop running loop() and the view loop.  
+
+**file `play.py`**  
+1. `import`: fit to view.  
+2. `class Play`: fit to view.  
+3. `__main__`: construct the view object and run run().  
+
+**file `observe.py`**  
+1. `import`: fit to view.  
+2. `__main__`: construct the view object and run run().  
+
+### 4. Hyperparameter tuning
+
+Tune the hyperparameters and the network configuration.  
+
+**file `dqn/config/dqn_config.py`**   
+1. `HYPER_PARAMS` -> _dict_: Set the hyperparameters.  
+2. `network_config(input_dim)` -> _(torch.nn.Sequential, function, function, int)_:  
+    - 2.1 `net` -> _torch.nn.Sequential_: define the neural network.  
+    - 2.2 `optim_func` -> _function_: define the optimizer function.  
+    - 2.3 `loss_func` -> _function_: define the loss function.  
+    - 2.4 `fc_out_dim` -> _int_: set the output dimension passed to the dueling layer.  
 

@@ -43,7 +43,7 @@ class Observe(View):
         if done:
             self.setup()
 
-        self.wait_frame_skip()
+        self.await_frame_skip()
 
 
 if __name__ == "__main__":

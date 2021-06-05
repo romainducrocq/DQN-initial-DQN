@@ -52,7 +52,7 @@ Wrap the environment view in pyglet.
     - 3.1: `(width, height)`, `background_color` -> \<int>: initialize the pyglet parameters.  
     - 3.2: define the view setup.  
 4. `await_frame_skip()`: define the wait time for frame skipping.  
-5. `select_play_action()` -> _int_: define the playable action selection.  
+5. `get_play_action()` -> _int_: define the played action getter.  
 6. `on_draw(dt)`: define the view loop, with refresh rate dt.  
 
 #### 3.2 View with custom interface
@@ -63,7 +63,7 @@ Wrap the environment view in a custom interface.
 1. `PYGLET` -> _bool_: set to False.  
 2. `__init__()`: define the view setup.  
 3. `await_frame_skip()`: define the wait time for frame skipping.  
-4. `select_play_action()` -> _int_: define the playable action selection.  
+4. `get_play_action()` -> _int_: define the played action getter.  
 5. `on_draw(dt)`: define the view loop, with refresh rate dt.  
 6. `clear()`: define the view clearing function.  
 7. create additional resources.  

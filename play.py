@@ -9,7 +9,7 @@ class Play(View):
         _ = self.env.reset()
 
     def loop(self):
-        action = self.select_play_action()
+        action = self.get_play_action()
 
         _, _, done, _ = self.env.step(action)
         if done:

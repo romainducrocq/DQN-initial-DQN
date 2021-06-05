@@ -12,6 +12,16 @@ The following algorithms are implemented:
 - 3DQN: Dueling Double DQN.  
 - Per3DQN: Dueling Double DQN with Priority Experience Replay.  
 
+Bin scripts:  
+
+`cd bin/`  
+
+- Build software requirements: `bash make.sh`.  
+- Train: `bash train.sh`.  
+- Observe: `bash observe.sh`.  
+- Visualize: `bash visualize.sh`.  
+- Play: `bash play.sh`.  
+
 How to use:  
 1. Create a custom environment in `env/` and tune its hyperparameters in `dqn/config/dqn_config.py` (`demo/`).  
 2. Train the model with `python3 train.py -algo PerDuelingDoubleDQNAgent -max_total_steps 18000000`.  
@@ -35,18 +45,6 @@ See `demo/` for a complete guide on how to build a custom environment and run th
 
 - pyglet, gym, torch, tensorboard, msgpack, wheel  
 > (venv) pip3 install 'pyglet==1.5.0' gym torch tensorboard 'msgpack==1.0.2' wheel --no-cache-dir  
-
-****
-
-Bin scripts:  
-
-`cd bin/`  
-
-- Build software requirements: `bash make.sh`.  
-- Train: `bash train.sh`.  
-- Observe: `bash observe.sh`.  
-- Visualize: `bash visualize.sh`.  
-- Play: `bash play.sh`.  
 
 ****
 

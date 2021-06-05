@@ -29,6 +29,9 @@ Create the custom environment model.
 1. `(W, H)` -> _(int, int)_: (optional) set the window resolution.  
 2. define the global constants and functions.  
 
+**file `env/custom_env/__init__.py`**  
+1. `import`, `add`: define the package namespace.  
+
 ### 2. Controller
 
 Wrap the environment controller in gym.  

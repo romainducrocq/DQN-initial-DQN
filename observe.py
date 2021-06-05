@@ -39,9 +39,12 @@ class Observe(View):
     def loop(self):
         action = self.network.actions([self.obs.tolist()])[0]
 
-        self.obs, _, done, _ = self.env.step(action)
+        self.obs, _, done, info = self.env.step(action)
         if done:
             self.setup()
+
+            print()
+            [print(k, ":", info[k]) for k in info]
 
         self.await_frame_skip()
 

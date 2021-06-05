@@ -11,9 +11,12 @@ class Play(View):
     def loop(self):
         action = self.get_play_action()
 
-        _, _, done, _ = self.env.step(action)
+        _, _, done, info = self.env.step(action)
         if done:
             self.setup()
+
+            print()
+            [print(k, ":", info[k]) for k in info]
 
 
 if __name__ == "__main__":

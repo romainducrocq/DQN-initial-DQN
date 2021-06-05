@@ -4,7 +4,7 @@ Implemented from my DQN framework: https://github.com/romainducrocq/frameworQ
 
 ### initial-DQN
 
-Déjà vu, I've just been in this place before  
+Déjà vu, I've just been in this place before?  
 https://www.youtube.com/watch?v=dv13gl0a-FA  
 
 1. Train: `python3 train.py -algo PerDuelingDoubleDQNAgent -max_total_steps 18000000`.

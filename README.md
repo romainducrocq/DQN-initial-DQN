@@ -21,16 +21,6 @@ How to use:
 
 See `demo/` for a complete guide on how to build a custom environment and run the programs.  
 
-Bin scripts:  
-
-`cd bin/`  
-
-0. Build software requirements: `bash make.sh`.  
-1. Train: `bash train.sh`.  
-2. Observe: `bash observe.sh`.  
-3. Visualize: `bash visualize.sh`.  
-4. Play: `bash play.sh`.  
-
 ****
 
 ### Software Requirements
@@ -45,6 +35,18 @@ Bin scripts:
 
 - pyglet, gym, torch, tensorboard, msgpack, wheel  
 > (venv) pip3 install 'pyglet==1.5.0' gym torch tensorboard 'msgpack==1.0.2' wheel --no-cache-dir  
+
+****
+
+Bin scripts:  
+
+`cd bin/`  
+
+- Build software requirements: `bash make.sh`.  
+- Train: `bash train.sh`.  
+- Observe: `bash observe.sh`.  
+- Visualize: `bash visualize.sh`.  
+- Play: `bash play.sh`.  
 
 ****
 

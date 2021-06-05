@@ -19,7 +19,17 @@ How to use:
 4. Visualize the learning curves in tensorboard with `tensorboard --logdir ./logs/`.  
 5. And beat the AI with `python3 play.py` to assert dominance on the machines.  
 
-See `demo/` for a complete guide on how to build a custom environment and run the programs.
+See `demo/` for a complete guide on how to build a custom environment and run the programs.  
+
+Bin scripts:  
+
+`cd bin/`  
+
+0. Build software requirements: `bash make.sh`.  
+1. Train: `bash train.sh`.  
+2. Observe: `bash observe.sh`.  
+3. Visualize: `bash visualize.sh`.  
+4. Play: `bash play.sh`.  
 
 ****
 

@@ -1,25 +1,16 @@
+Implemented from my DQN framework: https://github.com/romainducrocq/frameworQ
+
+****
+
 ### initial-DQN
 
-My own DQN framework for custom environments. Supports:  
-- Custom environments with openai gym.  
-- Dynamic save and load with msgpack.  
-- Multi-processing learning.  
-- Tensorboard visualization.  
+Déjà vu, I've just been in this place before  
+https://www.youtube.com/watch?v=dv13gl0a-FA  
 
-The following algorithms are implemented:  
-- DQN: vanilla DQN.  
-- DDQN: Double DQN.  
-- 3DQN: Dueling Double DQN.  
-- Per3DQN: Dueling Double DQN with Priority Experience Replay.  
-
-How to use:  
-1. Create a custom environment in `env/` and tune its hyperparameters in `dqn/config/dqn_config.py` (`demo/`).  
-2. Train the model with `python3 train.py -algo PerDuelingDoubleDQNAgent -max_total_steps 18000000`.  
-3. Observe the AI with `python3 observe.py -d save/PerDuelingDoubleDQNAgent_lr5e-05_model.pack -max_steps 500`.  
-4. Visualize the learning curves in tensorboard with `tensorboard --logdir ./logs/`.  
-5. And beat the AI with `python3 play.py` to assert dominance on the machines.  
-
-See `demo/` for a complete guide on how to use bin scripts, build a custom environment and run the programs.  
+1. Train: `python3 train.py -algo PerDuelingDoubleDQNAgent -max_total_steps 18000000`.
+2. Observe: `python3 observe.py -d save/PerDuelingDoubleDQNAgent_lr5e-05_model.pack -max_steps 500`.
+3. Visualize: `tensorboard --logdir ./logs/`.
+4. Play: `python3 play.py`.
 
 ****
 
@@ -44,12 +35,3 @@ See `demo/` for a complete guide on how to use bin scripts, build a custom envir
 
 ![Demo tensorboard png](demo/demo_tensorboard.png)
 
-****
-
-### Other custom environments
-
-flappy-seamonkai: https://github.com/romainducrocq/flappy-seamonkai
-
-****
-
-https://www.youtube.com/watch?v=dv13gl0a-FA  

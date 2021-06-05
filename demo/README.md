@@ -16,7 +16,7 @@ Create the custom environment model.
 2. create additional resources. E.g: utils.py, img/.  
 
 **file `env/custom_env/utils.py`**  
-1. `RES` -> _(int, int)_: set the window resolution.  
+1. `(W, H)` -> _(int, int)_: (optional) set the window resolution.  
 2. define the global constants and functions.  
 
 ### 2. Controller

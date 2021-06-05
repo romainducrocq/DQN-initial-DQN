@@ -22,14 +22,14 @@ class Observe(View):
             "DoubleDQNAgent": "DeepQNetwork",
             "DuelingDoubleDQNAgent": "DuelingDeepQNetwork",
             "PerDuelingDoubleDQNAgent": "DuelingDeepQNetwork"
-        }[args.dir.split('_')[0].split('save/')[1]])(
+        }[args.d.split('_')[0].split('save/')[1]])(
             device(("cuda:" + args.gpu) if cuda.is_available() else "cpu"),
-            float(args.dir.split('_')[1].split('lr')[1]),
+            float(args.d.split('_')[1].split('lr')[1]),
             reduce(lambda x, y: x * y, list(self.env.observation_space.shape)),
             self.env.action_space.n
         )
 
-        self.network.load(args.dir)
+        self.network.load(args.d)
 
         self.obs = np.zeros(reduce(lambda x, y: x * y, list(self.env.observation_space.shape)), dtype=np.float32)
 
@@ -51,7 +51,7 @@ class Observe(View):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="OBSERVE")
-    parser.add_argument('-dir', type=str, default='', help='Directory', required=True)
+    parser.add_argument('-d', type=str, default='', help='Directory', required=True)
     parser.add_argument('-max_steps', type=int, default=HYPER_PARAMS['max_episode_steps'], help='Max episode steps')
     parser.add_argument('-gpu', type=str, default='0', help='GPU #')
 

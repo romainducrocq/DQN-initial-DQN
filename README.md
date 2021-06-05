@@ -12,16 +12,6 @@ The following algorithms are implemented:
 - 3DQN: Dueling Double DQN.  
 - Per3DQN: Dueling Double DQN with Priority Experience Replay.  
 
-Bin scripts:  
-
-`cd bin/`  
-
-- Build software requirements: `bash make.sh`.  
-- Train: `bash train.sh`.  
-- Observe: `bash observe.sh`.  
-- Visualize: `bash visualize.sh`.  
-- Play: `bash play.sh`.  
-
 How to use:  
 1. Create a custom environment in `env/` and tune its hyperparameters in `dqn/config/dqn_config.py` (`demo/`).  
 2. Train the model with `python3 train.py -algo PerDuelingDoubleDQNAgent -max_total_steps 18000000`.  
@@ -29,7 +19,7 @@ How to use:
 4. Visualize the learning curves in tensorboard with `tensorboard --logdir ./logs/`.  
 5. And beat the AI with `python3 play.py` to assert dominance on the machines.  
 
-See `demo/` for a complete guide on how to build a custom environment and run the programs.  
+See `demo/` for a complete guide on how to use bin scripts, build a custom environment and run the programs.  
 
 ****
 

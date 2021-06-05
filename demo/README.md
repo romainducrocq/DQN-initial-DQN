@@ -1,3 +1,13 @@
+### Bin scripts:  
+
+`cd bin/`  
+
+- Build software requirements: `bash make.sh`.  
+- Train: `bash train.sh`.  
+- Observe: `bash observe.sh`.  
+- Visualize: `bash visualize.sh`.  
+- Play: `bash play.sh`.  
+
 ### Build a custom environment
 
 This framework is designed to wrap custom environments for applying DQN algorithms.  

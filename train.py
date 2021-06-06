@@ -137,7 +137,7 @@ if __name__ == "__main__":
                              'PerDuelingDoubleDQNAgent'
                         )
 
-    train = Train(env=Env(train=True), args=parser.parse_args())
+    train = Train(env=Env("train"), args=parser.parse_args())
 
     train.init_replay_memory_buffer()
 

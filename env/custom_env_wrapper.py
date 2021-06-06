@@ -10,10 +10,10 @@ import numpy as np
 class CustomEnvWrapper(gym.Env):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, train=False, observe=False, play=False):
+    def __init__(self, m):
         super(CustomEnvWrapper, self).__init__()
 
-        (self.train, self.observe, self.play) = (train, observe, play)
+        self.mode = {"train": False, "observe": False, "play": False, m: True}
 
         self.steps = 0
         self.total_reward = 0.
@@ -25,7 +25,7 @@ class CustomEnvWrapper(gym.Env):
 
         # """CHANGE FEATURE SCALING HERE""" ############################################################################
         self.lim_features = {
-            "speed": (0., 50. if self.train else 35.),
+            "speed": (0., 50. if self.mode["train"] else 35.),
             "sonar_distance": (0., RES[0])
         }
         ################################################################################################################
@@ -104,7 +104,7 @@ class CustomEnvWrapper(gym.Env):
         self.car.next_reward_gate_i = self.track.start_reward_gate(self.car.vertices())
         ################################################################################################################
 
-        if not self.train:
+        if not self.mode["train"]:
             self.reset_render()
 
         return self._obs()
@@ -114,7 +114,7 @@ class CustomEnvWrapper(gym.Env):
         self.car.move(action)
         ################################################################################################################
 
-        if not self.train:
+        if not self.mode["train"]:
             self.step_render()
 
         self.steps += 1

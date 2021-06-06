@@ -21,4 +21,4 @@ class Play(View):
 
 if __name__ == "__main__":
 
-    Play("PLAY", Env(play=True)).run()
+    Play("PLAY", Env("play")).run()

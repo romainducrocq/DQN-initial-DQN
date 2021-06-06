@@ -65,4 +65,4 @@ if __name__ == "__main__":
     parser.add_argument('-max_steps', type=int, default=HYPER_PARAMS['max_episode_steps'], help='Max episode steps')
     parser.add_argument('-gpu', type=str, default='0', help='GPU #')
 
-    Observe("OBSERVE", Env(observe=True), parser.parse_args()).run()
+    Observe("OBSERVE", Env("observe"), parser.parse_args()).run()

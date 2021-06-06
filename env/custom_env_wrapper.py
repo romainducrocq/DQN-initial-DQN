@@ -10,10 +10,10 @@ import numpy as np
 class CustomEnvWrapper(gym.Env):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, train=False):
+    def __init__(self, train=False, observe=False, play=False):
         super(CustomEnvWrapper, self).__init__()
 
-        self.train = train
+        (self.train, self.observe, self.play) = (train, observe, play)
 
         self.steps = 0
         self.total_reward = 0.

@@ -44,6 +44,8 @@ class CustomEnvWrapper(gym.Env):
         self.action_space = spaces.Discrete(action_space_n)
         self.observation_space = spaces.Box(low=0., high=1., shape=(observation_space_n,), dtype=np.float32)
 
+        self.log_info_buffer = []
+
     def scale(self, x, feature):
         return (x - self.lim_features[feature][0]) / (self.lim_features[feature][1] - self.lim_features[feature][0])
 
@@ -141,18 +143,23 @@ class CustomEnvWrapper(gym.Env):
     def render(self, mode='human'):
         pass
 
-    @staticmethod
-    def log_info_csv(info, done, log, log_step, log_path):
+    def log_info_writer(self, info, done, log, log_step, log_path):
         if log and (done or (log_step > 0 and info["l"] % log_step == 0)):
             if "TimeLimit.truncated" not in info:
                 info["TimeLimit.truncated"] = False
             info["done"] = done
 
-            file_exists = os.path.isfile(log_path + ".csv")
+            self.log_info_buffer.append(info)
 
-            with open(log_path + ".csv", 'a') as f:
-                csv_writer = DictWriter(f, delimiter=',', lineterminator='\n', fieldnames=[k for k in info])
-                if not file_exists:
-                    csv_writer.writeheader()
-                csv_writer.writerow(info)
-                f.close()
+            if done:
+                file_exists = os.path.isfile(log_path + ".csv")
+
+                with open(log_path + ".csv", 'a') as f:
+                    csv_writer = DictWriter(f, delimiter=',', lineterminator='\n', fieldnames=[k for k in info])
+                    if not file_exists:
+                        csv_writer.writeheader()
+                    for log_info in self.log_info_buffer:
+                        csv_writer.writerow(log_info)
+                    f.close()
+
+                self.log_info_buffer = []

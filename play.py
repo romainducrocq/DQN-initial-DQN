@@ -25,7 +25,7 @@ class Play(View):
         action = self.get_play_action()
 
         _, _, done, info = self.env.step(action)
-        Env.log_info_csv(info, done, *self.log)
+        self.env.log_info_writer(info, done, *self.log)
 
         if done:
             self.setup()

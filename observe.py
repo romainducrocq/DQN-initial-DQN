@@ -11,13 +11,22 @@ from torch import device, cuda
 
 
 class Observe(View):
-    def __init__(self, name, env, args):
+    def __init__(self, args):
         os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
         os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
         # TODO
-        # super(Observe, self).__init__(name, make_env(env=env, max_episode_steps=args.max_s))
-        super(Observe, self).__init__(name, make_env(env=env, repeat=HYPER_PARAMS['repeat'], max_episode_steps=args.max_s))
+        # super(Observe, self).__init__(type(self).__name__.upper(),
+        #                               make_env(
+        #                                   env=Env(type(self).__name__.lower()),
+        #                                   max_episode_steps=args.max_s)
+        #                               )
+        super(Observe, self).__init__(type(self).__name__.upper(),
+                                      make_env(
+                                          env=Env(type(self).__name__.lower()),
+                                          repeat=HYPER_PARAMS['repeat'],
+                                          max_episode_steps=args.max_s)
+                                      )
 
         model_pack = args.d.split('/')[-1].split('_model.pack')[0]
 
@@ -87,4 +96,4 @@ if __name__ == "__main__":
     parser.add_argument('-log', type=str2bool, default=False, help='Log csv to ./logs/test/')
     parser.add_argument('-log_s', type=int, default=0, help='Log step if > 0, else episode')
 
-    Observe("OBSERVE", Env("observe"), parser.parse_args()).run()
+    Observe(parser.parse_args()).run()

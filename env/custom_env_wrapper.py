@@ -13,10 +13,11 @@ from csv import DictWriter
 class CustomEnvWrapper(gym.Env):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, m):
+    def __init__(self, m, p=None):
         super(CustomEnvWrapper, self).__init__()
 
         self.mode = {"train": False, "observe": False, "play": False, m: True}
+        self.player = p if self.mode["play"] else None
 
         self.steps = 0
         self.total_reward = 0.

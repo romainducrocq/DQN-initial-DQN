@@ -2,7 +2,7 @@
 
 function run () {
 
-python3 observe.py -d save/PerDuelingDoubleDQNAgent_lr5e-05_model.pack -max_steps 500
+python3 observe.py -d save/PerDuelingDoubleDQNAgent_lr5e-05_model.pack -max_s 500
 
 }
 

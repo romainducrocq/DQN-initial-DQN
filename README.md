@@ -8,8 +8,8 @@ Déjà vu, I've just been in this place before?
 https://www.youtube.com/watch?v=dv13gl0a-FA  
 
 1. Train: `python3 train.py -algo PerDuelingDoubleDQNAgent -max_total_steps 18000000`
-2. Observe: `python3 observe.py -d save/PerDuelingDoubleDQNAgent_lr5e-05_model.pack -max_steps 500`
-3. Visualize: `tensorboard --logdir ./logs/`
+2. Observe: `python3 observe.py -d save/PerDuelingDoubleDQNAgent_lr5e-05_model.pack -max_s 500`
+3. Visualize: `tensorboard --logdir ./logs/train/`
 4. Play: `python3 play.py`
 
 ****

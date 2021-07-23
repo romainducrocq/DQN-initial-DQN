@@ -1,5 +1,5 @@
-from env import Env, HYPER_PARAMS, network_config, View
-from dqn import make_env, Networks
+from env import HYPER_PARAMS, network_config, CustomEnv, View
+from dqn import CustomEnvWrapper, make_env, Networks
 
 import os
 import argparse
@@ -16,12 +16,12 @@ class Observe(View):
         # TODO
         # super(Observe, self).__init__(type(self).__name__.upper(),
         #                               make_env(
-        #                                   env=Env(type(self).__name__.lower()),
+        #                                   env=CustomEnvWrapper(CustomEnv(type(self).__name__.lower())),
         #                                   max_episode_steps=args.max_s)
         #                               )
         super(Observe, self).__init__(type(self).__name__.upper(),
                                       make_env(
-                                          env=Env(type(self).__name__.lower()),
+                                          env=CustomEnvWrapper(CustomEnv(type(self).__name__.lower())),
                                           repeat=HYPER_PARAMS['repeat'],
                                           max_episode_steps=args.max_s)
                                       )

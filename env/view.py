@@ -91,8 +91,8 @@ class PygletView(pyglet.window.Window if PYGLET else object):
             self.car_imgs[i].anchor_y = self.car_imgs[i].height // 2
             self.car_sprites.append({
                 "sprite": pyglet.sprite.Sprite(self.car_imgs[i], 0, 0),
-                "scale_x": (self.env.get_env.car.height + 5) / (self.car_imgs[i].height * 2),
-                "scale_y": 2 * (self.env.get_env.car.width + 5) / self.car_imgs[i].width
+                "scale_x": (self.env.get_env().car.height + 5) / (self.car_imgs[i].height * 2),
+                "scale_y": 2 * (self.env.get_env().car.width + 5) / self.car_imgs[i].width
             })
         ################################################################################################################
 
@@ -100,12 +100,12 @@ class PygletView(pyglet.window.Window if PYGLET else object):
         play_action = 0
 
         # """CHANGE GET PLAY ACTION HERE""" ############################################################################
-        noop = self.env.get_env.car.actions['NOOP']
+        noop = self.env.get_env().car.actions['NOOP']
         action_keys = {
-            pyglet.window.key.UP: self.env.get_env.car.actions['UP'],
-            pyglet.window.key.RIGHT: self.env.get_env.car.actions['RIGHT'],
-            pyglet.window.key.DOWN: self.env.get_env.car.actions['DOWN'],
-            pyglet.window.key.LEFT: self.env.get_env.car.actions['LEFT']
+            pyglet.window.key.UP: self.env.get_env().car.actions['UP'],
+            pyglet.window.key.RIGHT: self.env.get_env().car.actions['RIGHT'],
+            pyglet.window.key.DOWN: self.env.get_env().car.actions['DOWN'],
+            pyglet.window.key.LEFT: self.env.get_env().car.actions['LEFT']
         }
 
         play_action += noop if self.key not in action_keys else action_keys[self.key]
@@ -119,30 +119,30 @@ class PygletView(pyglet.window.Window if PYGLET else object):
         self.loop()
 
         # """CHANGE VIEW LOOP HERE""" ##################################################################################
-        PygletView.draw_polygons(self.env.get_env.track.polygons_track, self.colors["polygons_track"])
+        PygletView.draw_polygons(self.env.get_env().track.polygons_track, self.colors["polygons_track"])
         if self.key == pyglet.window.key.SPACE and (time.time() - self.ai_view_timer) > 0.2:
             self.ai_view = not self.ai_view
             self.ai_view_timer = time.time()
         if self.ai_view:
-            PygletView.draw_vertices(self.env.get_env.track.reward_gates, self.colors["vertex_reward_gates"])
-            PygletView.draw_vertices([self.env.get_env.track.next_reward_gate(self.env.get_env.car.next_reward_gate_i)], self.colors["vertex_next_reward_gate"])
-            PygletView.draw_vertices(self.env.get_env.car.sonars, self.colors["car"][int(self.env.get_env.car.is_collision)])
-        PygletView.draw_vertices(self.env.get_env.track.out_border_vertices, self.colors["vertex_borders"])
-        PygletView.draw_vertices(self.env.get_env.track.in_border_vertices, self.colors["vertex_borders"])
-        # draw_polygons([self.env.get_env.car.points()], self.colors["car"][int(self.env.get_env.car.is_collision)])
+            PygletView.draw_vertices(self.env.get_env().track.reward_gates, self.colors["vertex_reward_gates"])
+            PygletView.draw_vertices([self.env.get_env().track.next_reward_gate(self.env.get_env().car.next_reward_gate_i)], self.colors["vertex_next_reward_gate"])
+            PygletView.draw_vertices(self.env.get_env().car.sonars, self.colors["car"][int(self.env.get_env().car.is_collision)])
+        PygletView.draw_vertices(self.env.get_env().track.out_border_vertices, self.colors["vertex_borders"])
+        PygletView.draw_vertices(self.env.get_env().track.in_border_vertices, self.colors["vertex_borders"])
+        # draw_polygons([self.env.get_env().car.points()], self.colors["car"][int(self.env.get_env().car.is_collision)])
 
-        self.car_sprites[int(self.env.get_env.car.is_collision)]["sprite"].update(
-            x=self.env.get_env.car.x_pos,
-            y=self.env.get_env.car.y_pos,
-            scale_x=self.car_sprites[int(self.env.get_env.car.is_collision)]["scale_x"],
-            scale_y=self.car_sprites[int(self.env.get_env.car.is_collision)]["scale_y"],
-            rotation=270-self.env.get_env.car.theta
+        self.car_sprites[int(self.env.get_env().car.is_collision)]["sprite"].update(
+            x=self.env.get_env().car.x_pos,
+            y=self.env.get_env().car.y_pos,
+            scale_x=self.car_sprites[int(self.env.get_env().car.is_collision)]["scale_x"],
+            scale_y=self.car_sprites[int(self.env.get_env().car.is_collision)]["scale_y"],
+            rotation=270-self.env.get_env().car.theta
         )
-        self.car_sprites[int(self.env.get_env.car.is_collision)]["sprite"].draw()
+        self.car_sprites[int(self.env.get_env().car.is_collision)]["sprite"].draw()
 
         PygletView.draw_label_top_left("AI view: SPACE", -RES[0], RES[1], y_offset=1)
-        PygletView.draw_label_top_left("Time: " + str(round(self.env.get_env.car.get_time(), 2)), -RES[0], RES[1], y_offset=2)
-        PygletView.draw_label_top_left("Score: " + str(self.env.get_env.car.score), -RES[0], RES[1], y_offset=3)
+        PygletView.draw_label_top_left("Time: " + str(round(self.env.get_env().car.get_time(), 2)), -RES[0], RES[1], y_offset=2)
+        PygletView.draw_label_top_left("Score: " + str(self.env.get_env().car.score), -RES[0], RES[1], y_offset=3)
         ################################################################################################################
 
     def on_resize(self, width, height):

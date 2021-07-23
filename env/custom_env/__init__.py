@@ -1,7 +1,6 @@
 # """CHANGE CUSTOM ENV PACKAGE NAMESPACE HERE""" #######################################################################
-from .track import Track
-from .car import Car
+from .dqn_env import DqnEnv as CustomEnv
 from .utils import RES
 
-__all__ = ['Track', 'Car', 'RES']
+__all__ = ['CustomEnv', 'RES']
 ########################################################################################################################

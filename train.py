@@ -1,12 +1,10 @@
-from env import Env
-from dqn.config import HYPER_PARAMS
+from env import Env, HYPER_PARAMS, network_config
 from dqn import make_env, Agents
 
 import os
 import time
 import argparse
 import itertools
-from functools import reduce
 from datetime import timedelta
 
 
@@ -30,7 +28,8 @@ class Train:
             epsilon_min=args.eps_min,
             epsilon_decay=args.eps_dec,
             epsilon_exp_decay=args.eps_dec_exp,
-            input_dim=reduce(lambda x, y: x*y, list(self.env.observation_space.shape)),
+            nn_conf_func=network_config,
+            input_dim=self.env.observation_space,
             output_dim=self.env.action_space.n,
             batch_size=args.bs,
             min_buffer_size=args.min_mem,

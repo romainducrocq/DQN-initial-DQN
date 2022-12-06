@@ -1,4 +1,4 @@
-Implemented from my DQN framework: https://github.com/romainducrocq/frameworQ
+Implemented from my DQN framework: https://github.com/romainducrocq/DQN-frameworQ
 
 ****
 

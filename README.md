@@ -1,4 +1,4 @@
-### initial-DQN
+### DQN-initial-d
 
 [Déjà vu](https://www.youtube.com/watch?v=dv13gl0a-FA), I've just been in this place before?  
 
